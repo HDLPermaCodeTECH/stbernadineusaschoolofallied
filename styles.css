@@ -4644,6 +4644,18 @@ body:not(.js-loaded) .reveal-scale {
     .logo-track img {
         height: 60px;
     }
+
+    .map-embed {
+        height: 320px !important;
+    }
+
+    .map-embed iframe {
+        height: 100% !important;
+    }
+
+    .cta-actions {
+        flex-wrap: wrap;
+    }
 }
 
 @media (max-width: 480px) {
@@ -4695,5 +4707,20 @@ body:not(.js-loaded) .reveal-scale {
 
     .trust-logo i {
         font-size: 1.1rem;
+    }
+
+    .map-embed {
+        height: 240px !important;
+    }
+
+    .cta-actions {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .cta-actions .btn {
+        width: 100%;
+        max-width: 260px;
     }
 }
