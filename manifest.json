@@ -1,0 +1,20 @@
+{
+  "name": "St. Bernadine Academy",
+  "short_name": "St. Bernadine",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#06752e",
+  "theme_color": "#06752e",
+  "icons": [
+    {
+      "src": "asset/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "asset/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
