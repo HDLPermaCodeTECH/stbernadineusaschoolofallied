@@ -3126,7 +3126,8 @@ footer {
 
     .services-hero-image {
         height: 280px;
-        clip-path: polygon(0 8%, 100% 0, 100% 100%, 0% 100%);
+        clip-path: none;
+        overflow: hidden;
     }
 
     .hero-stats-row {
@@ -4653,6 +4654,19 @@ body:not(.js-loaded) .reveal-scale {
         height: 60px;
     }
 
+    .footer-contact {
+        text-align: center;
+    }
+
+    .footer-contact li {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .footer-contact li i {
+        margin-top: 0;
+    }
+
     .map-embed {
         height: 320px !important;
     }
@@ -4663,6 +4677,10 @@ body:not(.js-loaded) .reveal-scale {
 
     .cta-actions {
         flex-wrap: wrap;
+    }
+
+    .professional-list-grid {
+        grid-template-columns: 1fr !important;
     }
 }
 
@@ -4730,5 +4748,9 @@ body:not(.js-loaded) .reveal-scale {
     .cta-actions .btn {
         width: 100%;
         max-width: 260px;
+    }
+
+    canvas.signature-pad {
+        height: 150px;
     }
 }
