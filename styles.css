@@ -4504,3 +4504,184 @@ body:not(.js-loaded) .reveal-scale {
     line-height: 1.7;
     font-weight: 400;
 }
+
+/* ========================================
+   Global Mobile Enhancements
+   ======================================== */
+@media (max-width: 1024px) {
+    .page-header {
+        padding: 70px 0;
+    }
+
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+
+    .page-header p {
+        font-size: 1rem;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero p {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        background-attachment: scroll;
+    }
+
+    .hero {
+        padding: 110px 0 90px;
+    }
+
+    .section-header h2 {
+        font-size: 2rem;
+    }
+
+    .section-header p {
+        font-size: 1rem;
+    }
+
+    .page-header {
+        padding: 60px 0;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .page-header p {
+        font-size: 0.95rem;
+    }
+
+    .services-hero-content {
+        padding: 45px 24px;
+    }
+
+    .services-hero-content p {
+        max-width: 100%;
+    }
+
+    .hero-badge {
+        font-size: 0.75rem;
+        padding: 7px 14px;
+    }
+
+    .hero-stats-row {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+    }
+
+    .hero-stat-divider {
+        display: none;
+    }
+
+    .feature-card,
+    .feature-card-boxed,
+    .service-card-new,
+    .program-card,
+    .team-card {
+        padding: 28px 22px;
+    }
+
+    .service-content,
+    .program-content {
+        padding: 22px;
+    }
+
+    .service-img,
+    .program-image {
+        height: 200px;
+    }
+
+    .timeline-container {
+        gap: 20px;
+    }
+
+    .timeline-box {
+        min-width: 0;
+        min-height: auto;
+        flex: 1 1 100%;
+        padding: 24px;
+    }
+
+    .custom-list li {
+        align-items: flex-start;
+    }
+
+    .faq-answer,
+    .faq-item.active .faq-answer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .newsletter-bar {
+        padding: 55px 0;
+    }
+
+    .newsletter-text h3 {
+        font-size: 1.5rem;
+    }
+
+    .logo-track {
+        gap: 40px;
+    }
+
+    .logo-track img {
+        height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 95px 0 75px;
+    }
+
+    .hero-btns .btn {
+        width: 100%;
+    }
+
+    .hero-stats-row {
+        flex-direction: column;
+    }
+
+    .hero-stat-item strong {
+        font-size: 1.15rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .page-header p {
+        font-size: 0.9rem;
+    }
+
+    .feature-card,
+    .feature-card-boxed,
+    .service-card-new,
+    .program-card,
+    .team-card {
+        padding: 24px 18px;
+    }
+
+    .service-img,
+    .program-image {
+        height: 180px;
+    }
+
+    .trust-logo {
+        white-space: normal;
+        text-align: center;
+    }
+
+    .trust-logo i {
+        font-size: 1.1rem;
+    }
+}
