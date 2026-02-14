@@ -2205,6 +2205,10 @@ footer {
 .logo-track img {
     height: 80px;
     width: auto;
+
+    .professional-list-grid {
+        grid-template-columns: 1fr !important;
+    }
     object-fit: contain;
     flex-shrink: 0;
     filter: grayscale(30%);
@@ -3570,6 +3574,10 @@ select:focus {
 
     .trust-logo i {
         font-size: 1.1rem;
+    }
+
+    canvas.signature-pad {
+        height: 150px;
     }
 }
 
