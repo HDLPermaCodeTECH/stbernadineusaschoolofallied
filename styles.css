@@ -4510,15 +4510,15 @@ body:not(.js-loaded) .reveal-scale {
    ======================================== */
 @media (max-width: 1024px) {
     .page-header {
-        padding: 70px 0;
+        padding: 70px 0 !important;
     }
 
     .page-header h1 {
-        font-size: 2.2rem;
+        font-size: 2.2rem !important;
     }
 
     .page-header p {
-        font-size: 1rem;
+        font-size: 1rem !important;
     }
 
     .hero-content {
@@ -4535,6 +4535,10 @@ body:not(.js-loaded) .reveal-scale {
         background-attachment: scroll;
     }
 
+    .upcoming-dates {
+        background-attachment: scroll;
+    }
+
     .hero {
         padding: 110px 0 90px;
     }
@@ -4548,15 +4552,19 @@ body:not(.js-loaded) .reveal-scale {
     }
 
     .page-header {
-        padding: 60px 0;
+        padding: 60px 0 45px !important;
     }
 
     .page-header h1 {
-        font-size: 2rem;
+        font-size: 2rem !important;
     }
 
     .page-header p {
-        font-size: 0.95rem;
+        font-size: 0.95rem !important;
+    }
+
+    .section-padding .container > div[style*="max-width: 900px"] {
+        padding: 28px 22px !important;
     }
 
     .services-hero-content {
@@ -4656,11 +4664,15 @@ body:not(.js-loaded) .reveal-scale {
     }
 
     .page-header h1 {
-        font-size: 1.8rem;
+        font-size: 1.8rem !important;
     }
 
     .page-header p {
-        font-size: 0.9rem;
+        font-size: 0.9rem !important;
+    }
+
+    .section-padding .container > div[style*="max-width: 900px"] {
+        padding: 22px 18px !important;
     }
 
     .feature-card,
