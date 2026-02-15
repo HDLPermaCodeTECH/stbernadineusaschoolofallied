@@ -1557,7 +1557,7 @@ footer {
     /* Restored flex */
     flex-direction: column;
     overflow: hidden;
-    z-index: 1000;
+    z-index: 2001;
     transition: all 0.3s ease;
     transform: translateY(20px);
     opacity: 0;
@@ -2209,6 +2209,7 @@ footer {
     .professional-list-grid {
         grid-template-columns: 1fr !important;
     }
+
     object-fit: contain;
     flex-shrink: 0;
     filter: grayscale(30%);
@@ -4589,7 +4590,7 @@ body:not(.js-loaded) .reveal-scale {
         font-size: 0.95rem !important;
     }
 
-    .section-padding .container > div[style*="max-width: 900px"] {
+    .section-padding .container>div[style*="max-width: 900px"] {
         padding: 28px 22px !important;
     }
 
@@ -4726,7 +4727,7 @@ body:not(.js-loaded) .reveal-scale {
         font-size: 0.9rem !important;
     }
 
-    .section-padding .container > div[style*="max-width: 900px"] {
+    .section-padding .container>div[style*="max-width: 900px"] {
         padding: 22px 18px !important;
     }
 
