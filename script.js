@@ -295,6 +295,10 @@ document.addEventListener('DOMContentLoaded', () => {
         homecare_services: {
             keywords: ['home care service', 'caregiver service', 'hiring a nurse', 'need help', 'patient care', '24/7'],
             response: "Our <strong>Home Care Services</strong> division provides 24/7 personalized care.<br><br>We match certified caregivers to patients for medication management, meal prep, and daily living assistance.<br><br><a href='home-care.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Request Care</a>."
+        },
+        referral: {
+            keywords: ['referral', 'refer', 'recommend', 'friend', 'bonus', 'commission'],
+            response: "Refer a friend and earn rewards! We offer a <strong>Referral Program</strong> for our courses.<br><br>If you know someone interested in healthcare training, refer them to us.<br><br><a href='referral.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Submit a Referral</a>."
         }
     };
 
