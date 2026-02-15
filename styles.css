@@ -402,6 +402,11 @@ header.scrolled {
     padding: 5px 0;
 }
 
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary-color);
+}
+
 /* Updated underline animation: Center Out */
 .nav-links a:not(.btn)::after {
     content: '';
@@ -417,13 +422,10 @@ header.scrolled {
     opacity: 0;
 }
 
-.nav-links a:not(.btn):hover::after {
+.nav-links a:not(.btn):hover::after,
+.nav-links a:not(.btn).active::after {
     width: 100%;
     opacity: 1;
-}
-
-.nav-links a:hover {
-    color: var(--primary-color);
 }
 
 /* Specific style for Apply Now button in navbar */

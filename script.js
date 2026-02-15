@@ -38,6 +38,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // --- Active Navigation Highlight ---
+    function highlightActiveLink() {
+        // Get path and normalize it (remove trailing slash unless it's just '/')
+        let currentPath = window.location.pathname;
+        if (currentPath.length > 1 && currentPath.endsWith('/')) {
+            currentPath = currentPath.slice(0, -1);
+        }
+
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (!href) return;
+
+            // Clean up href for comparison
+            let cleanHref = href;
+            // Remove full domain if present to just get path
+            try {
+                const url = new URL(href, window.location.origin);
+                cleanHref = url.pathname;
+                if (cleanHref.length > 1 && cleanHref.endsWith('/')) {
+                    cleanHref = cleanHref.slice(0, -1);
+                }
+            } catch (e) {
+                // If not a valid URL (e.g. relative path), keep as is but normalize slashes
+            }
+
+            // Check for match
+            // 1. Exact path match
+            // 2. Index page handling (root path matches index.html)
+            const isMatch =
+                currentPath === cleanHref ||
+                (currentPath === '/' && cleanHref.includes('index.html')) ||
+                (cleanHref === '/' && currentPath.includes('index.html')) ||
+                // Handle GitHub Pages project root
+                (currentPath === '/stbernadineusaschoolofallied' && cleanHref.includes('index.html')) ||
+                (currentPath === '/stbernadineusaschoolofallied/' && cleanHref.includes('index.html'));
+
+            if (isMatch) {
+                link.classList.add('active');
+            }
+        });
+    }
+    highlightActiveLink();
+
     // --- AI Chatbot ---
     const chatbotHTML = `
         <div class="chatbot-container">
