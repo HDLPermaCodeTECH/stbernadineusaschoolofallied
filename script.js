@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator();
-                addMessage("Hello! I'm the St. Bernadine AI. I can answer questions about our <strong>Programs</strong>, <strong>Tuition</strong>, <strong>Visa Sponsorship</strong>, <strong>Founder</strong>, and more.<br><br>How can I help you today?", 'bot');
+                addMessage("Hello! I'm the St. Bernadine AI. I can answer questions about our <strong>Programs</strong>, <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Tuition</strong></a>, <strong>Visa Sponsorship</strong>, <strong>Founder</strong>, and more.<br><br>How can I help you today?", 'bot');
                 showSuggestions();
             }, 800);
         }, 300);
@@ -217,41 +217,41 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Programs ---
         cna: {
             keywords: ['cna', 'certified nurse aide', 'nursing assistant', 'nurse aide', '90 hours'],
-            response: "Our <strong>Certified Nurse Aide (CNA)</strong> program is a 90-hour course (50 classroom / 40 clinicals).<br><br><strong>Schedule:</strong> Day and Evening classes available.<br><strong>Registration Fee:</strong> $500 ($200 non-refundable).<br><strong>Outcome:</strong> NJ State Licensure.<br><br>Learn more or apply on our <a href='cna-program.html' style='color: var(--primary-color); text-decoration: underline;'>CNA Page</a>."
+            response: "Our <strong>Certified Nurse Aide (CNA)</strong> program is a 90-hour course (50 classroom / 40 clinicals).<br><br><strong>Schedule:</strong> Day and Evening classes available.<br><strong>Registration Fee:</strong> $500 ($200 non-refundable).<br><strong>Outcome:</strong> NJ State Licensure.<br><br>Learn more or apply on our <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA Page</a>."
         },
         hha: {
             keywords: ['hha', 'home health aide', 'homemaker', '76 hours', 'ch-hha'],
-            response: "Our <strong>Certified Homemaker Home Health Aide (CH-HHA)</strong> program is 76 hours (60 classroom / 16 skills).<br><br><strong>Schedule:</strong> Weekdays and Weekends.<br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><strong>Outcome:</strong> NJ Board of Nursing Certification.<br><br>Details on our <a href='ch-hha-program.html' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA Page</a>."
+            response: "Our <strong>Certified Homemaker Home Health Aide (CH-HHA)</strong> program is 76 hours (60 classroom / 16 skills).<br><br><strong>Schedule:</strong> Weekdays and Weekends.<br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><strong>Outcome:</strong> NJ Board of Nursing Certification.<br><br>Details on our <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA Page</a>."
         },
         cma: {
             keywords: ['cma', 'certified medication aide', 'medication', 'med aide', '56 hours'],
-            response: "The <strong>Certified Medication Aide (CMA)</strong> course is 56 hours (40 classroom / 16 clinical).<br><br><strong>Prerequisite:</strong> Must have CNA or CH-HHA license.<br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><strong>Outcome:</strong> NJ State Certification.<br><br>Apply here: <a href='cma-program.html' style='color: var(--primary-color); text-decoration: underline;'>CMA Program</a>."
+            response: "The <strong>Certified Medication Aide (CMA)</strong> course is 56 hours (40 classroom / 16 clinical).<br><br><strong>Prerequisite:</strong> Must have CNA or CH-HHA license.<br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><strong>Outcome:</strong> NJ State Certification.<br><br>Apply here: <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CMA Program</a>."
         },
         pct: {
             keywords: ['pct', 'patient care technician', '220 hours', '5 months'],
-            response: "Our <strong>Patient Care Technician (PCT)</strong> program is a comprehensive 220-hour course (5 months including externship).<br><br><strong>Registration Fee:</strong> $500 ($400 non-refundable).<br><strong>Outcome:</strong> Advanced clinical skills for hospital settings.<br><br>More info: <a href='pct-program.html' style='color: var(--primary-color); text-decoration: underline;'>PCT Page</a>."
+            response: "Our <strong>Patient Care Technician (PCT)</strong> program is a comprehensive 220-hour course (5 months including externship).<br><br><strong>Registration Fee:</strong> $500 ($400 non-refundable).<br><strong>Outcome:</strong> Advanced clinical skills for hospital settings.<br><br>More info: <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>PCT Page</a>."
         },
         ma: {
             keywords: ['medical assistant', 'ma program', '620 hours', 'admin'],
-            response: "Our <strong>Certified Medical Assistant</strong> program is 620 hours (5 months training + externship).<br><br><strong>Registration Fee:</strong> $500 ($400 non-refundable).<br><strong>Focus:</strong> Clinical and administrative training.<br><br>Start your career: <a href='medical-assistant-program.html' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant Page</a>."
+            response: "Our <strong>Certified Medical Assistant</strong> program is 620 hours (5 months training + externship).<br><br><strong>Registration Fee:</strong> $500 ($400 non-refundable).<br><strong>Focus:</strong> Clinical and administrative training.<br><br>Start your career: <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant Page</a>."
         },
         ekg_phlebotomy: {
             keywords: ['ekg', 'phlebotomy', 'blood draw', 'heart monitor', '140 hours'],
-            response: "The <strong>EKG & Phlebotomy</strong> program is 140 hours.<br><br><strong>Schedule:</strong> Day or Weekend classes.<br><strong>Reservation Fee:</strong> $200 (non-refundable).<br><strong>Outcome:</strong> Technical Proficiency Certificate.<br><br>Details: <a href='ekg-phlebotomy-program.html' style='color: var(--primary-color); text-decoration: underline;'>EKG/Phlebotomy Page</a>."
+            response: "The <strong>EKG & Phlebotomy</strong> program is 140 hours.<br><br><strong>Schedule:</strong> Day or Weekend classes.<br><strong>Reservation Fee:</strong> $200 (non-refundable).<br><strong>Outcome:</strong> Technical Proficiency Certificate.<br><br>Details: <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>EKG/Phlebotomy Page</a>."
         },
         cpr: {
             keywords: ['cpr', 'bls', 'basic life support', 'heart association', 'first aid'],
-            response: "We offer <strong>CPR & BLS</strong> certification through the American Heart Association.<br><br><strong>Duration:</strong> 5 hours.<br><strong>Schedule:</strong> Weekdays/Weekends (10am - 3pm).<br><br>Register now: <a href='cpr-program.html' style='color: var(--primary-color); text-decoration: underline;'>CPR Page</a>."
+            response: "We offer <strong>CPR & BLS</strong> certification through the American Heart Association.<br><br><strong>Duration:</strong> 5 hours.<br><strong>Schedule:</strong> Weekdays/Weekends (10am - 3pm).<br><br>Register now: <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CPR Page</a>."
         },
         newborn: {
             keywords: ['newborn', 'baby nursing', 'infant care', 'neonatal', '10 hours'],
-            response: "Our <strong>Newborn Care Specialist (Baby Nursing)</strong> workshop is 10 hours.<br><br><strong>Schedule:</strong> Weekends (10am - 3pm).<br><strong>Registration Fee:</strong> $200 (non-refundable).<br><br>Learn more: <a href='newborn-care-program.html' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care Page</a>."
+            response: "Our <strong>Newborn Care Specialist (Baby Nursing)</strong> workshop is 10 hours.<br><br><strong>Schedule:</strong> Weekends (10am - 3pm).<br><strong>Registration Fee:</strong> $200 (non-refundable).<br><br>Learn more: <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care Page</a>."
         },
 
         // --- General Info ---
         tuition: {
             keywords: ['tuition', 'cost', 'price', 'payment plan', 'fee', 'financial'],
-            response: "We strive to make education affordable. We offer <strong>interest-free weekly or bi-weekly payment plans</strong>.<br><br>Program fees vary. Registration fees range from $200 - $500. Full tuition must be paid before graduation.<br><br>See details: <a href='tuition.html' style='color: var(--primary-color); text-decoration: underline;'>Tuition & Aid</a>."
+            response: "We strive to make education affordable. We offer <strong>interest-free weekly or bi-weekly payment plans</strong>.<br><br>Program fees vary. Registration fees range from $200 - $500. Full tuition must be paid before graduation.<br><br>See details: <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Tuition & Aid</a>."
         },
         requirements: {
             keywords: ['require', 'enroll', 'document', 'paperwork', 'prerequisite'],
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Leadership & History ---
         founder: {
             keywords: ['founder', 'ceo', 'bernadine', 'belen', 'owner', 'started', 'history', '1986'],
-            response: "St. Bernadine was founded in 1986 by <strong>Bernadine 'Belen' Samin, R.N.</strong>.<br><br>With over 40 years of nursing experience, her vision was to expand healthcare services globally to empower nurses and caregivers. <a href='about.html' style='color: var(--primary-color); text-decoration: underline;'>Read her story</a>."
+            response: "St. Bernadine was founded in 1986 by <strong>Bernadine 'Belen' Samin, R.N.</strong>.<br><br>With over 40 years of nursing experience, her vision was to expand healthcare services globally to empower nurses and caregivers. <a href='about.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Read her story</a>."
         },
         leadership: {
             keywords: ['leader', 'team', 'director', 'administrator', 'louie', 'jocelyn', 'management'],
@@ -283,11 +283,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Services ---
         visa: {
             keywords: ['visa', 'sponsorship', 'green card', 'eb3', 'immigration', 'global', 'international', 'abroad', 'petition'],
-            response: "We offer <strong>Global Career Procurement</strong>!<br><br>We specialize in EB-3 Visa and Green Card sponsorship for international nurses and therapists, including placement in top US institutions and travel assistance.<br><br><a href='placement.html' style='color: var(--primary-color); text-decoration: underline;'>Learn about Global Placement</a>."
+            response: "We offer <strong>Global Career Procurement</strong>!<br><br>We specialize in EB-3 Visa and Green Card sponsorship for international nurses and therapists, including placement in top US institutions and travel assistance.<br><br><a href='placement.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Learn about Global Placement</a>."
         },
         homecare_services: {
             keywords: ['home care service', 'caregiver service', 'hiring a nurse', 'need help', 'patient care', '24/7'],
-            response: "Our <strong>Home Care Services</strong> division provides 24/7 personalized care.<br><br>We match certified caregivers to patients for medication management, meal prep, and daily living assistance.<br><br><a href='home-care.html' style='color: var(--primary-color); text-decoration: underline;'>Request Care</a>."
+            response: "Our <strong>Home Care Services</strong> division provides 24/7 personalized care.<br><br>We match certified caregivers to patients for medication management, meal prep, and daily living assistance.<br><br><a href='home-care.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Request Care</a>."
         }
     };
 
@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Check for Greetings specifically
         if (lowerInput.match(/\b(hi|hello|hey|greetings|good morning|good afternoon)\b/)) {
-            return "Hello! I can help you with <strong>Program Details</strong> (CNA, HHA, etc.), <strong>Tuition</strong>, <strong>Visa Sponsorship</strong>, or tell you about our <strong>Founder</strong>. What would you like to know?";
+            return "Hello! I can help you with <strong>Program Details</strong> (CNA, HHA, etc.), <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Tuition</strong></a>, <strong>Visa Sponsorship</strong>, or tell you about our <strong>Founder</strong>. What would you like to know?";
         }
 
         // Check for specific keywords in knowledge base
