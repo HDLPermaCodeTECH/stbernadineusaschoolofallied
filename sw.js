@@ -1,4 +1,4 @@
-const CACHE_NAME = 'st-bernadine-v14';
+const CACHE_NAME = 'st-bernadine-v15';
 const ASSETS_TO_CACHE = [
     './index.html',
     './styles.css',
