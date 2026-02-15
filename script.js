@@ -74,7 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle Chat Window
     function toggleChat() {
         chatbotContainer.classList.toggle('active');
-        if (chatbotContainer.classList.contains('active')) {
+        const isActive = chatbotContainer.classList.contains('active');
+
+        // Hide toggle button when chat is active to prevent overlap/interaction issues
+        if (isActive) {
+            chatToggleBtn.style.opacity = '0';
+            chatToggleBtn.style.pointerEvents = 'none';
+        } else {
+            chatToggleBtn.style.opacity = '1';
+            chatToggleBtn.style.pointerEvents = 'all';
+        }
+
+        if (isActive) {
             setTimeout(() => userInput.focus(), 300);
             if (!chatInitialized) {
                 showInitialMessage();
