@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', sender);
         if (sender === 'bot') {
-            messageDiv.innerHTML = `<strong>St. Bernadine Academy AI:</strong><br>${text}`;
+            messageDiv.innerHTML = `<strong>St. Bernadine School AI:</strong><br>${text}`;
         } else {
             messageDiv.innerHTML = text;
         }
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         location: {
             keywords: ['location', 'address', 'where', 'office', 'jersey city', 'summit ave'],
-            response: "Our Academy and Home Care office is located at <strong>591 Summit Avenue, Suite 415, Jersey City, NJ 07306</strong>."
+            response: "Our School and Home Care office is located at <strong>591 Summit Avenue, Suite 415, Jersey City, NJ 07306</strong>."
         },
         contact: {
             keywords: ['contact', 'phone', 'call', 'email', 'registrar', 'reach'],
