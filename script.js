@@ -163,7 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: '📚 Programs', query: 'programs' },
             { label: '💰 Tuition', query: 'tuition' },
             { label: '🌏 Visa Sponsorship', query: 'visa' },
-            { label: '👩‍⚕️ Founder', query: 'founder' }
+            { label: '👩‍⚕️ Founder', query: 'founder' },
+            { label: '📍 Location', query: 'location' },
+            { label: '🤝 Referral', query: 'referral' }
         ];
 
         topics.forEach(topic => {
