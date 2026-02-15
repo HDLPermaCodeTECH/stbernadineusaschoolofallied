@@ -217,6 +217,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // AI Knowledge Base
     const schoolKnowledge = {
         // --- Programs ---
+        programs_list: {
+            keywords: ['programs', 'courses', 'classes', 'list', 'offer', 'training'],
+            response: "We offer a wide range of healthcare programs. Click for details:<br><br>📚 <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA (Certified Nurse Aide)</a><br>🏠 <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA (Home Health Aide)</a><br>💊 <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CMA (Medication Aide)</a><br>🏥 <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>PCT (Patient Care Tech)</a><br>🩺 <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant</a><br>🩸 <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>EKG & Phlebotomy</a><br>❤️ <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CPR & BLS</a><br>👶 <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care</a>"
+        },
         cna: {
             keywords: ['cna', 'certified nurse aide', 'nursing assistant', 'nurse aide', '90 hours'],
             response: "Our <strong>Certified Nurse Aide (CNA)</strong> program is a 90-hour course (50 classroom / 40 clinicals).<br><br><strong>Schedule:</strong> Day and Evening classes available.<br><strong>Registration Fee:</strong> $500 ($200 non-refundable).<br><strong>Outcome:</strong> NJ State Licensure.<br><br>Learn more or apply on our <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA Page</a>."
