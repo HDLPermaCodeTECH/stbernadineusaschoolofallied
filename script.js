@@ -162,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const topics = [
             { label: '📚 Programs', query: 'programs' },
             { label: '💰 Tuition', query: 'tuition' },
-            { label: '📍 Location', query: 'location' },
-            { label: '🤝 Referral', query: 'referral' }
+            { label: '🌏 Visa Sponsorship', query: 'visa' },
+            { label: '👩‍⚕️ Founder', query: 'founder' }
         ];
 
         topics.forEach(topic => {
