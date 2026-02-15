@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator();
-                addMessage("Hello! I'm the St. Bernadine AI. I can answer questions about our <strong>Programs</strong>, <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Tuition</strong></a>, <strong>Visa Sponsorship</strong>, <strong>Founder</strong>, and more.<br><br>How can I help you today?", 'bot');
+                addMessage("Hello! I'm the St. Bernadine AI. I can answer questions about our <strong>📚 Programs</strong>, <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>💰 Tuition</strong></a>, <strong>🌏 Visa Sponsorship</strong>, <strong>👩‍⚕️ Founder</strong>, and more.<br><br>How can I help you today?", 'bot');
                 showSuggestions();
             }, 800);
         }, 300);
