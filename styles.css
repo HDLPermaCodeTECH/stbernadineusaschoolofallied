@@ -4961,7 +4961,8 @@ body:not(.js-loaded) .reveal-scale {
     border-radius: 24px;
     outline: none;
     font-family: var(--font-body);
-    font-size: 0.95rem;
+    font-size: 16px;
+    /* Prevent zoom on mobile */
     transition: border-color 0.2s;
 }
 
