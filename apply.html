@@ -382,7 +382,16 @@
             <a href="#" download>Download Application Form (PDF)</a>
         </div>
 
-        <form id="application-form">
+        <form id="application-form" action="https://formsubmit.co/stbernadines@gmail.com" method="POST"
+            enctype="multipart/form-data">
+            <!-- FormSubmit Configuration -->
+            <input type="hidden" name="_subject" value="New Student Application - St. Bernadine">
+            <input type="hidden" name="_template" value="box">
+            <input type="hidden" name="_captcha" value="true">
+            <input type="hidden" name="_autoresponse"
+                value="Thank you for applying to St. Bernadine School of Allied Health. We have received your application and will review it shortly.">
+            <!-- Signature Hidden Input -->
+            <input type="hidden" name="signature_image" id="signatureInput">
 
             <!-- File Upload -->
             <div class="form-group">
@@ -800,6 +809,18 @@
                 fileText.style.color = '';
             }
         }
+
+        // --- Form Submission Logic (Signature Capture) ---
+        const form = document.getElementById('application-form');
+        form.addEventListener('submit', function (e) {
+            if (signaturePad.isEmpty()) {
+                e.preventDefault();
+                alert("Please provide your signature.");
+            } else {
+                const signatureData = signaturePad.toDataURL(); // Save as base64 data URI
+                document.getElementById('signatureInput').value = signatureData;
+            }
+        });
 
         // --- Dynamic Location Logic ---
 
