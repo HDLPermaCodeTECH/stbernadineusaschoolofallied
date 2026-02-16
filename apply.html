@@ -530,17 +530,17 @@
                     <label>Name <span class="required">*</span></label>
                     <div class="grid-3-form">
                         <div>
-                            <input type="text" id="firstName" name="First Name" class="form-control"
+                            <input type="text" id="firstName" name="firstName" class="form-control"
                                 placeholder="First Name" required>
                             <span class="helper-text">First</span>
                         </div>
                         <div>
-                            <input type="text" id="middleName" name="Middle Name" class="form-control"
+                            <input type="text" id="middleName" name="middleName" class="form-control"
                                 placeholder="Middle Name">
                             <span class="helper-text">Middle</span>
                         </div>
                         <div>
-                            <input type="text" id="lastName" name="Last Name" class="form-control"
+                            <input type="text" id="lastName" name="lastName" class="form-control"
                                 placeholder="Last Name" required>
                             <span class="helper-text">Last</span>
                         </div>
@@ -549,13 +549,13 @@
 
                 <div class="form-group">
                     <label>Address <span class="required">*</span></label>
-                    <input type="text" id="addressLine1" name="Address" class="form-control"
+                    <input type="text" id="addressLine1" name="address" class="form-control"
                         placeholder="Address Line 1" style="margin-bottom: 10px;" required>
 
                     <div class="grid-2-form">
                         <div>
                             <div>
-                                <select id="country" name="Country" class="form-control" required
+                                <select id="country" name="country" class="form-control" required
                                     style="margin-bottom: 15px;">
                                     <option value="">--- Select Country ---</option>
                                     <option value="" disabled>Loading countries...</option>
@@ -563,7 +563,7 @@
                                 <span class="helper-text" style="display: block; margin-bottom: 10px;">Country</span>
                             </div>
                             <div>
-                                <select id="city" name="City" class="form-control" disabled required>
+                                <select id="city" name="city" class="form-control" disabled required>
                                     <option value="">--- Select City ---</option>
                                 </select>
                                 <span class="helper-text">City</span>
@@ -571,7 +571,7 @@
                         </div>
                         <div class="grid-2-form" style="margin-top: 0;"> <!-- Adjusted margin -->
                             <div>
-                                <select id="state" name="State" class="form-control" disabled required
+                                <select id="state" name="state" class="form-control" disabled required
                                     style="margin-bottom: 15px;">
                                     <option value="">--- Select State/Province ---</option>
                                 </select>
@@ -579,7 +579,7 @@
                                     / Region</span>
                             </div>
                             <div>
-                                <input type="text" id="postalCode" name="Postal Code" class="form-control"
+                                <input type="text" id="postalCode" name="postalCode" class="form-control"
                                     placeholder="Postal / Zip Code" required>
                                 <span class="helper-text">Postal Code</span>
                             </div>
@@ -590,7 +590,7 @@
                 <div class="grid-2-form">
                     <div class="form-group">
                         <label for="phone">Contact Number <span class="required">*</span></label>
-                        <input type="tel" id="phone" name="Phone" class="form-control" required>
+                        <input type="tel" id="phone" name="phone" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email <span class="required">*</span></label>
@@ -604,11 +604,11 @@
                 <div class="grid-2-form">
                     <div class="form-group">
                         <label>Mother's Maiden Name <span class="required">*</span></label>
-                        <input type="text" id="motherName" name="Mother Name" class="form-control" required>
+                        <input type="text" id="motherName" name="motherName" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Father's Complete Name <span class="required">*</span></label>
-                        <input type="text" id="fatherName" name="Father Name" class="form-control" required>
+                        <input type="text" id="fatherName" name="fatherName" class="form-control" required>
                     </div>
                 </div>
 
@@ -617,19 +617,18 @@
                 <div class="grid-2-form">
                     <div class="form-group">
                         <label>Contact Person <span class="required">*</span></label>
-                        <input type="text" id="emergencyName" name="Emergency Contact Name" class="form-control"
-                            required>
+                        <input type="text" id="emergencyName" name="emergencyContactName" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Contact Number <span class="required">*</span></label>
-                        <input type="tel" id="emergencyPhone" name="Emergency Contact Phone" class="form-control"
+                        <input type="tel" id="emergencyPhone" name="emergencyContactPhone" class="form-control"
                             required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Who referred you to St. Bernadine?</label>
-                    <input type="text" id="referrer" name="Referrer" class="form-control">
+                    <input type="text" id="referrer" name="referrer" class="form-control">
                 </div>
 
                 <!-- Profession -->
@@ -660,7 +659,7 @@
                             <input type="radio" name="profession" value="Other" id="prof_other">
                             <label for="prof_other" style="margin:0; font-weight: 400; white-space: nowrap;">Other
                                 Profession:</label>
-                            <input type="text" id="otherProfession" name="Other Profession" class="form-control"
+                            <input type="text" id="otherProfession" name="otherProfession" class="form-control"
                                 style="padding: 6px 10px; margin-left: 10px; font-size: 0.9rem;" placeholder="Specify">
                         </div>
                     </div>
@@ -671,15 +670,15 @@
                 <div class="grid-3-form">
                     <div class="form-group">
                         <label>School <span class="required">*</span></label>
-                        <input type="text" id="school" name="School" class="form-control" required>
+                        <input type="text" id="school" name="school" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Course/Program <span class="required">*</span></label>
-                        <input type="text" id="course" name="Course" class="form-control" required>
+                        <input type="text" id="course" name="course" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Year Graduated <span class="required">*</span></label>
-                        <input type="text" id="yearGrad" name="Year Graduated" class="form-control" required>
+                        <input type="text" id="yearGrad" name="yearGraduated" class="form-control" required>
                     </div>
                 </div>
 
@@ -762,7 +761,7 @@
 
                 <div class="form-group">
                     <label>Date <span class="required">*</span></label>
-                    <input type="date" id="applicationDate" name="Date of Application" class="form-control" required>
+                    <input type="date" id="applicationDate" name="dateOfApplication" class="form-control" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit Application</button>
