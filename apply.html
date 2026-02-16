@@ -181,6 +181,75 @@
             margin-top: 5px;
         }
 
+        /* File Preview Styles */
+        #fileList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .file-item {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            background: white;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .file-preview {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--text-light);
+        }
+
+        .file-info {
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            word-break: break-all;
+            line-height: 1.3;
+        }
+
+        .file-size {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .remove-file {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s;
+        }
+
+        .remove-file:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
         @media (min-width: 768px) {
             .grid-3-form {
                 display: grid;
@@ -386,10 +455,10 @@
             <!-- Download / Upload Section -->
             <div class="download-box">
                 <p><i class="fa-solid fa-file-pdf"></i> Prefer to fill it out by hand?</p>
-                <a href="#" download>Download Application Form (PDF)</a>
+                <a href="http://localhost:3000/api/download-form" target="_blank">Download Application Form (PDF)</a>
             </div>
 
-            <form id="application-form" action="https://formsubmit.co/stbernadines@gmail.com" method="POST"
+            <form id="application-form" action="http://localhost:3000/send-email" method="POST"
                 enctype="multipart/form-data">
                 <!-- FormSubmit Configuration -->
                 <input type="hidden" name="_subject" value="New Student Application - St. Bernadine">
@@ -411,6 +480,24 @@
                             style="position: absolute; inset: 0; opacity: 0; cursor: pointer;" multiple>
                         <p class="helper-text">Accepted formats: PDF, JPG, PNG (Max 5MB)</p>
                     </div>
+                    <div id="fileList"></div>
+                </div>
+
+                <!-- Program Selection -->
+                <div class="form-group">
+                    <label>Program Applied For <span class="required">*</span></label>
+                    <select id="program" name="Program" class="form-control" required>
+                        <option value="" disabled selected>Select a Program</option>
+                        <option value="Certified Nurse Aide (CNA)">Certified Nurse Aide (CNA)</option>
+                        <option value="Certified Homemaker Home Health Aide (CH-HHA)">Certified Homemaker Home Health
+                            Aide (CH-HHA)</option>
+                        <option value="Certified Medication Aide (CMA)">Certified Medication Aide (CMA)</option>
+                        <option value="Patient Care Technician (PCT)">Patient Care Technician (PCT)</option>
+                        <option value="Certified Medical Assistant">Certified Medical Assistant</option>
+                        <option value="EKG/Phlebotomy Program">EKG/Phlebotomy Program</option>
+                        <option value="CPR and Basic Life Support (BLS)">CPR and Basic Life Support (BLS)</option>
+                        <option value="Certified Newborn Care Specialist">Certified Newborn Care Specialist</option>
+                    </select>
                 </div>
 
                 <!-- Personal Information -->
@@ -817,14 +904,65 @@
         });
 
         function handleFiles(files) {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = ''; // Clear previous previews
+
             if (files.length > 0) {
-                const names = Array.from(files).map(f => f.name).join(', ');
-                fileText.innerHTML = `<strong>Selected:</strong> ${names}`;
+                // Update header text to show count
+                fileText.innerHTML = `<strong>${files.length} file(s) selected</strong>`;
                 fileText.style.color = 'var(--primary-color)';
+
+                Array.from(files).forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+
+                    // Determine preview (Image or Icon)
+                    let previewContent = '';
+                    if (file.type.startsWith('image/')) {
+                        const imgUrl = URL.createObjectURL(file);
+                        previewContent = `<img src="${imgUrl}" class="file-preview" onload="URL.revokeObjectURL(this.src)">`;
+                    } else if (file.type === 'application/pdf') {
+                        previewContent = `<div class="file-preview"><i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i></div>`;
+                    } else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                        previewContent = `<div class="file-preview"><i class="fa-solid fa-file-word" style="color: #3b82f6;"></i></div>`;
+                    } else if (file.type.includes('excel') || file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+                        previewContent = `<div class="file-preview"><i class="fa-solid fa-file-excel" style="color: #22c55e;"></i></div>`;
+                    } else {
+                        previewContent = `<div class="file-preview"><i class="fa-solid fa-file-lines"></i></div>`;
+                    }
+
+                    // Format size
+                    const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+
+                    fileItem.innerHTML = `
+                        <button type="button" class="remove-file" onclick="removeFile(${index})" title="Remove file">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        ${previewContent}
+                        <div class="file-info">${file.name}</div>
+                        <div class="file-size">${size}</div>
+                    `;
+
+                    fileList.appendChild(fileItem);
+                });
             } else {
                 fileText.innerHTML = 'Drag and drop files here or click to select';
                 fileText.style.color = '';
             }
+        }
+
+        function removeFile(index) {
+            const dt = new DataTransfer();
+            const { files } = fileInput;
+
+            for (let i = 0; i < files.length; i++) {
+                if (i !== index) {
+                    dt.items.add(files[i]);
+                }
+            }
+
+            fileInput.files = dt.files;
+            handleFiles(fileInput.files);
         }
 
         // --- Form Submission Logic (Signature Capture) ---
