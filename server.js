@@ -325,16 +325,17 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         // Configure Nodemailer
         console.log("Configuring email transport for user:", process.env.EMAIL_USER);
         let transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false, // use STARTTLS
+            service: 'gmail',
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
             },
             logger: true,
             debug: true,
-            family: 4 // Force IPv4
+            family: 4, // Force IPv4
+            connectionTimeout: 10000, // 10 seconds
+            greetingTimeout: 10000,   // 10 seconds
+            socketTimeout: 10000      // 10 seconds
         });
 
         // Prepare attachments
