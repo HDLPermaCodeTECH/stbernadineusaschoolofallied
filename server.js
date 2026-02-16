@@ -408,8 +408,8 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
 });
 
 // Start Server
-const PORT = 3000;
+// Start Server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-    console.log(`To view your site, open your browser to: http://localhost:${PORT}/apply.html`);
+    console.log(`Server running on port ${PORT}`);
 });
