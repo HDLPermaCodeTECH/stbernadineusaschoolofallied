@@ -1156,21 +1156,26 @@
             const originalText = btn.innerText;
             const form = this; // Capture form reference
 
-            // Validate Phone
-            if (!iti.isValidNumber()) {
-                alert("Please enter a valid main contact number.");
-                return;
-            }
+            try {
+                // Validate Phone
+                if (iti && !iti.isValidNumber()) {
+                    alert("Please enter a valid main contact number.");
+                    return;
+                }
 
-            // Validate Signature
-            if (signaturePad.isEmpty()) {
-                alert("Please provide your signature.");
-                return;
+                // Validate Signature
+                if (signaturePad && signaturePad.isEmpty()) {
+                    alert("Please provide your signature.");
+                    return;
+                } else if (signaturePad) {
+                    // Convert signature to data URL and set to hidden input
+                    const signatureData = signaturePad.toDataURL();
+                    document.getElementById('signatureInput').value = signatureData;
+                }
+            } catch (err) {
+                console.error("Validation Error:", err);
+                // Proceed to submit anyway if validation logic fails to avoid blocking the user
             }
-
-            // Convert signature to data URL and set to hidden input
-            const signatureData = signaturePad.toDataURL();
-            document.getElementById('signatureInput').value = signatureData;
 
             btn.innerText = 'Submitting...';
             btn.disabled = true;
