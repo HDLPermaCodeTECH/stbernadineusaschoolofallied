@@ -409,7 +409,6 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
 
 // Start Server
 // Ensure uploads directory exists
-const fs = require('fs');
 if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
     console.log('Created uploads directory');
