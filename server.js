@@ -331,7 +331,9 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
-            }
+            },
+            logger: true, // log to console
+            debug: true   // include SMTP traffic in logs
         });
 
         // Prepare attachments
