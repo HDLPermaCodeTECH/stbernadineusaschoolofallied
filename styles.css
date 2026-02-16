@@ -5063,3 +5063,91 @@ body:not(.js-loaded) .reveal-scale {
         right: 20px;
     }
 }
+/* === Professional Enrollment Card Design === */
+.enrollment-body {
+    background-color: #f4f7f6;
+    background-image: url('asset/images/pattern-bg.png'); /* Placeholder or remove if none */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.enrollment-card-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.enrollment-card {
+    background: white;
+    padding: 50px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    max-width: 850px; /* Wider for complex form */
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    border-top: 5px solid var(--primary-color);
+}
+
+.enrollment-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 30px;
+}
+
+.enrollment-logo {
+    max-width: 140px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.enrollment-header h2 {
+    color: var(--text-dark);
+    margin: 0 0 10px;
+    font-size: 1.8rem;
+}
+
+.enrollment-header p {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+/* Enhanced Inputs for Card */
+.enrollment-card .form-control {
+    border: 1px solid #e2e8f0;
+    padding: 12px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.enrollment-card .form-control:focus {
+    background: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(6, 117, 46, 0.1);
+}
+
+.enrollment-card label {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.enrollment-card .btn-primary {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(6, 117, 46, 0.25);
+}
+
+.enrollment-card .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(6, 117, 46, 0.35);
+}
+
