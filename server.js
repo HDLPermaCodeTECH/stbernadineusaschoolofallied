@@ -408,8 +408,22 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
 });
 
 // Start Server
+// Ensure uploads directory exists
+const fs = require('fs');
+if (!fs.existsSync('uploads')) {
+    fs.mkdirSync('uploads');
+    console.log('Created uploads directory');
+}
+
+// Health Check
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
 // Start Server
+console.log('Attempting to start server...');
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`To view your site, open your browser to: http://0.0.0.0:${PORT}/apply.html`);
 });
