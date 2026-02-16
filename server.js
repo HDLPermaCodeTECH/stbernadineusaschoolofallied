@@ -326,14 +326,14 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         console.log("Configuring email transport for user:", process.env.EMAIL_USER);
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // use SSL
+            port: 587,
+            secure: false, // use STARTTLS
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
             },
-            logger: true, // log to console
-            debug: true   // include SMTP traffic in logs
+            logger: true,
+            debug: true
         });
 
         // Prepare attachments
