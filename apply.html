@@ -387,7 +387,7 @@
             <!-- FormSubmit Configuration -->
             <input type="hidden" name="_subject" value="New Student Application - St. Bernadine">
             <input type="hidden" name="_template" value="box">
-            <input type="hidden" name="_captcha" value="true">
+            <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_autoresponse"
                 value="Thank you for applying to St. Bernadine School of Allied Health. We have received your application and will review it shortly.">
             <!-- Signature Hidden Input -->
@@ -1163,6 +1163,7 @@
             e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
+            const form = this; // Capture form reference
 
             // Validate Phone
             if (!iti.isValidNumber()) {
@@ -1176,17 +1177,15 @@
                 return;
             }
 
+            // Convert signature to data URL and set to hidden input
+            const signatureData = signaturePad.toDataURL();
+            document.getElementById('signatureInput').value = signatureData;
+
             btn.innerText = 'Submitting...';
             btn.disabled = true;
 
-            // Simulate server request
-            setTimeout(() => {
-                alert('Application Submitted Successfully! We will contact you shortly.');
-                this.reset();
-                signaturePad.clear();
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }, 1500);
+            // Submit the form programmatically
+            form.submit();
         });
     </script>
 </body>
