@@ -302,20 +302,15 @@ app.get('/api/download-form', async (req, res) => {
 // Configure Nodemailer (Global)
 console.log("Configuring email transport...");
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // upgrade later with STARTTLS
-    requireTLS: true,
+    host: 'smtp.googlemail.com', // Alternative host
+    port: 465,
+    secure: true, // use SSL
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     logger: true,
-    debug: true,
-    family: 4, // Force IPv4
-    connectionTimeout: 60000, // 60s
-    greetingTimeout: 30000,   // 30s
-    socketTimeout: 60000      // 60s
+    debug: true
 });
 
 // Verify connection configuration on startup
