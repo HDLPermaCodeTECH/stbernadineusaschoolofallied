@@ -1,11 +1,11 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 require('dotenv').config();
 
 const app = express();
@@ -18,7 +18,10 @@ app.use(bodyParser.json());
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/') // Make sure this folder exists
+        if (!fs.existsSync('uploads')) {
+            fs.mkdirSync('uploads');
+        }
+        cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname)
@@ -29,6 +32,11 @@ const upload = multer({ storage: storage });
 
 // Serve static files
 app.use(express.static(__dirname));
+
+// Configure Brevo API
+const defaultClient = SibApiV3Sdk.ApiClient.instance;
+const apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.EMAIL_PASS;
 
 // Helper: Generate PDF
 const generatePDF = (data, signatureBuffer) => {
@@ -140,7 +148,6 @@ const generatePDF = (data, signatureBuffer) => {
         doc.end();
     });
 };
-
 
 // Helper: Generate Blank PDF
 const generateBlankPDF = () => {
@@ -299,28 +306,34 @@ app.get('/api/download-form', async (req, res) => {
     }
 });
 
-// Configure Nodemailer (Brevo SMTP)
-console.log("Configuring email transport (Brevo)...");
-const transporter = nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com',
-    port: 2525, // Port 587 is blocked, trying 2525
-    secure: false, // use STARTTLS
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    logger: true,
-    debug: true
-});
+// Helper: Send Email via Brevo API
+async function sendEmail(to, subject, htmlContent, attachments = []) {
+    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-// Verify connection configuration on startup
-transporter.verify(function (error, success) {
-    if (error) {
-        console.error("❌ SMTP CONNECTION ERROR ON STARTUP:", error);
-    } else {
-        console.log("✅ SMTP Server is ready to take our messages");
+    sendSmtpEmail.subject = subject;
+    sendSmtpEmail.htmlContent = htmlContent;
+    sendSmtpEmail.sender = { "name": "St. Bernadine Website", "email": process.env.EMAIL_USER };
+    sendSmtpEmail.to = [{ "email": to, "name": "Admin" }];
+
+    // Map attachments to Brevo format
+    // expects { content: base64string, name: filename }
+    if (attachments.length > 0) {
+        sendSmtpEmail.attachment = attachments.map(att => ({
+            content: att.content.toString('base64'),
+            name: att.filename
+        }));
     }
-});
+
+    try {
+        const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log('✅ API Email sent successfully. MessageId:', data.messageId);
+        return data;
+    } catch (error) {
+        console.error('❌ API Email Error:', error);
+        throw error;
+    }
+}
 
 // Route to handle form submission with file upload
 app.post('/send-email', upload.array('attachment'), async (req, res) => {
@@ -349,71 +362,65 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         let attachments = [
             {
                 filename: 'Application_Form.pdf',
-                content: pdfBuffer,
-                contentType: 'application/pdf'
+                content: pdfBuffer
             }
         ];
 
         // Add uploaded files to attachments
         if (files && files.length > 0) {
             files.forEach(file => {
+                const fileContent = fs.readFileSync(file.path);
                 attachments.push({
                     filename: file.originalname,
-                    path: file.path
+                    content: fileContent
                 });
+                // Clean up uploaded file immediately after reading
+                try { fs.unlinkSync(file.path); } catch (e) { console.error("Error deleting temp file:", e); }
             });
         }
 
         // Format Email Content
-        let mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER, // Send to self
-            subject: `New Application: ${data['First Name'] || 'Applicant'}`,
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h2 style="color: #003366; border-bottom: 2px solid #003366; padding-bottom: 10px;">New Student Application Received</h2>
-                    <p style="font-size: 16px;">A new application has been submitted. The official PDF is attached.</p>
-                    
-                    <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 20px;">
-                        <h3 style="margin-top: 0; color: #333;">Applicant Summary</h3>
-                        <table style="width: 100%; border-collapse: collapse;">
+        const htmlContent = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #003366; border-bottom: 2px solid #003366; padding-bottom: 10px;">New Student Application Received</h2>
+                <p style="font-size: 16px;">A new application has been submitted. The official PDF is attached.</p>
+                
+                <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                    <h3 style="margin-top: 0; color: #333;">Applicant Summary</h3>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 8px; font-weight: bold; width: 150px;">Program:</td>
+                            <td style="padding: 8px; color: #003366; font-weight: bold;">${data['Program'] || 'Not Specified'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; font-weight: bold;">Name:</td>
+                            <td style="padding: 8px;">${data['First Name']} ${data['Last Name'] || ''}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; font-weight: bold;">Email:</td>
+                            <td style="padding: 8px;">${data['email']}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; font-weight: bold;">Phone:</td>
+                            <td style="padding: 8px;">${data['Phone']}</td>
+                        </tr>
                             <tr>
-                                <td style="padding: 8px; font-weight: bold; width: 150px;">Program:</td>
-                                <td style="padding: 8px; color: #003366; font-weight: bold;">${data['Program'] || 'Not Specified'}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; font-weight: bold;">Name:</td>
-                                <td style="padding: 8px;">${data['First Name']} ${data['Last Name'] || ''}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; font-weight: bold;">Email:</td>
-                                <td style="padding: 8px;">${data['email']}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; font-weight: bold;">Phone:</td>
-                                <td style="padding: 8px;">${data['Phone']}</td>
-                            </tr>
-                             <tr>
-                                <td style="padding: 8px; font-weight: bold;">Education Course:</td>
-                                <td style="padding: 8px;">${data['Course'] || 'N/A'}</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <p style="margin-top: 20px; font-size: 14px; color: #666;">
-                        <em>This email was generated automatically by the St. Bernadine application system.</em>
-                    </p>
+                            <td style="padding: 8px; font-weight: bold;">Education Course:</td>
+                            <td style="padding: 8px;">${data['Course'] || 'N/A'}</td>
+                        </tr>
+                    </table>
                 </div>
-            `,
-            attachments: attachments
-        };
 
-        // Send Email
-        let info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+                <p style="margin-top: 20px; font-size: 14px; color: #666;">
+                    <em>This email was generated automatically by the St. Bernadine application system (via Brevo API).</em>
+                </p>
+            </div>
+        `;
 
-        // Respond
-        res.status(200).send('Application Submitted Successfully! PDF Generated.');
+        // Send Email via API
+        await sendEmail(process.env.EMAIL_USER, `New Application: ${data['First Name'] || 'Applicant'}`, htmlContent, attachments);
+
+        res.status(200).send('Application Submitted Successfully!');
 
     } catch (error) {
         console.error("Error processing application:", error);
@@ -432,10 +439,16 @@ app.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
 
+// Version Check (Debug)
+app.get('/version', (req, res) => {
+    res.status(200).send('BREVO_API_V2');
+});
+
 // Start Server
 console.log('Attempting to start server...');
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Using Brevo API for emails (VERSION: BREVO_API_V2)`);
     console.log(`To view your site, open your browser to: http://0.0.0.0:${PORT}/apply.html`);
 });
