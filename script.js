@@ -40,10 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Active Navigation Highlight ---
     function highlightActiveLink() {
-        // Get path and normalize it (remove trailing slash unless it's just '/')
-        let currentPath = window.location.pathname;
-        if (currentPath.length > 1 && currentPath.endsWith('/')) {
-            currentPath = currentPath.slice(0, -1);
+        // Get the current filename from the URL
+        // Handles: /path/to/index.html -> index.html
+        // Handles: / (root) -> index.html (assumed)
+        let currentFile = window.location.pathname.split('/').pop() || 'index.html';
+
+        // Handle cases where the path ends in a slash (e.g. /folder/) -> assumed index.html
+        if (currentFile.indexOf('.') === -1) {
+            currentFile = 'index.html';
         }
 
         const navLinks = document.querySelectorAll('.nav-links a');
@@ -52,31 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const href = link.getAttribute('href');
             if (!href) return;
 
-            // Clean up href for comparison
-            let cleanHref = href;
-            // Remove full domain if present to just get path
-            try {
-                const url = new URL(href, window.location.origin);
-                cleanHref = url.pathname;
-                if (cleanHref.length > 1 && cleanHref.endsWith('/')) {
-                    cleanHref = cleanHref.slice(0, -1);
-                }
-            } catch (e) {
-                // If not a valid URL (e.g. relative path), keep as is but normalize slashes
+            // Get the filename from the link href
+            // We use the link object property to get the absolute path, then extract filename
+            // But link.href returns full URL. valid for comparison if we just want filename.
+
+            // Simpler: Just check if the href *ends with* the current filename
+            // This avoids issues with relative paths like ./about.html vs about.html
+
+            // Special handling for home page
+            if ((currentFile === 'index.html' || currentFile === '') && (href === 'index.html' || href === './' || href === '/' || href.endsWith('index.html'))) {
+                link.classList.add('active');
+                return;
             }
 
-            // Check for match
-            // 1. Exact path match
-            // 2. Index page handling (root path matches index.html)
-            const isMatch =
-                currentPath === cleanHref ||
-                (currentPath === '/' && cleanHref.includes('index.html')) ||
-                (cleanHref === '/' && currentPath.includes('index.html')) ||
-                // Handle GitHub Pages project root
-                (currentPath === '/stbernadineusaschoolofallied' && cleanHref.includes('index.html')) ||
-                (currentPath === '/stbernadineusaschoolofallied/' && cleanHref.includes('index.html'));
-
-            if (isMatch) {
+            if (href.endsWith(currentFile)) {
                 link.classList.add('active');
             }
         });

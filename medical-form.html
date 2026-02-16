@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Physical Form - St. Bernadine School of Allied Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #06752e;
+            --text-dark: #0f172a;
+            --text-light: #64748B;
+            --border: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.4;
+            background: #f8fafc;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 11pt;
+        }
+
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.5in;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            margin-right: 20px;
+        }
+
+        .header-text h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-text p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Sections */
+        .section-title {
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+            color: var(--text-dark);
+        }
+
+        .field-input {
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            min-height: 28px;
+            background: #fff;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+
+        /* Specific Layouts */
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-box {
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--text-dark);
+            display: inline-block;
+        }
+
+        /* Provider Section */
+        .provider-box {
+            border: 2px solid var(--border);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            padding-top: 10px;
+        }
+
+        /* UI Controls */
+        .ui-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .btn-print {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @media print {
+            body {
+                background: none;
+            }
+
+            .page {
+                box-shadow: none;
+                margin: 0;
+                width: auto;
+                height: 100%;
+                padding: 0;
+                border: none;
+            }
+
+            .ui-controls {
+                display: none;
+            }
+
+            input {
+                border: none;
+                border-bottom: 1px solid #000;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ui-controls">
+        <button onclick="window.print()" class="btn-print">
+            <i class="fa-solid fa-print"></i> Print / Save as PDF
+        </button>
+    </div>
+
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <img src="asset/images/4d-logo.png" alt="Logo" class="logo">
+            <div class="header-text">
+                <h1>Medical Physical & Immunization Form</h1>
+                <p>St. Bernadine School of Allied Health | 591 Summit Ave Suite 415, Jersey City, NJ 07306 | (201)
+                    222-1116</p>
+            </div>
+        </div>
+
+        <p style="font-size: 0.85rem; font-style: italic; margin-bottom: 10px;">
+            To be completed by a licensed Physician, Nurse Practitioner, or Physician Assistant. This form is required
+            for clinical rotation clearance.
+        </p>
+
+        <!-- Section 1: Student Details -->
+        <div class="section-title">1. Student Information</div>
+        <div class="row">
+            <div class="col field-group" style="flex: 2;">
+                <span class="field-label">Student Name (Last, First, Middle)</span>
+                <div class="field-input"></div>
+            </div>
+            <div class="col field-group">
+                <span class="field-label">Date of Birth</span>
+                <div class="field-input"></div>
+            </div>
+            <div class="col field-group">
+                <span class="field-label">Program (e.g., CNA, MA)</span>
+                <div class="field-input"></div>
+            </div>
+        </div>
+
+        <!-- Section 2: Physical Examination -->
+        <div class="section-title">2. Physical Examination</div>
+        <div class="vitals-grid" style="margin-bottom: 15px;">
+            <div class="field-group">
+                <span class="field-label">BP</span>
+                <div class="field-input"></div>
+            </div>
+            <div class="field-group">
+                <span class="field-label">Pulse</span>
+                <div class="field-input"></div>
+            </div>
+            <div class="field-group">
+                <span class="field-label">Resp</span>
+                <div class="field-input"></div>
+            </div>
+            <div class="field-group">
+                <span class="field-label">Temp</span>
+                <div class="field-input"></div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Fit for Duty Certification:</div>
+        <div style="border: 1px solid var(--border); padding: 10px; font-size: 0.9rem; margin-bottom: 10px;">
+            <div class="checkbox-group" style="margin-bottom: 8px;">
+                <div class="checkbox-box"></div>
+                <span>I certify that I have examined the above-named student and found him/her to be in good physical
+                    and mental health.</span>
+            </div>
+            <div class="checkbox-group" style="margin-bottom: 8px;">
+                <div class="checkbox-box"></div>
+                <span>Free from communicable diseases.</span>
+            </div>
+            <div class="checkbox-group">
+                <div class="checkbox-box"></div>
+                <span>Able to lift at least 50 lbs and perform the duties designated for a healthcare student.</span>
+            </div>
+        </div>
+
+        <!-- Section 3: Immunization History -->
+        <div class="section-title">3. Immunization History</div>
+
+        <!-- PPD / TB Screening -->
+        <strong style="display: block; margin-bottom: 5px; font-size: 0.9rem;">A. Tuberculosis Screening (PPD
+            Mantoux)</strong>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Test Type</th>
+                    <th style="width: 25%;">Date Planted</th>
+                    <th style="width: 25%;">Date Read</th>
+                    <th style="width: 15%;">Result (mm)</th>
+                    <th style="width: 15%;">Interpretation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>PPD Step 1</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Pos / Neg</td>
+                </tr>
+                <tr>
+                    <td><strong>PPD Step 2</strong> (if req)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Pos / Neg</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="field-group" style="margin-bottom: 15px;">
+            <span class="field-label">If PPD is Positive: Chest X-Ray or Quantiferon Gold Required</span>
+            <div style="display: flex; gap: 10px; border: 1px solid var(--border); padding: 5px;">
+                <span style="font-weight: 600;">Date:</span> _______________
+                <span style="font-weight: 600; margin-left: 20px;">Result:</span> _______________ (Attach Report)
+            </div>
+        </div>
+
+        <!-- Vaccines -->
+        <strong style="display: block; margin-bottom: 5px; font-size: 0.9rem;">B. Required Immunizations /
+            Titers</strong>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vaccine</th>
+                    <th>Date 1</th>
+                    <th>Date 2</th>
+                    <th>Date 3 / Booster</th>
+                    <th>Titer Result (If applicable)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>MMR</strong> (Measles, Mumps, Rubella)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Pos / Neg</td>
+                </tr>
+                <tr>
+                    <td><strong>Varicella</strong> (Chicken Pox)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Pos / Neg</td>
+                </tr>
+                <tr>
+                    <td><strong>Hepatitis B</strong> (Series of 3)</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Pos / Neg</td>
+                </tr>
+                <tr>
+                    <td><strong>Covid-19</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>N/A</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="font-size: 0.8rem; font-style: italic; margin-bottom: 15px;">
+            * If Hepatitis B vaccine is declined, a waiver must be signed at the school office.
+        </div>
+
+        <!-- Section 4: Provider Cert -->
+        <div class="section-title">4. Healthcare Provider Certification</div>
+        <div class="provider-box">
+            <div class="row">
+                <div class="col field-group" style="flex: 2;">
+                    <span class="field-label">Provider Name (Print)</span>
+                    <div class="field-input"></div>
+                </div>
+                <div class="col field-group">
+                    <span class="field-label">License Number</span>
+                    <div class="field-input"></div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 20px;">
+                <div class="col field-group" style="flex: 2;">
+                    <span class="field-label">Signature</span>
+                    <div style="border-bottom: 1px solid #000; height: 30px;"></div>
+                </div>
+                <div class="col field-group">
+                    <span class="field-label">Date of Exam</span>
+                    <div class="field-input"></div>
+                </div>
+            </div>
+
+            <div
+                style="margin-top: 20px; border: 1px dashed var(--text-light); height: 80px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">
+                Provider Office Stamp
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            2026 Academic Year • St. Bernadine School of Allied Health • Medical Physical Form
+        </div>
+
+    </div>
+
+</body>
+
+</html>
