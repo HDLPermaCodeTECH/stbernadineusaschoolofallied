@@ -333,7 +333,8 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                 pass: process.env.EMAIL_PASS
             },
             logger: true,
-            debug: true
+            debug: true,
+            family: 4 // Force IPv4
         });
 
         // Prepare attachments
