@@ -3501,13 +3501,13 @@ select:focus {
     transition: var(--transition);
 }
 
-.nav-links a.active {
+.nav-links a:not(.btn).active {
     color: var(--primary-color);
     font-weight: 700;
     position: relative;
 }
 
-.nav-links a.active::after {
+.nav-links a:not(.btn).active::after {
     content: '';
     position: absolute;
     bottom: -5px;
