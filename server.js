@@ -303,7 +303,7 @@ app.get('/api/download-form', async (req, res) => {
 console.log("Configuring email transport (Brevo)...");
 const transporter = nodemailer.createTransport({
     host: 'smtp-relay.brevo.com',
-    port: 587,
+    port: 2525, // Port 587 is blocked, trying 2525
     secure: false, // use STARTTLS
     auth: {
         user: process.env.EMAIL_USER,
