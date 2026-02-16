@@ -426,6 +426,17 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
     }
 });
 
+// Ensure uploads directory exists
+if (!fs.existsSync('uploads')) {
+    fs.mkdirSync('uploads');
+    console.log('Created uploads directory');
+}
+
+// Health Check
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
 // Start Server
 console.log('Attempting to start server...');
 const PORT = process.env.PORT || 3000;
