@@ -535,30 +535,33 @@
                     <div class="grid-2-form">
                         <div>
                             <div>
+                                <select id="country" name="Country" class="form-control" required
+                                    style="margin-bottom: 15px;">
+                                    <option value="">--- Select Country ---</option>
+                                    <option value="" disabled>Loading countries...</option>
+                                </select>
+                                <span class="helper-text" style="display: block; margin-bottom: 10px;">Country</span>
+                            </div>
+                            <div>
                                 <select id="city" name="City" class="form-control" disabled required>
                                     <option value="">--- Select City ---</option>
                                 </select>
                                 <span class="helper-text">City</span>
                             </div>
+                        </div>
+                        <div class="grid-2-form" style="margin-top: 0;"> <!-- Adjusted margin -->
                             <div>
-                                <select id="state" name="State" class="form-control" disabled required>
+                                <select id="state" name="State" class="form-control" disabled required
+                                    style="margin-bottom: 15px;">
                                     <option value="">--- Select State/Province ---</option>
                                 </select>
-                                <span class="helper-text">State / Province / Region</span>
+                                <span class="helper-text" style="display: block; margin-bottom: 10px;">State / Province
+                                    / Region</span>
                             </div>
-                        </div>
-                        <div class="grid-2-form" style="margin-top: 10px;">
                             <div>
                                 <input type="text" id="postalCode" name="Postal Code" class="form-control"
                                     placeholder="Postal / Zip Code" required>
                                 <span class="helper-text">Postal Code</span>
-                            </div>
-                            <div>
-                                <select id="country" name="Country" class="form-control" required>
-                                    <option value="">--- Select Country ---</option>
-                                    <option value="" disabled>Loading countries...</option>
-                                </select>
-                                <span class="helper-text">Country</span>
                             </div>
                         </div>
                     </div>
