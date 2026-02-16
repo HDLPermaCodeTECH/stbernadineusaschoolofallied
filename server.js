@@ -299,6 +299,34 @@ app.get('/api/download-form', async (req, res) => {
     }
 });
 
+// Configure Nodemailer (Global)
+console.log("Configuring email transport...");
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // upgrade later with STARTTLS
+    requireTLS: true,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    },
+    logger: true,
+    debug: true,
+    family: 4, // Force IPv4
+    connectionTimeout: 60000, // 60s
+    greetingTimeout: 30000,   // 30s
+    socketTimeout: 60000      // 60s
+});
+
+// Verify connection configuration on startup
+transporter.verify(function (error, success) {
+    if (error) {
+        console.error("❌ SMTP CONNECTION ERROR ON STARTUP:", error);
+    } else {
+        console.log("✅ SMTP Server is ready to take our messages");
+    }
+});
+
 // Route to handle form submission with file upload
 app.post('/send-email', upload.array('attachment'), async (req, res) => {
     try {
@@ -321,22 +349,6 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         console.log("Generating PDF...");
         const pdfBuffer = await generatePDF(data, signatureBuffer);
         console.log("PDF generated successfully.");
-
-        // Configure Nodemailer
-        console.log("Configuring email transport for user:", process.env.EMAIL_USER);
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            logger: true,
-            debug: true,
-            family: 4, // Force IPv4
-            connectionTimeout: 10000, // 10 seconds
-            greetingTimeout: 10000,   // 10 seconds
-            socketTimeout: 10000      // 10 seconds
-        });
 
         // Prepare attachments
         let attachments = [
@@ -412,18 +424,6 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         console.error("Error processing application:", error);
         res.status(500).send('Error processing application: ' + error.message);
     }
-});
-
-// Start Server
-// Ensure uploads directory exists
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-    console.log('Created uploads directory');
-}
-
-// Health Check
-app.get('/health', (req, res) => {
-    res.status(200).send('OK');
 });
 
 // Start Server
