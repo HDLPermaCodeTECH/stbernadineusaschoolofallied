@@ -818,16 +818,7 @@
         }
 
         // --- Form Submission Logic (Signature Capture) ---
-        const form = document.getElementById('application-form');
-        form.addEventListener('submit', function (e) {
-            if (signaturePad.isEmpty()) {
-                e.preventDefault();
-                alert("Please provide your signature.");
-            } else {
-                const signatureData = signaturePad.toDataURL(); // Save as base64 data URI
-                document.getElementById('signatureInput').value = signatureData;
-            }
-        });
+
 
         // --- Dynamic Location Logic ---
 
