@@ -342,6 +342,36 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
     }
 });
 
+app.post('/send-contact', async (req, res) => {
+    try {
+        const { name, email, contact_number, subject, message } = req.body;
+        console.log("Received contact Inquiry:", req.body);
+
+        const htmlContent = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #003366; border-bottom: 2px solid #003366; padding-bottom: 10px;">New Website Inquiry</h2>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Phone:</strong> ${contact_number}</p>
+                <p><strong>Subject:</strong> ${subject}</p>
+                <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                    <strong>Message:</strong><br>
+                    ${message.replace(/\n/g, '<br>')}
+                </div>
+            </div>
+        `;
+
+        // Send to stbernadines@gmail.com
+        await sendEmail("stbernadines@gmail.com", `Inquiry: ${subject} - ${name}`, htmlContent);
+
+        res.status(200).json({ message: 'Message sent successfully!' });
+
+    } catch (error) {
+        console.error("Error sending contact email:", error);
+        res.status(500).json({ error: 'Failed to send message.' });
+    }
+});
+
 // Ensure uploads directory exists
 if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
