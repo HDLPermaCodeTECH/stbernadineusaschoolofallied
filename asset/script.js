@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (counters.length > 0) {
         const animateCounter = (counter) => {
-            const target = parseInt(counter.getAttribute('data-target'));
+            const target = parseFloat(counter.getAttribute('data-target'));
             const duration = 2000;
             let start = 0;
             const increment = target / (duration / 16);
