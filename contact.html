@@ -368,6 +368,35 @@
                 btn.disabled = false;
             }
         });
+
+        // --- DEV: Auto-Fill Test Data ---
+        function autoFillContactTest() {
+            const form = document.getElementById('contact-form');
+            form.querySelector('input[type="text"]').value = 'Hebreydill Llagas';
+            form.querySelector('input[type="email"]').value = 'llagashebreydill1996@gmail.com';
+            document.getElementById('contactNumber').value = '+12015550123';
+            form.querySelectorAll('input[type="text"]')[1].value = 'Test Inquiry Subject';
+            form.querySelector('textarea').value = 'This is a test message to verify the contact form functionality. Please confirm receipt.';
+
+            alert('Test Data Filled! (Email: llagashebreydill1996@gmail.com)');
+        }
+
+        // Add Button
+        const btn = document.createElement('button');
+        btn.innerHTML = '📝 [DEV] Fill Test Data';
+        btn.style.position = 'fixed';
+        btn.style.bottom = '20px';
+        btn.style.right = '20px';
+        btn.style.zIndex = '9999';
+        btn.style.padding = '10px 20px';
+        btn.style.background = '#921c1c';
+        btn.style.color = 'white';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '5px';
+        btn.style.cursor = 'pointer';
+        btn.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+        btn.onclick = autoFillContactTest;
+        document.body.appendChild(btn);
     </script>
 </body>
 

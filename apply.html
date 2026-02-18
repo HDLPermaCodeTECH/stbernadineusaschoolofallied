@@ -1328,6 +1328,78 @@
             form.submit();
         });
     </script>
+    <script>
+        // --- DEV: Auto-Fill Test Data ---
+        function autoFillTest() {
+            // Personal Info
+            document.getElementById('program').value = 'Certified Nurse Aide (CNA)';
+            document.getElementById('firstName').value = 'Hebreydill';
+            document.getElementById('lastName').value = 'Llagas';
+            document.getElementById('addressLine1').value = '123 Test Street';
+
+            // Location (Mocking standard flow)
+            document.getElementById('postalCode').value = '07306';
+
+            // Contact
+            document.getElementById('phone').value = '+12015550123';
+            document.getElementById('email').value = 'llagashebreydill1996@gmail.com';
+
+            // Family
+            document.getElementById('motherName').value = 'Mother Llagas';
+            document.getElementById('fatherName').value = 'Father Llagas';
+
+            // Emergency
+            document.getElementById('emergencyName').value = 'Emergency Contact';
+            document.getElementById('emergencyPhone').value = '+12015550999';
+
+            // Profession
+            document.getElementById('prof_cg').checked = true;
+
+            // Education
+            document.getElementById('school').value = 'Test University';
+            document.getElementById('course').value = 'BS Nursing';
+            document.getElementById('yearGrad').value = '2018';
+
+            // Signature
+            document.getElementById('signatureName').value = 'Hebreydill Llagas';
+            document.getElementById('applicationDate').valueAsDate = new Date();
+
+            // Draw on Signature Pad
+            const canvas = document.getElementById('signature-pad');
+            const signaturePad = new SignaturePad(canvas);
+            signaturePad.penColor = "black";
+            signaturePad.fromData([
+                { color: "black", points: [{ x: 50, y: 100 }, { x: 100, y: 100 }, { x: 150, y: 50 }, { x: 200, y: 100 }] }
+            ]);
+
+            // Handle Country/State/City (Simplification for test)
+            // We manually set values to bypass the fetch logic for speed testing
+            document.getElementById('country').innerHTML = '<option value="United States" selected>United States</option>';
+            document.getElementById('state').innerHTML = '<option value="New Jersey" selected>New Jersey</option>';
+            document.getElementById('state').disabled = false;
+            document.getElementById('city').innerHTML = '<option value="Jersey City" selected>Jersey City</option>';
+            document.getElementById('city').disabled = false;
+
+            alert('Test Data Filled! (Email: llagashebreydill1996@gmail.com)');
+        }
+
+        // Add Button
+        const btn = document.createElement('button');
+        btn.innerHTML = '📝 [DEV] Fill Test Data';
+        btn.style.position = 'fixed';
+        btn.style.bottom = '20px';
+        btn.style.right = '20px';
+        btn.style.zIndex = '9999';
+        btn.style.padding = '10px 20px';
+        btn.style.background = '#921c1c';
+        btn.style.color = 'white';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '5px';
+        btn.style.cursor = 'pointer';
+        btn.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+        btn.onclick = autoFillTest;
+        document.body.appendChild(btn);
+    </script>
 </body>
 
 </html>
