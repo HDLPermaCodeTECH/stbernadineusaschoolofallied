@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Send Message Logic
-    function sendMessage() {
+    async function sendMessage() {
         const message = userInput.value.trim();
         if (message) {
             // Add user message
@@ -162,14 +162,20 @@ document.addEventListener('DOMContentLoaded', () => {
             // Simulate AI thinking
             showTypingIndicator();
 
-            // Simulate AI response delay
-            setTimeout(() => {
+            try {
+                // Get Response (Async)
+                const response = await getBotResponse(message);
+
                 removeTypingIndicator();
-                const response = getBotResponse(message);
                 addMessage(response, 'bot');
+
                 // Re-show suggestions after bot response
                 setTimeout(showSuggestions, 500);
-            }, 1000);
+            } catch (error) {
+                console.error("Chat Error:", error);
+                removeTypingIndicator();
+                addMessage("I'm having trouble connecting right now. Please try again.", 'bot');
+            }
         }
     }
 
@@ -180,13 +186,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addMessage(text, 'user');
         showTypingIndicator();
-        setTimeout(() => {
+
+        // Use the same async logic
+        getBotResponse(text).then(response => {
             removeTypingIndicator();
-            const response = getBotResponse(text);
             addMessage(response, 'bot');
-            // Re-show suggestions after bot response
             setTimeout(showSuggestions, 500);
-        }, 800);
+        });
     }
 
     function showSuggestions() {
@@ -359,22 +365,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    function getBotResponse(input) {
+    async function getBotResponse(input) {
         const lowerInput = input.toLowerCase();
 
-        // Check for Greetings specifically
+        // 1. Check for Greetings locally (faster/cheaper)
         if (lowerInput.match(/\b(hi|hello|hey|greetings|good morning|good afternoon)\b/)) {
             return "Hello! I can help you with <strong>Program Details</strong> (CNA, HHA, etc.), <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Tuition</strong></a>, <strong>Visa Sponsorship</strong>, or tell you about our <strong>Founder</strong>. What would you like to know?";
         }
 
-        // Check for specific keywords in knowledge base
+        // 2. Try Server AI
+        try {
+            // Check if we are running on a server that supports the API
+            const response = await fetch('http://localhost:3000/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: input })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data.response;
+            } else {
+                console.warn("AI Server Error/Unavailable:", response.status);
+            }
+        } catch (e) {
+            console.log("AI Server unreachable (likely static mode), falling back to local logic.");
+        }
+
+        // 3. Fallback to Local Knowledge Base
         for (const key in schoolKnowledge) {
             if (schoolKnowledge[key].keywords.some(word => lowerInput.includes(word))) {
                 return schoolKnowledge[key].response;
             }
         }
 
-        // Expanded Fallback
+        // 4. Final Fallback
         return "I'm not sure about that specific detail. You can ask me about:<br>- <strong>Programs</strong> (CNA, HHA, PCT, MA)<br>- <strong>Tuition & Aid</strong><br>- <strong>Visa Sponsorship</strong><br>- <strong>Location & Contact</strong><br><br>Or call us at (201) 222-1116.";
     }
 

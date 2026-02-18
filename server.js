@@ -1,4 +1,98 @@
-const express = require('express');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// ... (existing middleware) ...
+
+// Configure Gemini API
+let chatModel = null;
+if (process.env.GEMINI_API_KEY) {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    chatModel = genAI.getGenerativeModel({ model: "gemini-pro" });
+    console.log("Gemini API configured.");
+} else {
+    console.log("WARNING: GEMINI_API_KEY not found in .env. Chatbot will use local fallback.");
+}
+
+// System Instruction for St. Bernadine AI
+const systemInstruction = `
+You are the AI assistant for St. Bernadine School of Allied Health, Healthcare Services, located in Jersey City, NJ.
+Your goal is to be helpful, professional, and knowledgeable about the school's programs, tuition, and placement services.
+
+**Key Information:**
+*   **Mission:** To serve people and strengthen healthcare services globally.
+*   **Founder:** Bernadine "Belen" Samin, R.N. (Founded in 1986).
+*   **Location:** 591 Summit Ave Suite 410, Jersey City, NJ 07306.
+*   **Contact:** (201) 222-1116 | info@stbernadine.com
+
+**Programs:**
+*   **CNA (Certified Nurse Aide):** 90 hours. $500 fee ($200 non-refundable). Day/Evening classes.
+*   **CH-HHA (Certified Home Health Aide):** 76 hours. $200 fee. Weekdays/Weekends.
+*   **CMA (Certified Medication Aide):** 56 hours. $200 fee. Must have CNA/CH-HHA license.
+*   **PCT (Patient Care Technician):** 220 hours (5 months). $500 fee.
+*   **Medical Assistant:** 620 hours (5 months). $500 fee.
+*   **EKG & Phlebotomy:** 140 hours. $200 fee.
+*   **CPR & BLS:** 5 hours (AHA Certified).
+*   **Newborn Care Specialist:** 10 hours. $200 fee.
+
+**Tuition & Refund Policy:**
+*   We offer interest-free weekly/bi-weekly payment plans.
+*   **Reservation/Registration fees are NON-REFUNDABLE** but consumable for future sessions.
+*   Full tuition must be paid before graduation.
+
+**Global Placement (EB-3 Visa):**
+*   We sponsor Green Cards for RNs, PTs, OTs, and Medical Technologists.
+*   **Process:** 1. Document Screening -> 2. Legal Review -> 3. Visa Petition -> 4. Green Card -> 5. Onboarding.
+*   **NO Placement Fees** for direct hires.
+
+**Tone:**
+*   Be encouraging and professional.
+*   If you don't know something, ask them to contact the school directly.
+*   Keep answers concise and easy to read.
+`;
+
+// ... (existing routes) ...
+
+// Chatbot Endpoint
+app.post('/chat', async (req, res) => {
+    try {
+        if (!chatModel) {
+            return res.status(503).json({ error: "Gemini API not configured" });
+        }
+
+        const userMessage = req.body.message;
+        if (!userMessage) {
+            return res.status(400).json({ error: "Message required" });
+        }
+
+        const chat = chatModel.startChat({
+            history: [
+                {
+                    role: "user",
+                    parts: [{ text: systemInstruction }],
+                },
+                {
+                    role: "model",
+                    parts: [{ text: "Understood. I am ready to assist as the St. Bernadine AI." }],
+                },
+            ],
+            generationConfig: {
+                maxOutputTokens: 250,
+            },
+        });
+
+        const result = await chat.sendMessage(userMessage);
+        const response = await result.response;
+        const text = response.text();
+
+        res.json({ response: text });
+
+    } catch (error) {
+        console.error("Gemini API Error:", error);
+        res.status(500).json({ error: "AI Error" });
+    }
+});
+
+// ... (rest of server.js) ...
+
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
