@@ -486,12 +486,12 @@ app.post('/send-contact', async (req, res) => {
         const { name, email, contact_number, subject, message } = req.body;
         console.log("Received contact Inquiry:", req.body);
 
-        // Generate PDF
-        const pdfBuffer = await generateInquiryPDF(req.body);
-        const attachments = [{
-            content: pdfBuffer.toString('base64'),
-            name: `Inquiry_${name.replace(/\s+/g, '_')}.pdf`
-        }];
+        // Generate PDF - REMOVED per user request
+        // const pdfBuffer = await generateInquiryPDF(req.body);
+        // const attachments = [{
+        //     content: pdfBuffer.toString('base64'),
+        //     name: `Inquiry_${name.replace(/\s+/g, '_')}.pdf`
+        // }];
 
         // Professional HTML Email Template
         // Professional HTML Email Template
@@ -522,7 +522,7 @@ app.post('/send-contact', async (req, res) => {
                         "${message.replace(/\n/g, '<br>')}"
                     </div>
 
-                    <p style="font-size: 14px; margin-top: 30px; color: #888; text-align: center;">See attached PDF for official record.</p>
+                    <p style="font-size: 14px; margin-top: 30px; color: #888; text-align: center;"></p>
                 </div>
 
                 <!-- Footer -->
@@ -534,8 +534,8 @@ app.post('/send-contact', async (req, res) => {
             </div>
         `;
 
-        // Send to stbernadines@gmail.com with PDF
-        await sendEmail("stbernadines@gmail.com", `[Inquiry] ${subject} - ${name}`, htmlContent, attachments);
+        // Send to stbernadines@gmail.com without PDF
+        await sendEmail("stbernadines@gmail.com", `[Inquiry] ${subject} - ${name}`, htmlContent);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
