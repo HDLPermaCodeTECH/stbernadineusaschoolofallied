@@ -387,9 +387,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return data.response;
             } else {
                 console.warn("AI Server Error/Unavailable:", response.status);
+                // Throw error to trigger catch block and fallback
+                throw new Error("API Error");
             }
         } catch (e) {
-            console.log("AI Server unreachable (likely static mode), falling back to local logic.");
+            console.log("AI Server unreachable or quota exceeded. Falling back to local logic.");
         }
 
         // 3. Fallback to Local Knowledge Base
@@ -400,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 4. Final Fallback
-        return "I'm not sure about that specific detail. You can ask me about:<br>- <strong>Programs</strong> (CNA, HHA, PCT, MA)<br>- <strong>Tuition & Aid</strong><br>- <strong>Visa Sponsorship</strong><br>- <strong>Location & Contact</strong><br><br>Or call us at (201) 222-1116.";
+        return "I'm having trouble connecting to my brain right now (High Traffic).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
     }
 
 
