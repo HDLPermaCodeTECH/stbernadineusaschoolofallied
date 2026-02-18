@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         contact: {
             keywords: ['contact', 'phone', 'call', 'email', 'number', 'talk', 'reach'],
-            response: "📞 <strong>Phone:</strong> (201) 222-1116<br>📧 <strong>Email:</strong> info@stbernadineusa.com<br>📍 <strong>Visit:</strong> 591 Summit Ave, Jersey City.<br><br>We are here to help!"
+            response: "📞 <strong>Phone:</strong> (201) 222-1116<br>📧 <strong>Email:</strong> school@stbernadineusa.com<br>📍 <strong>Visit:</strong> 591 Summit Ave, Jersey City.<br><br>We are here to help!"
         },
         referral: {
             keywords: ['referral', 'refer', 'recommend', 'friend', 'bonus', 'commission'],
