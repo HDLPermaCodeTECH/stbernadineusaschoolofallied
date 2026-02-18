@@ -334,6 +334,24 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         `;
 
         await sendEmail(process.env.EMAIL_USER, `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments);
+
+        // Auto-Reply to Applicant
+        const autoReplySubject = "Application Received - St. Bernadine School of Allied Health";
+        const autoReplyHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #003366;">Application Received</h2>
+                <p>Dear ${data.firstName},</p>
+                <p>Thank you for applying to St. Bernadine School of Allied Health.</p>
+                <p>We have successfully received your application for the <strong>${data.Program}</strong> program.</p>
+                <p>Our admissions team will review your details and contact you shortly regarding the next steps.</p>
+                <br>
+                <p>Best regards,</p>
+                <p><strong>St. Bernadine School of Allied Health Admissions</strong></p>
+                <p>Phone: (201) 222-1116</p>
+                <p>Email: school@stbernadineusa.com</p>
+            </div>
+        `;
+        await sendEmail(data.email, autoReplySubject, autoReplyHtml);
         res.status(200).send('Application Submitted Successfully!');
 
     } catch (error) {
@@ -457,6 +475,23 @@ app.post('/send-contact', async (req, res) => {
 
         // Send to stbernadines@gmail.com with PDF
         await sendEmail("stbernadines@gmail.com", `[Inquiry] ${subject} - ${name}`, htmlContent, attachments);
+
+        // Auto-Reply to Inquirer
+        const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
+        const autoReplyHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #003366;">Thank You for Contacting Us</h2>
+                <p>Dear ${name},</p>
+                <p>This email confirms that we have received your message regarding "<strong>${subject}</strong>".</p>
+                <p>A member of our team will get back to you as soon as possible.</p>
+                <br>
+                <p>Best regards,</p>
+                <p><strong>St. Bernadine School of Allied Health</strong></p>
+                <p>Phone: (201) 222-1116</p>
+                <p>Email: school@stbernadineusa.com</p>
+            </div>
+        `;
+        await sendEmail(email, autoReplySubject, autoReplyHtml);
 
         res.status(200).json({ message: 'Message sent successfully!' });
 
