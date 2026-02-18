@@ -360,6 +360,7 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                     <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
                     <p style="margin: 5px 0 15px; color: #64748b; font-size: 13px;">Secure Admin Notification</p>
                     <p style="margin: 0; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
+                    <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                 </div>
             </div>
         `;
@@ -409,10 +410,11 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                     <p style="margin: 0 0 10px; color: #94a3b8; font-size: 12px;">591 Summit Ave Suite 410, Jersey City, NJ 07306</p>
                     <p style="margin: 0 0 15px; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
 
-                    <div style="font-size: 11px; color: #cbd5e1;">
+                    <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 5px;">
                         <a href="https://stbernadineusa.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
                         <a href="https://stbernadineusa.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
                     </div>
+                    <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                 </div>
             </div>
         `;
@@ -530,6 +532,7 @@ app.post('/send-contact', async (req, res) => {
                     <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
                     <p style="margin: 5px 0 15px; color: #64748b; font-size: 13px;">Secure Admin Notification</p>
                     <p style="margin: 0; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
+                    <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                 </div>
             </div>
         `;
@@ -581,10 +584,11 @@ app.post('/send-contact', async (req, res) => {
                     <p style="margin: 0 0 10px; color: #94a3b8; font-size: 12px;">591 Summit Ave Suite 410, Jersey City, NJ 07306</p>
                     <p style="margin: 0 0 15px; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
 
-                    <div style="font-size: 11px; color: #cbd5e1;">
+                    <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 5px;">
                         <a href="https://stbernadineusa.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
                         <a href="https://stbernadineusa.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
                     </div>
+                    <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                 </div>
             </div>
         `;

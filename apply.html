@@ -324,7 +324,8 @@
                     <a href="contact.html">Contact Us</a>
                     <a href="referral.html">Referral</a>
                     <a href="contact.html" class="btn btn-primary">Inquire Now</a>
-                    <a href="#" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make a Payment</a>
+                    <a href="#" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make a
+                        Payment</a>
                 </div>
             </nav>
         </div>
@@ -714,8 +715,18 @@
                 </p>
 
                 <div class="form-group">
+                    <label>Signature <span class="required">*</span></label>
+                    <div class="signature-pad-wrapper">
+                        <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
+                        <div class="signature-actions">
+                            <span class="clear-sig" id="clear-signature">Clear Signature</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label>Full Name <span class="required">*</span></label>
-                    <input type="text" id="signatureName" name="signature_image" class="form-control"
+                    <input type="text" id="signatureName" name="signature_name" class="form-control"
                         placeholder="Type your full name" required>
                 </div>
 
@@ -1320,4 +1331,3 @@
 </body>
 
 </html>
-
