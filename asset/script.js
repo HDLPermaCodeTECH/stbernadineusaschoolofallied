@@ -204,8 +204,10 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestionsDiv.classList.add('chat-suggestions');
 
         const topics = [
+            { label: '📝 Apply Now', query: 'application' },
             { label: '📚 Programs', query: 'programs' },
             { label: '💰 Tuition', query: 'tuition' },
+            { label: '🎓 Student Life', query: 'student_life' },
             { label: '🌏 Visa Sponsorship', query: 'visa' },
             { label: '👩‍⚕️ Founder', query: 'founder' },
             { label: '📍 Location', query: 'location' },
@@ -362,6 +364,14 @@ document.addEventListener('DOMContentLoaded', () => {
         referral: {
             keywords: ['referral', 'refer', 'recommend', 'friend', 'bonus', 'commission'],
             response: "Refer a friend and earn rewards! We offer a <strong>Referral Program</strong> for our courses.<br><br>If you know someone interested in healthcare training, refer them to us!<br><br><a href='referral.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Submit a Referral</a>."
+        },
+        application: {
+            keywords: ['application', 'apply', 'register', 'enroll', 'sign up', 'start', 'join'],
+            response: "Ready to start your career? 🎓<br><br>Click here to fill out the <strong>Online Application</strong>:<br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Apply Now</strong></a><br><br>It only takes a few minutes!"
+        },
+        student_life: {
+            keywords: ['student', 'life', 'career', 'advice', 'skills', 'news', 'blog', 'events'],
+            response: "Explore our Student Resources:<br><br>🎓 <a href='student-life.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Student Life</a><br>💼 <a href='career-advice.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Career Advice</a><br>🩺 <a href='clinical-skills.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Clinical Skills</a><br>📰 <a href='agency-news.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Agency News</a>"
         },
         developer: {
             keywords: ['developer', 'dev', 'creator', 'made this', 'built this', 'architect', 'troy', 'hebrey', 'llagas', 'who are you', 'programming'],
