@@ -253,7 +253,7 @@ const generatePDF = (data, signatureBuffer) => {
         y = doc.y + 20;
         if (y > 700) doc.addPage();
 
-        doc.rect(50, y, 495, 80).fillOpacity(0.05).fill('#055923');
+        doc.rect(50, y, 495, 160).fillOpacity(0.05).fill('#055923');
         doc.fillOpacity(1);
         doc.font('Helvetica-Bold').fillColor('#055923').text('Declaration:', 60, y + 10);
         doc.font('Helvetica').fontSize(10).fillColor('black').text(
