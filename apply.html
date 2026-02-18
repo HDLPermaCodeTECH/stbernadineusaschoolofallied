@@ -323,7 +323,8 @@
                     <a href="forms.html">Forms</a>
                     <a href="contact.html">Contact Us</a>
                     <a href="referral.html">Referral</a>
-                    <a href="apply.html" class="btn btn-primary">Apply Now</a>
+                    <a href="services.html" class="btn btn-primary">Inquire Now</a>
+                    <a href="#" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make a Payment</a>
                 </div>
             </nav>
         </div>
@@ -475,13 +476,10 @@
                 </div>
             </div>
 
-            <!-- Download / Upload Section -->
-            <div class="download-box">
-                <p><i class="fa-solid fa-file-pdf"></i> Prefer to fill it out by hand?</p>
-                <a href="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/api/download-form"
-                    target="_blank">Download
-                    Application Form
-                    (PDF)</a>
+
+
+            <div style="text-align: center; margin-bottom: 30px;">
+                <a href="#" class="btn btn-primary" style="width: 100%; max-width: 300px;">Make a Payment</a>
             </div>
 
             <form id="application-form" action="https://stbernadineusaschoolofallied.onrender.com/send-email"
@@ -630,12 +628,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Who referred you to St. Bernadine?</label>
-                    <input type="text" id="referrer" name="referrer" class="form-control">
+                    <label>How Did You Know About Us?</label>
+                    <select id="referrer" name="referrer" class="form-control"
+                        onchange="this.value === 'Others' ? document.getElementById('referrerOther').style.display = 'block' : document.getElementById('referrerOther').style.display = 'none'">
+                        <option value="">Select an option</option>
+                        <option value="FB">FB</option>
+                        <option value="IG">IG</option>
+                        <option value="in">in</option>
+                        <option value="Referred by a Friend">Referred by a Friend</option>
+                        <option value="Others">Others</option>
+                    </select>
+                    <input type="text" id="referrerOther" name="referrerOther" class="form-control"
+                        style="margin-top: 10px; display: none;" placeholder="Please specify">
                 </div>
 
                 <!-- Profession -->
-                <div class="form-section-title">Profession <span class="required">*</span></div>
+                <!-- Profession -->
+                <div class="form-section-title">Profession <span class="required" style="color: red;">*</span></div>
                 <div class="form-group">
                     <div class="radio-group">
                         <div class="radio-item">
@@ -656,7 +665,7 @@
                         </div>
                         <div class="radio-item">
                             <input type="radio" name="profession" value="Caregiver" id="prof_cg">
-                            <label for="prof_cg" style="margin:0; font-weight: 400;">Caregiver</label>
+                            <label for="prof_cg" style="margin:0; font-weight: 400;">Nursing Assistant/Caregiver</label>
                         </div>
                         <div class="radio-item" style="align-items: center;">
                             <input type="radio" name="profession" value="Other" id="prof_other">
@@ -685,61 +694,13 @@
                     </div>
                 </div>
 
-                <!-- Employment History -->
-                <div class="form-section-title">Employment History</div>
-
-                <!-- History 1 -->
-                <div style="background: var(--off-white); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <div class="grid-3-form">
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Company Name</label>
-                            <input type="text" name="company1" class="form-control">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Contact Number</label>
-                            <input type="text" name="companyPhone1" class="form-control">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Date Employed</label>
-                            <input type="text" name="dateEmployed1" class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- History 2 -->
-                <div style="background: var(--off-white); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <div class="grid-3-form">
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Company Name</label>
-                            <input type="text" name="company2" class="form-control">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Contact Number</label>
-                            <input type="text" name="companyPhone2" class="form-control">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Date Employed</label>
-                            <input type="text" name="dateEmployed2" class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- History 3 -->
-                <div style="background: var(--off-white); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <div class="grid-3-form">
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Company Name</label>
-                            <input type="text" name="company3" class="form-control">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Contact Number</label>
-                            <input type="text" name="companyPhone3" class="form-control">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 0.85rem;">Date Employed</label>
-                            <input type="text" name="dateEmployed3" class="form-control">
-                        </div>
-                    </div>
+                <!-- Download / Upload Section -->
+                <div class="download-box" style="margin-bottom: 30px;">
+                    <p><i class="fa-solid fa-file-pdf"></i> Prefer to fill it out by hand?</p>
+                    <a href="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/api/download-form"
+                        target="_blank">Download
+                        Application Form
+                        (PDF)</a>
                 </div>
 
                 <!-- Disclosure & Signature -->
@@ -753,13 +714,9 @@
                 </p>
 
                 <div class="form-group">
-                    <label>Signature <span class="required">*</span></label>
-                    <div class="signature-pad-wrapper">
-                        <canvas id="signature-pad" class="signature-pad"></canvas>
-                        <div class="signature-actions">
-                            <span class="clear-sig" id="clear-signature">Clear Signature</span>
-                        </div>
-                    </div>
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="signatureName" name="signature_image" class="form-control"
+                        placeholder="Type your full name" required>
                 </div>
 
                 <div class="form-group">
@@ -812,7 +769,7 @@
                 <div class="footer-links">
                     <h3>Contact Us</h3>
                     <ul class="footer-contact">
-                        <li><i class="fa-solid fa-location-dot"></i> 591 Summit Ave Suite 415, Jersey City, NJ
+                        <li><i class="fa-solid fa-location-dot"></i> 591 Summit Ave Suite 410, Jersey City, NJ
                             07306,
                             United States
                         </li>

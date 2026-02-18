@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         location: {
             keywords: ['location', 'address', 'where', 'map', 'directions', 'jersey city'],
-            response: "We are located at <strong>591 Summit Avenue, Suite 415, Jersey City, NJ 07306</strong>.<br><br>We are easily accessible by public transportation (Journal Square PATH).<br><iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.738080068307!2d-74.0620888!3d40.7275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c250ca533f810b%3A0xc3f8e5c54e0aeb29!2s591%20Summit%20Ave%20Suite%20415%2C%20Jersey%20City%2C%20NJ%2007306!5e0!3m2!1sen!2sus!4v1707577800000!5m2!1sen!2sus' width='100%' height='200' style='border:0; border-radius: 8px; margin-top: 10px;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>"
+            response: "We are located at <strong>591 Summit Avenue, Suite 410, Jersey City, NJ 07306</strong>.<br><br>We are easily accessible by public transportation (Journal Square PATH).<br><iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.738080068307!2d-74.0620888!3d40.7275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c250ca533f810b%3A0xc3f8e5c54e0aeb29!2s591%20Summit%20Ave%20Suite%20410%2C%20Jersey%20City%2C%20NJ%2007306!5e0!3m2!1sen!2sus!4v1707577800000!5m2!1sen!2sus' width='100%' height='200' style='border:0; border-radius: 8px; margin-top: 10px;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>"
         },
         contact: {
             keywords: ['contact', 'phone', 'call', 'email', 'number', 'talk'],

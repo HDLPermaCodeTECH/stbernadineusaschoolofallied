@@ -20,16 +20,19 @@
     <meta property="og:title" content="Referral Program - St. Bernadine School of Allied Health, Healthcare Services">
     <meta property="og:description"
         content="Refer a friend to St. Bernadine School of Allied Health and earn rewards. Help build the next generation of healthcare professionals.">
-    <meta property="og:image" content="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/logo.png">
+    <meta property="og:image"
+        content="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/logo.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/referral.html">
+    <meta property="twitter:url"
+        content="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/referral.html">
     <meta property="twitter:title"
         content="Referral Program - St. Bernadine School of Allied Health, Healthcare Services">
     <meta property="twitter:description"
         content="Refer a friend to St. Bernadine School of Allied Health and earn rewards. Help build the next generation of healthcare professionals.">
-    <meta property="twitter:image" content="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/logo.png">
+    <meta property="twitter:image"
+        content="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/logo.png">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,8 +42,60 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="asset/styles.css?v=3.0">
 </head>
+<link rel="stylesheet" href="asset/styles.css?v=3.0">
+<!-- Intl Tel Input CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+<style>
+    .iti {
+        width: 100%;
+    }
+
+    .referral-section-title {
+        color: var(--primary-color);
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 5px;
+        font-family: var(--font-heading);
+    }
+
+    .referral-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .referral-label-blue {
+        color: var(--text-dark);
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .referral-radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .referral-radio-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-dark);
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .referral-radio-option input[type="radio"] {
+        accent-color: var(--primary-color);
+        width: 16px;
+        height: 16px;
+    }
+</style>
 
 <body>
 
@@ -78,7 +133,8 @@
                     <a href="forms.html">Forms</a>
                     <a href="contact.html">Contact Us</a>
                     <a href="referral.html">Referral</a>
-                    <a href="apply.html" class="btn btn-primary">Apply Now</a>
+                    <a href="services.html" class="btn btn-primary">Inquire Now</a>
+                    <a href="#" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make a Payment</a>
                 </div>
             </nav>
         </div>
@@ -121,52 +177,77 @@
         <div class="container">
             <div class="p-40"
                 style="max-width: 700px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: var(--shadow-lg);">
-                <h2 style="text-align: center; margin-bottom: 30px;">Referral Submission</h2>
+                <h2 style="text-align: center; margin-bottom: 30px; color: #06752e; font-weight: 800;">Referral
+                    Submission</h2>
                 <form id="referral-form">
 
-                    <h3
-                        style="margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px;">
-                        Your Information</h3>
+                    <h3 class="referral-section-title">Referrer's Information</h3>
+
                     <div class="grid grid-2" style="margin-bottom: 20px;">
                         <div>
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Your Name</label>
-                            <input type="text"
+                            <label class="referral-label">Name</label>
+                            <input type="text" name="referrer_name"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required>
                         </div>
                         <div>
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Your Email</label>
-                            <input type="email"
+                            <label class="referral-label">Email</label>
+                            <input type="email" name="referrer_email"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required>
                         </div>
                     </div>
 
-                    <h3
-                        style="margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 5px; margin-top: 30px;">
-                        Friend's Information</h3>
+                    <div style="margin-bottom: 30px;">
+                        <label class="referral-label referral-label-blue">Contact Number</label>
+                        <input type="tel" id="referrerPhone" name="referrer_phone"
+                            style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;" required>
+                    </div>
+
+                    <h3 class="referral-section-title">Applicant's Information</h3>
+
                     <div class="grid grid-2" style="margin-bottom: 20px;">
                         <div>
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Friend's Name</label>
-                            <input type="text"
+                            <label class="referral-label">Name</label>
+                            <input type="text" name="applicant_name"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required>
                         </div>
                         <div>
-                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Friend's Phone</label>
-                            <input type="tel"
+                            <label class="referral-label referral-label-blue">Contact Number</label>
+                            <input type="tel" id="applicantPhone" name="applicant_phone"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required>
                         </div>
                     </div>
+
                     <div style="margin-bottom: 20px;">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Friend's Email
-                            (Optional)</label>
-                        <input type="email"
+                        <label class="referral-label">Email (Optional)</label>
+                        <input type="email" name="applicant_email"
                             style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;">
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Submit
+                    <div style="margin-bottom: 30px;">
+                        <label class="referral-label referral-label-blue" style="font-size: 0.95rem;">Refer for:
+                            <span style="color: #ef4444;">*</span></label>
+                        <div class="referral-radio-group">
+                            <label class="referral-radio-option">
+                                <input type="radio" name="refer_program" value="Placement and Consultancy" required>
+                                Placement and Consultancy
+                            </label>
+                            <label class="referral-radio-option">
+                                <input type="radio" name="refer_program" value="School of Allied Health Services">
+                                School of Allied Health Services
+                            </label>
+                            <label class="referral-radio-option">
+                                <input type="radio" name="refer_program" value="Home Care Services">
+                                Home Care Services
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn"
+                        style="width: 100%; margin-top: 20px; background-color: #902017; color: white; border: none; font-size: 1.1rem;">Submit
                         Referral</button>
                 </form>
             </div>
@@ -213,7 +294,7 @@
                 <div class="footer-links">
                     <h3>Contact Us</h3>
                     <ul class="footer-contact">
-                        <li><i class="fa-solid fa-location-dot"></i> 591 Summit Ave Suite 415, Jersey City, NJ 07306,
+                        <li><i class="fa-solid fa-location-dot"></i> 591 Summit Ave Suite 410, Jersey City, NJ 07306,
                             United States
                         </li>
                         <li><i class="fa-solid fa-phone"></i> +1 (201) 222-1116</li>
@@ -239,6 +320,23 @@
     </footer>
 
     <script src="asset/script.js?v=9.0"></script>
+    <!-- Intl Tel Input JS -->
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+    <script>
+        // Initialize Intl Tel Input
+        const phoneOptions = {
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
+            initialCountry: "us",
+            preferredCountries: ["us", "ph"],
+            separateDialCode: true
+        };
+
+        const referrerPhone = document.querySelector("#referrerPhone");
+        if (referrerPhone) window.intlTelInput(referrerPhone, phoneOptions);
+
+        const applicantPhone = document.querySelector("#applicantPhone");
+        if (applicantPhone) window.intlTelInput(applicantPhone, phoneOptions);
+    </script>
     <script>
         document.getElementById('referral-form').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -249,5 +347,3 @@
 </body>
 
 </html>
-
-
