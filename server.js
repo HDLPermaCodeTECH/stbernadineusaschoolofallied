@@ -276,7 +276,7 @@ const sendEmail = async (to, subject, htmlContent, attachments) => {
 
     sendSmtpEmail.subject = subject;
     sendSmtpEmail.htmlContent = htmlContent;
-    sendSmtpEmail.sender = { "name": "St. Bernadine System", "email": "system@stbernadine.com" };
+    sendSmtpEmail.sender = { "name": "St. Bernadine System", "email": process.env.EMAIL_USER };
     sendSmtpEmail.to = [{ "email": to, "name": "Admin" }];
     if (attachments) {
         sendSmtpEmail.attachment = attachments;
