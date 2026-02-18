@@ -358,11 +358,11 @@
                     alert('Message Sent Successfully! We will contact you soon.');
                     this.reset();
                 } else {
-                    alert('Error: ' + (result.error || 'Failed to send message.'));
+                    alert(`Error (${response.status}): ${result.error || result.message || 'Failed to send message.'}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again later.');
+                alert(`Network/Server Error: ${error.message}\nMake sure the backend is running on port 3000.`);
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
