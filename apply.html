@@ -1324,8 +1324,31 @@
             btn.innerText = 'Submitting...';
             btn.disabled = true;
 
-            // Submit the form programmatically
-            form.submit();
+            // Submit the form using Fetch API for better UX (Alert instead of raw page)
+            const formData = new FormData(form);
+
+            fetch('https://stbernadineusaschoolofallied.onrender.com/send-email', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text().then(text => {
+                            alert('Application Submitted Successfully!');
+                            window.location.reload(); // Refresh to clear form
+                        });
+                    } else {
+                        return response.text().then(text => {
+                            throw new Error(text || 'Submission failed');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Submission Error:', error);
+                    alert('Error submitting application: ' + error.message);
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
         });
     </script>
 
