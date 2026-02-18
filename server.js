@@ -328,12 +328,39 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         }
 
         // Email Content
+        // Email Content
         const htmlContent = `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #003366; border-bottom: 2px solid #003366; padding-bottom: 10px;">New Student Application Received</h2>
-                <p><strong>Applicant:</strong> ${data.firstName} ${data.lastName}</p>
-                <p><strong>Program:</strong> ${data.Program}</p>
-                <p>See attached PDF for full details.</p>
+            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <!-- Header -->
+                <div style="background-color: #055923; padding: 40px 20px; text-align: center;">
+                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" style="width: 120px; height: auto; margin-bottom: 20px; background: #ffffff; padding: 10px; border-radius: 4px; pointer-events: none; user-select: none; -webkit-user-select: none;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">New Application Received</h1>
+                    <p style="color: #e2e8f0; margin: 10px 0 0; font-size: 14px; font-weight: 500; letter-spacing: 1px;">Admin Notification System</p>
+                </div>
+                
+                <!-- Body -->
+                <div style="padding: 50px 40px; color: #333333; line-height: 1.8;">
+                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">A new student application has been submitted via the website.</p>
+                    
+                    <div style="background-color: #fcfcfc; border-left: 5px solid #921c1c; padding: 25px; margin: 30px 0; border-radius: 0 4px 4px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                        <p style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px;">Applicant</p>
+                        <p style="margin: 0; font-size: 18px; font-weight: 700; color: #055923;">${data.firstName} ${data.lastName}</p>
+                        
+                        <div style="margin: 20px 0; border-top: 1px solid #eee;"></div>
+
+                        <p style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px;">Program</p>
+                        <p style="margin: 0; font-size: 18px; font-weight: 700; color: #055923;">${data.Program}</p>
+                    </div>
+
+                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Please find the full application details in the attached PDF.</p>
+                </div>
+
+                <!-- Footer -->
+                <div style="background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e6e6e6;">
+                    <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
+                    <p style="margin: 5px 0 15px; color: #64748b; font-size: 13px;">Secure Admin Notification</p>
+                    <p style="margin: 0; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
+                </div>
             </div>
         `;
 
@@ -369,7 +396,6 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                 <!-- Footer -->
                 <div style="background-color: #f8fafc; padding: 40px 30px; text-align: center; border-top: 1px solid #e6e6e6;">
                     <div style="margin-bottom: 25px;">
-                        <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/logo.png" alt="Small Logo" style="width: 40px; opacity: 0.8; margin-bottom: 15px; pointer-events: none;">
                         <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
                         <p style="margin: 5px 0 25px; color: #64748b; font-size: 13px;">Excellence in Healthcare Education Since 1986</p>
                     </div>
@@ -468,46 +494,42 @@ app.post('/send-contact', async (req, res) => {
         }];
 
         // Professional HTML Email Template
+        // Professional HTML Email Template
         const htmlContent = `
-            <div style="font-family: 'Helvetica', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
-                <div style="background-color: #003366; padding: 20px; border-radius: 8px 8px 0 0; text-align: center;">
-                    <h1 style="color: #ffffff; margin: 0; font-size: 24px;">New Website Inquiry</h1>
-                    <p style="color: #cbd5e1; margin: 5px 0 0;">St. Bernadine School of Allied Health</p>
+            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <!-- Header -->
+                <div style="background-color: #055923; padding: 40px 20px; text-align: center;">
+                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" style="width: 120px; height: auto; margin-bottom: 20px; background: #ffffff; padding: 10px; border-radius: 4px; pointer-events: none; user-select: none; -webkit-user-select: none;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">New Inquiry Received</h1>
+                    <p style="color: #e2e8f0; margin: 10px 0 0; font-size: 14px; font-weight: 500; letter-spacing: 1px;">Admin Notification System</p>
                 </div>
                 
-                <div style="background-color: #ffffff; padding: 30px; border-radius: 0 0 8px 8px;">
-                    <p style="font-size: 16px; color: #333;"><strong>Subject:</strong> ${subject}</p>
-                    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                <!-- Body -->
+                <div style="padding: 50px 40px; color: #333333; line-height: 1.8;">
+                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">A new message has been submitted via the website contact form.</p>
                     
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <tr>
-                            <td style="padding: 8px 0; color: #666; width: 100px;"><strong>Name:</strong></td>
-                            <td style="padding: 8px 0; color: #333;">${name}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px 0; color: #666;"><strong>Email:</strong></td>
-                            <td style="padding: 8px 0; color: #333;"><a href="mailto:${email}" style="color: #003366; text-decoration: none;">${email}</a></td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px 0; color: #666;"><strong>Phone:</strong></td>
-                            <td style="padding: 8px 0; color: #333;">${contact_number}</td>
-                        </tr>
-                    </table>
-                    
-                    <div style="margin-top: 25px;">
-                        <p style="font-weight: bold; color: #333; margin-bottom: 10px;">Message:</p>
-                        <div style="background-color: #f4f6f8; padding: 15px; border-left: 4px solid #003366; color: #555; line-height: 1.6;">
-                            ${message.replace(/\n/g, '<br>')}
-                        </div>
+                    <div style="background-color: #fcfcfc; border-left: 5px solid #921c1c; padding: 25px; margin: 30px 0; border-radius: 0 4px 4px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                        <p style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px;">Subject</p>
+                        <p style="margin: 0; font-size: 18px; font-weight: 700; color: #055923; margin-bottom: 15px;">"${subject}"</p>
+                        
+                        <p style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px;">From</p>
+                        <p style="margin: 0; font-size: 16px; font-weight: 600; color: #333;">${name}</p>
+                        <p style="margin: 0; font-size: 14px; color: #666;"><a href="mailto:${email}" style="color: #055923; text-decoration: none;">${email}</a> | ${contact_number}</p>
                     </div>
 
-                    <p style="margin-top: 30px; font-size: 14px; color: #888; text-align: center;">
-                        A detailed PDF copy of this inquiry is attached to this email.
-                    </p>
+                    <p style="font-weight: bold; color: #333; margin-bottom: 10px;">Message Content:</p>
+                    <div style="background-color: #f4f6f8; padding: 20px; border-radius: 4px; color: #555; font-style: italic; line-height: 1.6;">
+                        "${message.replace(/\n/g, '<br>')}"
+                    </div>
+
+                    <p style="font-size: 14px; margin-top: 30px; color: #888; text-align: center;">See attached PDF for official record.</p>
                 </div>
-                
-                <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #999;">
-                    &copy; ${new Date().getFullYear()} St. Bernadine School of Allied Health. All rights reserved.
+
+                <!-- Footer -->
+                <div style="background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e6e6e6;">
+                    <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
+                    <p style="margin: 5px 0 15px; color: #64748b; font-size: 13px;">Secure Admin Notification</p>
+                    <p style="margin: 0; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
                 </div>
             </div>
         `;
@@ -546,7 +568,6 @@ app.post('/send-contact', async (req, res) => {
                 <!-- Footer -->
                 <div style="background-color: #f8fafc; padding: 40px 30px; text-align: center; border-top: 1px solid #e6e6e6;">
                     <div style="margin-bottom: 25px;">
-                        <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/logo.png" alt="Small Logo" style="width: 40px; opacity: 0.8; margin-bottom: 15px; pointer-events: none;">
                         <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
                         <p style="margin: 5px 0 25px; color: #64748b; font-size: 13px;">Excellence in Healthcare Education Since 1986</p>
                     </div>
