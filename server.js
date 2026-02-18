@@ -147,7 +147,7 @@ app.post('/chat', async (req, res) => {
         const chat = chatModel.startChat({
             history: [], // Start fresh or verify if history preservation is needed
             generationConfig: {
-                maxOutputTokens: 250,
+                maxOutputTokens: 1000,
             },
         });
 
