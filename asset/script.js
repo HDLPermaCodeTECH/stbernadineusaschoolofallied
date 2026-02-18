@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="chat-messages" id="chat-messages">
                 <div class="message bot">
-                    Hello! I'm the AI assistant for St. Bernadine School of Allied Health, Healthcare Services. How can I help you today?
+                    Hello! I'm the St. Bernadine AI. I can answer questions about our 📚 Programs, 💰 Tuition, 🌏 Visa Sponsorship, 👩⚕️ Founder, and more.
                 </div>
             </div>
             <div class="chat-input local-theme-input">
@@ -145,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
             showTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator();
-                addMessage("Hello! I'm the St. Bernadine AI. I can answer questions about our <strong>📚 Programs</strong>, <strong>💰 Tuition</strong>, <strong>🌏 Visa Sponsorship</strong>, <strong>👩‍⚕️ Founder</strong>, and more.<br><br>How can I help you today?", 'bot');
-                showSuggestions();
+                addMessage("Hello! I'm the St. Bernadine AI. I can answer questions about our 📚 Programs, 💰 Tuition, 🌏 Visa Sponsorship, 👩⚕️ Founder, and more.", 'bot');
+                // showSuggestions(); // Removed per user request
             }, 800);
         }, 300);
     }

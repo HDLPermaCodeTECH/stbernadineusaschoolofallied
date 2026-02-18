@@ -219,7 +219,7 @@ const generatePDF = (data, signatureBuffer) => {
         addField('Email', data.email);
 
         y += 10;
-        doc.lineWidth(2).moveTo(50, y).lineTo(545, y).stroke('#921c1c'); // Red Separator
+        doc.lineWidth(1).moveTo(50, y).lineTo(545, y).stroke('black'); // Black Separator (Thinner)
         y += 15;
 
         addField('Mother\'s Maiden Name', data.motherName);
@@ -229,7 +229,7 @@ const generatePDF = (data, signatureBuffer) => {
         addField('Referred By', data.referrer);
 
         y += 10;
-        doc.lineWidth(2).moveTo(50, y).lineTo(545, y).stroke('#921c1c'); // Red Separator
+        doc.lineWidth(1).moveTo(50, y).lineTo(545, y).stroke('black'); // Black Separator (Thinner)
         y += 15;
 
         addField('Profession', data.profession === 'Other' ? data.otherProfession : data.profession);
@@ -265,25 +265,31 @@ const generatePDF = (data, signatureBuffer) => {
         if (signatureBuffer) {
             doc.text('Applicant Signature:', 60, y - 10);
             doc.image(signatureBuffer, 60, y + 5, { height: 50 });
+            // Add Printed Name Below Signature
+            doc.font('Helvetica').fontSize(10).text(`${data.firstName} ${data.lastName}`, 60, y + 60);
         } else {
             doc.text('(Signed Digitally)', 60, y + 10);
+            doc.font('Helvetica').fontSize(10).text(`${data.firstName} ${data.lastName}`, 60, y + 25);
         }
 
-        doc.font('Helvetica-Oblique').fontSize(9).text(`Date: ${data.dateOfApplication}`, 350, y + 40);
+        doc.font('Helvetica-Oblique').fontSize(9).text(`Date: ${data.dateOfApplication}`, 350, y + 60);
         doc.end();
     });
 };
 
-const sendEmail = async (to, subject, htmlContent, attachments) => {
+const sendEmail = async (to, subject, htmlContent, attachments, replyTo) => {
     const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
     sendSmtpEmail.subject = subject;
     sendSmtpEmail.htmlContent = htmlContent;
     sendSmtpEmail.sender = { "name": "St. Bernadine System", "email": process.env.EMAIL_USER };
-    sendSmtpEmail.to = [{ "email": to, "name": "Admin" }];
+    sendSmtpEmail.to = [{ "email": to, "name": "Recipient" }];
     if (attachments) {
         sendSmtpEmail.attachment = attachments;
+    }
+    if (replyTo) {
+        sendSmtpEmail.replyTo = { "email": replyTo };
     }
 
     try {
@@ -365,7 +371,7 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
             </div>
         `;
 
-        await sendEmail(process.env.EMAIL_USER, `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments);
+        await sendEmail(process.env.EMAIL_USER, `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email);
 
         // Auto-Reply to Applicant
         const autoReplySubject = "Application Received - St. Bernadine School of Allied Health";
@@ -538,34 +544,33 @@ app.post('/send-contact', async (req, res) => {
         `;
 
         // Send to stbernadines@gmail.com without PDF
-        await sendEmail("stbernadines@gmail.com", `[Inquiry] ${subject} - ${name}`, htmlContent);
+        await sendEmail("stbernadines@gmail.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
-        // Auto-Reply to Inquirer
+        // Auto-Reply to Applicant
         const autoReplyHtml = `
             <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                 <!-- Header -->
                 <div style="background-color: #055923; padding: 40px 20px; text-align: center;">
                     <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" style="width: 120px; height: auto; margin-bottom: 20px; background: #ffffff; padding: 10px; border-radius: 4px; pointer-events: none; user-select: none; -webkit-user-select: none;">
-                    <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Message Received</h1>
+                    <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Application Received</h1>
                     <p style="color: #e2e8f0; margin: 10px 0 0; font-size: 14px; font-weight: 500; letter-spacing: 1px;">St. Bernadine School of Allied Health</p>
                 </div>
                 
                 <!-- Body -->
                 <div style="padding: 50px 40px; color: #333333; line-height: 1.8;">
-                    <p style="font-size: 18px; margin-bottom: 25px; color: #055923; font-weight: 600;">Dear ${name},</p>
-                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Thank you for contacting St. Bernadine School of Allied Health.</p>
+                    <p style="font-size: 18px; margin-bottom: 25px; color: #055923; font-weight: 600;">Dear ${data.firstName},</p>
+                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Thank you for choosing St. Bernadine School of Allied Health for your professional journey.</p>
                     
                     <div style="background-color: #fcfcfc; border-left: 5px solid #921c1c; padding: 25px; margin: 30px 0; border-radius: 0 4px 4px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-                        <p style="margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px;">Subject</p>
-                        <p style="margin: 0; font-size: 18px; font-weight: 700; color: #055923; font-family: 'Georgia', serif; font-style: italic;">"${subject}"</p>
+                        <p style="margin: 0; font-size: 16px; color: #444;">We have successfully received your application for the <strong style="color: #921c1c;">${data.Program}</strong> program.</p>
                     </div>
 
-                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">A member of our team receives your inquiry and will review it meticulously. We aim to respond within 24 hours.</p>
+                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Our admissions team is currently reviewing your details. We will contact you shortly regarding the next steps in your enrollment process.</p>
                     
                     <p style="font-size: 16px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #f0f0f0;">Best regards,</p>
-                    <p style="font-size: 18px; font-weight: bold; color: #055923; margin-top: 5px;">Support Team</p>
+                    <p style="font-size: 18px; font-weight: bold; color: #055923; margin-top: 5px;">Admissions Team</p>
                 </div>
 
                 <!-- Footer -->
@@ -592,15 +597,16 @@ app.post('/send-contact', async (req, res) => {
                 </div>
             </div>
         `;
-        await sendEmail(email, autoReplySubject, autoReplyHtml);
-
-        res.status(200).json({ message: 'Message sent successfully!' });
+        await sendEmail(data.email, autoReplySubject, autoReplyHtml);
+        res.status(200).send('Application Submitted Successfully!');
 
     } catch (error) {
-        console.error("Error sending contact email:", error);
-        res.status(500).json({ error: 'Failed to send message.' });
+        console.error("Error processing application:", error);
+        res.status(500).send('Error: ' + error.message);
     }
 });
+
+
 
 // Ensure uploads directory exists
 if (!fs.existsSync('uploads')) {
