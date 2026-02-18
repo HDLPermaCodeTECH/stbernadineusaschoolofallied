@@ -346,7 +346,7 @@
 
             try {
                 // Use absolute URL for local development compatibility (Live Server 5500 -> Backend 3000)
-                const response = await fetch('http://localhost:3000/send-contact', {
+                const response = await fetch('https://stbernadineusaschoolofallied.onrender.com/send-contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
