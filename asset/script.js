@@ -269,55 +269,55 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         cna: {
             keywords: ['cna', 'certified nurse aide', 'nursing assistant', 'nurse aide', '90 hours'],
-            response: "Our <strong>Certified Nurse Aide (CNA)</strong> program is a 90-hour course (50 classroom / 40 clinicals).<br><br><strong>Schedule:</strong> Day & Evening classes available.<br><strong>Registration Fee:</strong> $500 ($200 non-refundable).<br><strong>Outcome:</strong> NJ State Licensure.<br><br>Learn more or apply on our <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA Page</a>."
+            response: "Our <strong>Certified Nurse Aide (CNA)</strong> program is a 90-hour course (50 classroom / 40 clinicals).<br><br><strong>Schedule:</strong> Day & Evening classes available.<br><br><strong>Registration Fee:</strong> $500 ($200 non-refundable).<br><br><strong>Outcome:</strong> NJ State Licensure.<br><br>👉 <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CNA Details</strong></a>"
         },
         hha: {
             keywords: ['hha', 'home health aide', 'homemaker', '76 hours', 'ch-hha'],
-            response: "Our <strong>Certified Homemaker Home Health Aide (CH-HHA)</strong> program is 76 hours (60 classroom / 16 skills).<br><br><strong>Schedule:</strong> Weekdays & Weekends available.<br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><strong>Outcome:</strong> NJ Board of Nursing Certification.<br><br>Details on our <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA Page</a>."
+            response: "Our <strong>Certified Homemaker Home Health Aide (CH-HHA)</strong> program is 76 hours (60 classroom / 16 skills).<br><br><strong>Schedule:</strong> Weekdays & Weekends available.<br><br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><br><strong>Outcome:</strong> NJ Board of Nursing Certification.<br><br>👉 <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CH-HHA Details</strong></a>"
         },
         cma: {
             keywords: ['cma', 'certified medication aide', 'medication', 'med aide', '56 hours'],
-            response: "The <strong>Certified Medication Aide (CMA)</strong> course is 56 hours.<br><br><strong>Schedule:</strong> Flexible clinical hours.<br><strong>Prerequisite:</strong> Must have CNA or CH-HHA license.<br><strong>Registration Fee:</strong> $200.<br><br>Apply here: <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CMA Program</a>."
+            response: "The <strong>Certified Medication Aide (CMA)</strong> course is 56 hours.<br><br><strong>Schedule:</strong> Flexible clinical hours.<br><br><strong>Prerequisite:</strong> Must have CNA or CH-HHA license.<br><br><strong>Registration Fee:</strong> $200.<br><br>👉 <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CMA Details</strong></a>"
         },
         pct: {
             keywords: ['pct', 'patient care technician', '220 hours', '5 months'],
-            response: "Our <strong>Patient Care Technician (PCT)</strong> program is 220 hours (5 months).<br><br><strong>Schedule:</strong> Contact for next intake.<br><strong>Registration Fee:</strong> $500.<br><strong>Outcome:</strong> Advanced clinical skills.<br><br>More info: <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>PCT Page</a>."
+            response: "Our <strong>Patient Care Technician (PCT)</strong> program is 220 hours (5 months).<br><br><strong>Schedule:</strong> Contact for next intake.<br><br><strong>Registration Fee:</strong> $500.<br><br><strong>Outcome:</strong> Advanced clinical skills.<br><br>👉 <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View PCT Details</strong></a>"
         },
         ma: {
             keywords: ['medical assistant', 'ma program', '620 hours', 'admin', 'clinical assistant'],
-            response: "Our <strong>Certified Medical Assistant</strong> program is 620 hours (5 months).<br><br><strong>Schedule:</strong> Intensive training + Externship.<br><strong>Registration Fee:</strong> $500.<br><strong>Focus:</strong> Clinical and administrative training.<br><br>Start your career: <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant Page</a>."
+            response: "Our <strong>Certified Medical Assistant</strong> program is 620 hours (5 months).<br><br><strong>Schedule:</strong> Intensive training + Externship.<br><br><strong>Registration Fee:</strong> $500.<br><br><strong>Focus:</strong> Clinical and administrative training.<br><br>👉 <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Medical Assistant Details</strong></a>"
         },
         ekg_phlebotomy: {
             keywords: ['ekg', 'phlebotomy', 'blood draw', 'heart monitor', '140 hours'],
-            response: "The <strong>EKG & Phlebotomy</strong> program is 140 hours.<br><br><strong>Schedule:</strong> Day or Weekend classes.<br><strong>Reservation Fee:</strong> $200 (non-refundable).<br><strong>Outcome:</strong> Technical Proficiency Certificate.<br><br>Details: <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>EKG/Phlebotomy Page</a>."
+            response: "The <strong>EKG & Phlebotomy</strong> program is 140 hours.<br><br><strong>Schedule:</strong> Day or Weekend classes.<br><br><strong>Reservation Fee:</strong> $200 (non-refundable).<br><br><strong>Outcome:</strong> Technical Proficiency Certificate.<br><br>👉 <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View EKG/Phlebotomy Details</strong></a>"
         },
         cpr: {
             keywords: ['cpr', 'bls', 'basic life support', 'heart, association', 'first aid', 'resuscitation'],
-            response: "We offer <strong>CPR & BLS</strong> certification through the American Heart Association.<br><br><strong>Duration:</strong> 5 hours.<br><strong>Schedule:</strong> Weekdays/Weekends (10am - 3pm).<br><strong>Fee:</strong> Inclusive of book.<br><br>Register now: <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CPR Page</a>."
+            response: "We offer <strong>CPR & BLS</strong> certification through the American Heart Association.<br><br><strong>Duration:</strong> 5 hours.<br><br><strong>Schedule:</strong> Weekdays/Weekends (10am - 3pm).<br><br><strong>Fee:</strong> Inclusive of book.<br><br>👉 <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CPR Details</strong></a>"
         },
         newborn: {
             keywords: ['newborn', 'baby nursing', 'infant care', 'neonatal', '10 hours', 'baby nurse'],
-            response: "Our <strong>Newborn Care Specialist (Baby Nursing)</strong> workshop is 10 hours.<br><br><strong>Schedule:</strong> Weekends (10am - 3pm).<br><strong>Registration Fee:</strong> $200 (non-refundable).<br><br>Learn more: <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care Page</a>."
+            response: "Our <strong>Newborn Care Specialist (Baby Nursing)</strong> workshop is 10 hours.<br><br><strong>Schedule:</strong> Weekends (10am - 3pm).<br><br><strong>Registration Fee:</strong> $200 (non-refundable).<br><br>👉 <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Newborn Care Details</strong></a>"
         },
 
         // --- Tuition & Fees ---
         tuition: {
             keywords: ['tuition', 'cost', 'price', 'payment plan', 'fee', 'financial', 'how much'],
-            response: "We offer <strong>interest-free weekly or bi-weekly payment plans</strong>.<br><br><strong>Registration Fees:</strong><br>- CNA/PCT/MA: $500<br>- CH-HHA/CMA/Newborn: $200<br>- EKG/Phlebotomy/CPR: $200<br><br>Note: Reservation fees are non-refundable but consumable. Full tuition must be paid before graduation.<br><br>See details: <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Tuition & Aid</a>."
+            response: "We offer <strong>interest-free weekly or bi-weekly payment plans</strong>.<br><br><strong>Registration Fees:</strong><br>- CNA/PCT/MA: $500<br>- CH-HHA/CMA/Newborn: $200<br>- EKG/Phlebotomy/CPR: $200<br><br>Note: Reservation fees are non-refundable but consumable.<br><br>📄 <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Tuition Schedule</strong></a>"
         },
         refund_policy: {
             keywords: ['refund', 'money back', 'cancellation', 'withdraw', 'non-refundable'],
-            response: "<strong>Reservation fees are strictly non-refundable</strong> but are consumable for the next session of your chosen program if you need to reschedule. Please check our enrollment agreement for the full refund policy regarding tuition."
+            response: "<strong>Reservation fees are strictly non-refundable</strong> but are consumable for the next session of your chosen program if you need to reschedule.<br><br>Please check our enrollment agreement for the full refund policy regarding tuition."
         },
 
         // --- Admissions & Forms ---
         requirements: {
             keywords: ['require', 'enroll', 'document', 'paperwork', 'prerequisite', 'admission', 'qualify'],
-            response: "General requirements include:<br>- High School Diploma/GED (for most programs)<br>- State ID / Driver's License<br>- Social Security Card<br>- Medical Clearance (PPD/Physical)<br><br>You can download the <strong>Enrollment Application</strong> and <strong>Medical Form</strong> here: <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Forms & Resources</a>."
+            response: "General requirements include:<br>- High School Diploma/GED (for most programs)<br>- State ID / Driver's License<br>- Social Security Card<br>- Medical Clearance (PPD/Physical)<br><br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Start Online Application</strong></a><br><br>📄 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Download Forms</strong></a>"
         },
         forms: {
             keywords: ['form', 'download', 'pdf', 'application', 'catalog', 'physical form'],
-            response: "You can download important documents from our Forms page:<br>📄 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Enrollment Application</a><br>🩺 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Physical Form</a><br>📖 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Course Catalog</a>"
+            response: "You can download important documents from our Forms page:<br><br>📄 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Enrollment Application</a><br><br>🩺 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Physical Form</a><br><br>📖 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Course Catalog</a>"
         },
 
         // --- Placement & Global Services ---
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         contact: {
             keywords: ['contact', 'phone', 'call', 'email', 'number', 'talk', 'reach'],
-            response: "📞 <strong>Phone:</strong> (201) 222-1116<br>📧 <strong>Email:</strong> school@stbernadineusa.com<br>📍 <strong>Visit:</strong> 591 Summit Ave, Jersey City.<br><br>We are here to help!"
+            response: "📞 <strong>Phone:</strong> (201) 222-1116<br><br>📧 <strong>Email:</strong> school@stbernadineusa.com<br><br>📍 <strong>Visit:</strong> 591 Summit Ave, Jersey City.<br><br>We are here to help!"
         },
         referral: {
             keywords: ['referral', 'refer', 'recommend', 'friend', 'bonus', 'commission'],
