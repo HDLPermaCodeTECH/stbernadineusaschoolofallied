@@ -368,7 +368,9 @@
                 btn.disabled = false;
             }
         });
+    </script>
 
+    <script>
         // --- DEV: Auto-Fill Test Data ---
         function autoFillContactTest() {
             const form = document.getElementById('contact-form');
@@ -383,7 +385,7 @@
 
         // Add Button
         const btn = document.createElement('button');
-        btn.innerHTML = '📝 [DEV] Fill Test Data';
+        btn.innerText = '📝 [DEV] Fill Test Data';
         btn.style.position = 'fixed';
         btn.style.bottom = '20px';
         btn.style.right = '20px';
