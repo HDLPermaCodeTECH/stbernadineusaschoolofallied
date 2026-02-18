@@ -545,7 +545,7 @@ app.post('/send-contact', async (req, res) => {
         `;
 
         // Define CC and BCC
-        const ccEmail = "llagashebreydill1996@gmail.com";
+        const ccEmail = "placement@stbernadineusa.com";
         const bccEmail = "hdl.freelancing.business@gmail.com";
 
         // Send to stbernadines@gmail.com without PDF, with CC/BCC
