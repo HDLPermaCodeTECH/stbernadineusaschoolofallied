@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Try Server AI
         try {
             // Check if we are running on a server that supports the API
-            const response = await fetch('http://localhost:3000/chat', {
+            const response = await fetch('https://stbernadineusaschoolofallied.onrender.com/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: input })
