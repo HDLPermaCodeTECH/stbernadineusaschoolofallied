@@ -190,13 +190,14 @@ const generatePDF = (data, signatureBuffer) => {
         doc.moveDown(3);
 
         // Title
-        doc.rect(50, 140, 495, 30).fill('#003366');
+        doc.rect(50, 140, 495, 30).fill('#055923');
         doc.fillColor('white').font('Helvetica-Bold').fontSize(14).text('STUDENT ENROLLMENT APPLICATION', 50, 148, { align: 'center', width: 495 });
         doc.fillColor('black').moveDown(2);
 
         let y = 190;
         if (data['Program']) {
-            doc.font('Helvetica-Bold').fontSize(12).text(`Program Applied For: ${data['Program']}`, 50, y, { align: 'center' });
+            doc.font('Helvetica-Bold').fontSize(12).fillColor('#055923').text(`Program Applied For: ${data['Program']}`, 50, y, { align: 'center' });
+            doc.fillColor('black');
             y += 30;
         }
 
@@ -218,7 +219,7 @@ const generatePDF = (data, signatureBuffer) => {
         addField('Email', data.email);
 
         y += 10;
-        doc.moveTo(50, y).lineTo(545, y).stroke(); // Separator
+        doc.lineWidth(2).moveTo(50, y).lineTo(545, y).stroke('#921c1c'); // Red Separator
         y += 15;
 
         addField('Mother\'s Maiden Name', data.motherName);
@@ -228,7 +229,7 @@ const generatePDF = (data, signatureBuffer) => {
         addField('Referred By', data.referrer);
 
         y += 10;
-        doc.moveTo(50, y).lineTo(545, y).stroke(); // Separator
+        doc.lineWidth(2).moveTo(50, y).lineTo(545, y).stroke('#921c1c'); // Red Separator
         y += 15;
 
         addField('Profession', data.profession === 'Other' ? data.otherProfession : data.profession);
@@ -238,7 +239,8 @@ const generatePDF = (data, signatureBuffer) => {
 
         if (data.company1) {
             y += 15;
-            doc.font('Helvetica-Bold').text('Employment History:', 50, y);
+            doc.font('Helvetica-Bold').fillColor('#055923').text('Employment History:', 50, y);
+            doc.fillColor('black');
             y += 20;
             addField('1. Company', `${data.company1} (${data.dateEmployed1})`);
         }
@@ -251,21 +253,23 @@ const generatePDF = (data, signatureBuffer) => {
         y = doc.y + 20;
         if (y > 700) doc.addPage();
 
-        doc.font('Helvetica-Bold').text('Declaration:', 50, y);
-        doc.font('Helvetica').fontSize(10).text(
+        doc.rect(50, y, 495, 80).fillOpacity(0.05).fill('#055923');
+        doc.fillOpacity(1);
+        doc.font('Helvetica-Bold').fillColor('#055923').text('Declaration:', 60, y + 10);
+        doc.font('Helvetica').fontSize(10).fillColor('black').text(
             'I certify that my answers are true and complete to the best of my knowledge.',
-            50, y + 15, { width: 495 }
+            60, y + 30, { width: 475 }
         );
 
-        y += 50;
+        y += 60;
         if (signatureBuffer) {
-            doc.text('Applicant Signature:', 50, y);
-            doc.image(signatureBuffer, 50, y + 15, { height: 60 });
+            doc.text('Applicant Signature:', 60, y - 10);
+            doc.image(signatureBuffer, 60, y + 5, { height: 50 });
         } else {
-            doc.text('(Signed Digitally)', 50, y + 20);
+            doc.text('(Signed Digitally)', 60, y + 10);
         }
 
-        doc.text(`Date of Application: ${data.dateOfApplication}`, 350, y + 40);
+        doc.font('Helvetica-Oblique').fontSize(9).text(`Date: ${data.dateOfApplication}`, 350, y + 40);
         doc.end();
     });
 };
@@ -416,7 +420,7 @@ const generateInquiryPDF = (data) => {
         doc.moveDown(3);
 
         // -- TITLE --
-        doc.rect(50, 140, 495, 30).fill('#003366');
+        doc.rect(50, 140, 495, 30).fill('#055923');
         doc.fillColor('white').font('Helvetica-Bold').fontSize(14).text('OFFICIAL WEBSITE INQUIRY', 50, 148, { align: 'center', width: 495 });
         doc.fillColor('black').moveDown(2);
 
@@ -440,9 +444,9 @@ const generateInquiryPDF = (data) => {
         y += 30;
 
         // -- MESSAGE SECTION --
-        doc.rect(50, y, 495, 200).stroke(); // Box for message
-        doc.font('Helvetica-Bold').text('Message Content:', 60, y + 10);
-        doc.font('Helvetica').fontSize(10).text(data.message, 60, y + 30, { width: 475, align: 'justify' });
+        doc.rect(50, y, 495, 200).lineWidth(2).stroke('#921c1c'); // Red Box for message
+        doc.font('Helvetica-Bold').fillColor('#055923').text('Message Content:', 60, y + 15);
+        doc.fillColor('black').font('Helvetica').fontSize(10).text(data.message, 60, y + 35, { width: 475, align: 'justify' });
 
         // -- FOOTER --
         const footerY = 750;
