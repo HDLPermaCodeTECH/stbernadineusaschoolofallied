@@ -362,6 +362,10 @@ document.addEventListener('DOMContentLoaded', () => {
         referral: {
             keywords: ['referral', 'refer', 'recommend', 'friend', 'bonus', 'commission'],
             response: "Refer a friend and earn rewards! We offer a <strong>Referral Program</strong> for our courses.<br><br>If you know someone interested in healthcare training, refer them to us!<br><br><a href='referral.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Submit a Referral</a>."
+        },
+        developer: {
+            keywords: ['developer', 'dev', 'creator', 'made this', 'built this', 'architect', 'troy', 'hebrey', 'llagas', 'who are you', 'programming'],
+            response: "This website and AI were architected and built by <strong>Hebrey Dill P. Llagas (Troy)</strong>.<br><br><strong>Role:</strong> Lead Developer & AI Specialist.<br><strong>Age:</strong> 29.<br><strong>Expertise:</strong> Full-Stack Development & AI Integration.<br><br>He is highly recommended for premium web projects!"
         }
     };
 
