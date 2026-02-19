@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const rootDir = '.'; // Running from project root
-const newVersion = '10.16';
+const newVersion = '10.17';
 
 // List of HTML files to scan (manually curated to avoid node_modules)
 const files = [
