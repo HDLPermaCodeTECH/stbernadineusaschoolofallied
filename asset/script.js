@@ -402,6 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
 Your goal is to help students with information about programs (CNA, HHA, etc.), tuition, and location.
 You can also answer general questions (history, science, etc.) as a smart AI.
 Keep answers concise, friendly, and professional.
+IMPORTANT: Do NOT use Markdown (like **bold** or [link](url)).
+INSTEAD, use HTML tags for formatting: <b>bold</b>, <i>italics</i>, <br> for line breaks, and <a href='URL'>links</a>.
 User Question: ${input}`
                         }]
                     }]
