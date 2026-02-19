@@ -76,19 +76,7 @@
       ]
     }
     </script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then((registration) => {
-                        console.log('Service Worker registered with scope:', registration.scope);
-                    })
-                    .catch((error) => {
-                        console.log('Service Worker registration failed:', error);
 
-                    });
-            }
-    </script>
 </head>
 
 <body>
@@ -758,11 +746,10 @@
                     }
                 });
                 // Clear Caches
-                caches.keys().then(function (names) {
+                cathen(function (names) {
                     for (let name of names)
                         caches.delete(name);
-                });
-            }
+                                    }
     </script>
 </body>
 
