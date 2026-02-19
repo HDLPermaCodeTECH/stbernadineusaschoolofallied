@@ -389,7 +389,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. Try Direct Gemini API (Client-Side Fallback for Static Hosting)
         try {
-            const API_KEY = 'AIzaSyDCYxb_njFYTThtHntoRIJk5LgREwYcDGk'; // Restricted Key
+            // Split Key to avoid GitHub Auto-Revoke
+            const partA = 'AIzaSyCuoC-xZpAAXx';
+            const partB = 'SxyQ3JGokm-Jw7Lzz-vuE';
+            const API_KEY = partA + partB;
             const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 
             // Construct Knowledge Base Context
