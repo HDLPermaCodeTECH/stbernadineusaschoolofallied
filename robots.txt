@@ -1,5 +1,5 @@
 ﻿User-agent: *
 Allow: /
-Sitemap: https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/sitemap.xml
+Sitemap: https://www.stbernadineschoolofallied.com/sitemap.xml
 
 
