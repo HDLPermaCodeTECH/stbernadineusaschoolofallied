@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Try Direct Gemini API (Client-Side Fallback for Static Hosting)
         try {
             const API_KEY = 'AIzaSyDCYxb_njFYTThtHntoRIJk5LgREwYcDGk'; // Restricted Key
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 
             // Construct Knowledge Base Context
             const knowledgeContext = Object.values(schoolKnowledge)
@@ -428,7 +428,11 @@ User Question: ${input}`
                 }
             } else {
                 console.warn("Gemini API Error:", response.status);
-                addMessage(`System Error: ${response.status} - ${response.statusText}`, 'bot');
+                if (response.status === 429) {
+                    return "I'm thinking too fast! 🧠💨<br>Please wait <strong>5-10 seconds</strong> and try again. (Server Busy)";
+                } else {
+                    addMessage(`System Error: ${response.status} - ${response.statusText}`, 'bot');
+                }
             }
         } catch (e) {
             console.log("Gemini API unreachable.", e);
