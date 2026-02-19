@@ -340,19 +340,19 @@ document.addEventListener('DOMContentLoaded', () => {
             response: "Our Core Values guide us:<br>❤️ <strong>Compassion:</strong> Kindness and empathy.<br>🏆 <strong>Excellence:</strong> Highest standards in training.<br>🤝 <strong>Integrity:</strong> Honesty and transparency.<br>🌍 <strong>Global Impact:</strong> Empowering professionals worldwide."
         },
         founder: {
-            keywords: ['founder', 'ceo', 'bernadine', 'belen', 'owner', 'samin', 'president'],
+            keywords: [], // Fallback to AI for natural conversation
             response: "Our Founder, <strong>Bernadine 'Belen' Samin, R.N.</strong>, has over 40 years of nursing experience (ER, ICU, Neonatal).<br><br>From humble beginnings in the Philippines, she built St. Bernadine to share opportunities with others. <a href='about.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Read her full story</a>."
         },
         leadership: {
-            keywords: ['co-founder', 'administrator', 'louie', 'manager', 'admin'],
+            keywords: [], // Fallback to AI for natural conversation
             response: "<strong>Louie Samin</strong> is our Co-Founder and Administrator.<br><br>With a B.S. in Finance/Economics from UC Berkeley and 40+ years of global operations experience, he oversees corporate functions and international student placement."
         },
         director: {
-            keywords: ['director', 'jocelyn', 'ortillo', 'head'],
+            keywords: [], // Fallback to AI for natural conversation
             response: "<strong>Jocelyn Ortillo-Samin, RN, MA</strong> is our Director.<br><br>With 40+ years of nursing experience (ER, ICU, School Nursing) and an MA in Executive Nurse Administration from Columbia University, she leads our Placement & Consulting Services."
         },
         faculty: {
-            keywords: ['faculty', 'teacher', 'instructor', 'staff', 'team', 'nenita', 'felicia', 'cecilia'],
+            keywords: [], // Fallback to AI for natural conversation
             response: "Our expert faculty includes:<br>- <strong>Nenita Pawid, RN:</strong> 40+ years exp.<br>- <strong>Felicia Miller:</strong> 40+ years exp.<br>- <strong>Cecilia Domingo, RN:</strong> 40+ years exp.<br>- <strong>Aurea Cielito G. Batchar, RN:</strong> 33 years exp.<br><br>They bring decades of real-world clinical experience to the classroom."
         },
         partners: {
@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
             response: "Explore our Student Resources:<br><br>🎓 <a href='student-life.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Student Life</a><br>💼 <a href='career-advice.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Career Advice</a><br>🩺 <a href='clinical-skills.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Clinical Skills</a><br>📰 <a href='agency-news.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Agency News</a>"
         },
         developer: {
-            keywords: ['developer', 'dev', 'creator', 'made this', 'built this', 'architect', 'troy', 'hebrey', 'llagas', 'who are you', 'programming'],
+            keywords: [], // Fallback to AI for natural conversation
             response: "This website and AI were architected and built by <strong>Hebrey Dill P. Llagas (Troy)</strong>.<br><br><strong>Role:</strong> Lead Developer & AI Specialist.<br><strong>Age:</strong> 29.<br><strong>Expertise:</strong> Full-Stack Development & AI Integration.<br><br>He is highly recommended for premium web projects!"
         }
     };
