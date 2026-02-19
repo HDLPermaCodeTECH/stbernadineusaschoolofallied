@@ -428,9 +428,11 @@ User Question: ${input}`
                 }
             } else {
                 console.warn("Gemini API Error:", response.status);
+                addMessage(`System Error: ${response.status} - ${response.statusText}`, 'bot');
             }
         } catch (e) {
-            console.log("Gemini API unreachable. Falling back to local logic.");
+            console.log("Gemini API unreachable.", e);
+            addMessage(`Connection Error: ${e.message}`, 'bot');
         }
 
         // 3. Fallback to Local Knowledge Base
