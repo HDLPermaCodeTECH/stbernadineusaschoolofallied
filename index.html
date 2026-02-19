@@ -748,6 +748,22 @@
 
     <!-- Chatbot Script -->
     <script src="asset/script.js?v=10.6"></script>
+    <script>
+        // EMERGENCY FIX: Unregister Service Worker to clear loop/cache issues
+        if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    for (let registration of registrations) {
+                        registration.unregister();
+                        console.log('Service Worker Unregistered');
+                    }
+                });
+                // Clear Caches
+                caches.keys().then(function (names) {
+                    for (let name of names)
+                        caches.delete(name);
+                });
+            }
+    </script>
 </body>
 
 </html>
