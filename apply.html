@@ -1329,7 +1329,7 @@
             // Submit the form using Fetch API for better UX (Alert instead of raw page)
             const formData = new FormData(form);
 
-            fetch('https://stbernadineusaschoolofallied.onrender.com/send-email', {
+            fetch('/send-email', {
                 method: 'POST',
                 body: formData
             })

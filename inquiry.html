@@ -101,7 +101,8 @@
                     <a href="contact.html">Contact Us</a>
                     <a href="referral.html">Referral</a>
                     <a href="inquiry.html" class="btn btn-primary">Inquire Now</a>
-                    <a href="payment.html" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make a
+                    <a href="payment.html" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make
+                        a
                         Payment</a>
                 </div>
             </nav>
@@ -321,8 +322,8 @@
             };
 
             try {
-                // Use absolute URL for local development compatibility (Live Server 5500 -> Backend 3000)
-                const response = await fetch('https://stbernadineusaschoolofallied.onrender.com/send-contact', {
+                // Use relative URL for production (same origin)
+                const response = await fetch('/send-contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)

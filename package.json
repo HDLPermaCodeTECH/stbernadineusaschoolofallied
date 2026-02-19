@@ -4,7 +4,8 @@
     "description": "Backend server for email submission using Nodemailer",
     "main": "server.js",
     "scripts": {
-        "start": "node server.js"
+        "start": "node server.js",
+        "build": "exit 0"
     },
     "dependencies": {
         "@google/generative-ai": "^0.24.1",
@@ -16,8 +17,5 @@
         "nodemailer": "^6.9.1",
         "pdfkit": "^0.17.2",
         "sib-api-v3-sdk": "^8.5.0"
-    },
-    "engines": {
-        "node": ">=18.0.0"
     }
 }
