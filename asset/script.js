@@ -392,6 +392,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const API_KEY = 'AIzaSyCmHsdOyUghILg2bQ4IM3vk97ds1l0ZTf8'; // Restricted Key
             const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
+            // Construct Knowledge Base Context
+            const knowledgeContext = Object.values(schoolKnowledge)
+                .map(item => item.response.replace(/<[^>]*>?/gm, '')) // Strip HTML for token efficiency
+                .join('\n\n');
+
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -399,6 +404,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     contents: [{
                         parts: [{
                             text: `You are St. Bernadine AI, a helpful assistant for St. Bernadine School of Allied Health in Jersey City.
+USE the following School Information to answer questions:
+${knowledgeContext}
+
 Your goal is to help students with information about programs (CNA, HHA, etc.), tuition, and location.
 You can also answer general questions (history, science, etc.) as a smart AI.
 Keep answers concise, friendly, and professional.
