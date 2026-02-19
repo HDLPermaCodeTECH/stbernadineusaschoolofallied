@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Try Direct Gemini API (Client-Side Fallback for Static Hosting)
         try {
             const API_KEY = 'AIzaSyCmHsdOyUghILg2bQ4IM3vk97ds1l0ZTf8'; // Restricted Key
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
 
             // Construct Knowledge Base Context
             const knowledgeContext = Object.values(schoolKnowledge)
