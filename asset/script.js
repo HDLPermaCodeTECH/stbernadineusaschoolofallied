@@ -340,8 +340,12 @@ document.addEventListener('DOMContentLoaded', () => {
             response: "Our Core Values guide us:<br>❤️ <strong>Compassion:</strong> Kindness and empathy.<br>🏆 <strong>Excellence:</strong> Highest standards in training.<br>🤝 <strong>Integrity:</strong> Honesty and transparency.<br>🌍 <strong>Global Impact:</strong> Empowering professionals worldwide."
         },
         founder: {
-            keywords: ['founder', 'ceo', 'bernadine', 'belen', 'owner', 'samin'],
+            keywords: ['founder', 'ceo', 'bernadine', 'belen', 'owner', 'samin', 'president'],
             response: "Our Founder, <strong>Bernadine 'Belen' Samin, R.N.</strong>, has over 40 years of nursing experience (ER, ICU, Neonatal).<br><br>From humble beginnings in the Philippines, she built St. Bernadine to share opportunities with others. <a href='about.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Read her full story</a>."
+        },
+        leadership: {
+            keywords: ['co-founder', 'administrator', 'louie', 'manager', 'director', 'admin'],
+            response: "<strong>Louie Samin</strong> is our Co-Founder and Administrator.<br><br>With a B.S. in Finance/Economics from UC Berkeley and 40+ years of global operations experience, he oversees corporate functions and international student placement."
         },
         faculty: {
             keywords: ['faculty', 'teacher', 'instructor', 'staff', 'team', 'nenita', 'felicia', 'cecilia'],
@@ -430,6 +434,8 @@ document.addEventListener('DOMContentLoaded', () => {
 INSTRUCTIONS:
 1. If the user asks about the school (programs, tuition, location, etc.), USE the specific information below.
 2. If the user asks about GENERAL topics (World History, Science, Math, Life, etc.), ANSWER it using your own vast knowledge. You are a smart AI.
+
+CRITICAL: NEVER use the old domain 'stbernadineusa.com'. ALWAYS use 'stbernadineschoolofallied.com'.
 
 SCHOOL INFORMATION:
 ${knowledgeContext}
