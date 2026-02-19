@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Tuition & Fees ---
         tuition: {
-            keywords: ['tuition', 'cost', 'price', 'payment plan', 'fee', 'financial', 'how much'],
+            keywords: ['tuition', 'cost', 'price', 'payment plan', 'fee', 'financial'],
             response: "We offer <strong>interest-free weekly or bi-weekly payment plans</strong>.<br><br><strong>Registration Fees:</strong><br>- CNA/PCT/MA: $500<br>- CH-HHA/CMA/Newborn: $200<br>- EKG/Phlebotomy/CPR: $200<br><br>Note: Reservation fees are non-refundable but consumable.<br><br>📄 <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Tuition Schedule</strong></a>"
         },
         refund_policy: {
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Admissions & Forms ---
         requirements: {
-            keywords: ['require', 'enroll', 'document', 'paperwork', 'prerequisite', 'admission', 'qualify'],
+            keywords: ['enroll', 'document', 'paperwork', 'prerequisite', 'admission', 'qualify'],
             response: "General requirements include:<br>- High School Diploma/GED (for most programs)<br>- State ID / Driver's License<br>- Social Security Card<br>- Medical Clearance (PPD/Physical)<br><br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Start Online Application</strong></a><br><br>📄 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Download Forms</strong></a>"
         },
         forms: {
@@ -362,11 +362,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- General ---
         location: {
-            keywords: ['location', 'address', 'where', 'map', 'directions', 'jersey city', 'office'],
+            keywords: ['location', 'address', 'map', 'directions', 'jersey city', 'office'],
             response: "We are located at <strong>591 Summit Avenue, Suite 410, Jersey City, NJ 07306</strong>.<br><br><strong>Hours:</strong> Tue-Sat 9am-5pm.<br><br><iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.738080068307!2d-74.0620888!3d40.7275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c250ca533f810b%3A0xc3f8e5c54e0aeb29!2s591%20Summit%20Ave%20Suite%20410%2C%20Jersey%20City%2C%20NJ%2007306!5e0!3m2!1sen!2sus!4v1707577800000!5m2!1sen!2sus' width='100%' height='200' style='border:0; border-radius: 8px; margin-top: 10px;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>"
         },
         contact: {
-            keywords: ['contact', 'phone', 'call', 'email', 'number', 'talk', 'reach'],
+            keywords: ['contact', 'phone', 'call', 'email', 'number'],
             response: "📞 <strong>Phone:</strong> (201) 222-1116<br><br>📧 <strong>Email:</strong> school@stbernadineschoolofallied.com<br><br>📍 <strong>Visit:</strong> 591 Summit Ave, Jersey City.<br><br>We are here to help!"
         },
         referral: {
