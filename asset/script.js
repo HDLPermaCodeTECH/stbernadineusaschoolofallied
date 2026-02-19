@@ -395,12 +395,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const API_KEY = partA + partB;
             const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 
+            // Helper: Retry Fetch with Exponential Backoff
+            async function fetchWithRetry(url, options, retries = 3, backoff = 2000) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 && retries > 0) {
+                        console.warn(`Rate limit hit. Retrying in ${backoff / 1000}s...`);
+                        await new Promise(r => setTimeout(r, backoff));
+                        return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                    }
+                    return response;
+                } catch (e) {
+                    if (retries > 0) {
+                        await new Promise(r => setTimeout(r, backoff));
+                        return fetchWithRetry(url, options, retries - 1, backoff * 2);
+                    }
+                    throw e;
+                }
+            }
+
             // Construct Knowledge Base Context
             const knowledgeContext = Object.values(schoolKnowledge)
                 .map(item => item.response.replace(/<[^>]*>?/gm, '')) // Strip HTML for token efficiency
                 .join('\n\n');
 
-            const response = await fetch(API_URL, {
+            const response = await fetchWithRetry(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
