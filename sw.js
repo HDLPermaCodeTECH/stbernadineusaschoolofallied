@@ -1,8 +1,8 @@
-const CACHE_NAME = 'st-bernadine-v18';
+const CACHE_NAME = 'st-bernadine-v20';
 const ASSETS_TO_CACHE = [
     './index.html',
-    './styles.css',
-    './script.js',
+    './asset/styles.css',
+    './asset/script.js',
     './asset/images/logo.png',
     './asset/images/pc.webp',
     './asset/images/sahs.webp',
