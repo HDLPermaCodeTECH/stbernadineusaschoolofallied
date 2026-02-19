@@ -391,7 +391,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return "Hello! I can help you with <strong>Program Details</strong> (CNA, HHA, etc.), <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Tuition</strong></a>, <strong>Visa Sponsorship</strong>, or tell you about our <strong>Founder</strong>. What would you like to know?";
         }
 
-        // 2. Try Direct Gemini API (Client-Side Fallback for Static Hosting)
+        // 2. PRIORITY: Check Local Knowledge Base First (Instant & Accurate)
+        // This fixes "slow response" and "hallucinated links"
+        for (const key in schoolKnowledge) {
+            if (schoolKnowledge[key].keywords.some(word => lowerInput.includes(word))) {
+                console.log(`Matched local knowledge: ${key}`);
+                return schoolKnowledge[key].response;
+            }
+        }
+
+        // 3. Fallback: Direct Gemini API (For general/unknown queries)
         try {
             // Split Key to avoid GitHub Auto-Revoke
             const partA = 'AIzaSyCuoC-xZpAAXx';
@@ -464,18 +473,11 @@ User Question: ${input}`
             }
         } catch (e) {
             console.log("Gemini API unreachable.", e);
-            addMessage(`Connection Error: ${e.message}`, 'bot');
+            // Final Fallback if API completely fails
+            return "I'm having trouble connecting to my brain right now (High Traffic).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
         }
 
-        // 3. Fallback to Local Knowledge Base
-        for (const key in schoolKnowledge) {
-            if (schoolKnowledge[key].keywords.some(word => lowerInput.includes(word))) {
-                return schoolKnowledge[key].response;
-            }
-        }
-
-        // 4. Final Fallback
-        return "I'm having trouble connecting to my brain right now (High Traffic).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
+        return "I'm not sure about that. Please try asking about our **Programs**, **Tuition**, or **Location**.";
     }
 
 
