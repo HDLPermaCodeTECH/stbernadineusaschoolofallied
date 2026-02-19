@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const directoryPath = 'c:\\Users\\hdlfr\\OneDrive\\문서\\St. Bernadine Official Website';
-const oldDomain = 'stbernadineusa.com';
-const newDomain = 'stbernadineusa.com';
+const oldDomain = 'stbernadineschoolofallied.com';
+const newDomain = 'stbernadineschoolofallied.com';
 
 // Recursive function to walk through directories
 function walk(dir, callback) {

@@ -65,7 +65,7 @@ if (process.env.GEMINI_API_KEY) {
 *   **Mission:** To serve people and strengthen healthcare services globally.
 *   **History:** Founded in 1986. Originally established to volunteer and help the community.
 *   **Location:** 591 Summit Ave Suite 410, Jersey City, NJ 07306.
-*   **Contact:** (201) 222-1116 | school@stbernadineusa.com
+*   **Contact:** (201) 222-1116 | school@stbernadineschoolofallied.com
 
 **Leadership & Team:**
 *   **Founder & CEO:** Bernadine "Belen" Samin, R.N.
@@ -195,7 +195,7 @@ const generatePDF = (data, signatureBuffer) => {
         doc.font('Helvetica-Bold').fontSize(18).text('ST. BERNADINE', 150, 50);
         doc.fontSize(12).text('SCHOOL OF ALLIED HEALTH', 150, 75);
         doc.font('Helvetica').fontSize(10).text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 150, 95);
-        doc.text('Phone: +1 (201) 222-1116 | Email: school@stbernadineusa.com', 150, 110);
+        doc.text('Phone: +1 (201) 222-1116 | Email: school@stbernadineschoolofallied.com', 150, 110);
         doc.moveDown(3);
 
         // Title
@@ -435,8 +435,8 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                     <p style="margin: 0 0 15px; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
 
                     <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 5px;">
-                        <a href="https://stbernadineusa.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
-                        <a href="https://stbernadineusa.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
+                        <a href="https://stbernadineschoolofallied.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
+                        <a href="https://stbernadineschoolofallied.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
                     </div>
                     <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                 </div>
@@ -468,7 +468,7 @@ const generateInquiryPDF = (data) => {
         doc.font('Helvetica-Bold').fontSize(18).text('ST. BERNADINE', 150, 50);
         doc.fontSize(12).text('SCHOOL OF ALLIED HEALTH', 150, 75);
         doc.font('Helvetica').fontSize(10).text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 150, 95);
-        doc.text('Phone: +1 (201) 222-1116 | Email: school@stbernadineusa.com', 150, 110);
+        doc.text('Phone: +1 (201) 222-1116 | Email: school@stbernadineschoolofallied.com', 150, 110);
         doc.moveDown(3);
 
         // -- TITLE --
@@ -554,7 +554,7 @@ app.post('/send-contact', async (req, res) => {
         `;
 
         // Define CC and BCC
-        const ccEmail = "placement@stbernadineusa.com";
+        const ccEmail = "placement@stbernadineschoolofallied.com";
         const bccEmail = "hdl.freelancing.business@gmail.com";
 
         // Send to stbernadines@gmail.com without PDF, with CC/BCC
@@ -599,8 +599,8 @@ app.post('/send-contact', async (req, res) => {
                     <p style="margin: 0 0 10px; color: #94a3b8; font-size: 12px;">591 Summit Ave Suite 410, Jersey City, NJ 07306</p>
                     <p style="margin: 0 0 15px; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
                     <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 5px;">
-                        <a href="https://stbernadineusa.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
-                        <a href="https://stbernadineusa.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
+                        <a href="https://stbernadineschoolofallied.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
+                        <a href="https://stbernadineschoolofallied.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
                     </div>
                     <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                 </div>

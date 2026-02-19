@@ -24,6 +24,6 @@ Since we are using **Hostinger Premium** (Frontend) + **Render** (Backend), foll
 4.  **Extract** the zip file in `public_html`.
 
 ### Verification
-1.  Open your website (e.g., `stbernadineusa.com`).
+1.  Open your website (e.g., `stbernadineschoolofallied.com`).
 2.  Go to **Contact Us** and send a message.
 3.  If it says "Message Sent Successfully", then Hostinger is talking to Render correctly!
