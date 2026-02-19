@@ -344,8 +344,12 @@ document.addEventListener('DOMContentLoaded', () => {
             response: "Our Founder, <strong>Bernadine 'Belen' Samin, R.N.</strong>, has over 40 years of nursing experience (ER, ICU, Neonatal).<br><br>From humble beginnings in the Philippines, she built St. Bernadine to share opportunities with others. <a href='about.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Read her full story</a>."
         },
         leadership: {
-            keywords: ['co-founder', 'administrator', 'louie', 'manager', 'director', 'admin'],
+            keywords: ['co-founder', 'administrator', 'louie', 'manager', 'admin'],
             response: "<strong>Louie Samin</strong> is our Co-Founder and Administrator.<br><br>With a B.S. in Finance/Economics from UC Berkeley and 40+ years of global operations experience, he oversees corporate functions and international student placement."
+        },
+        director: {
+            keywords: ['director', 'jocelyn', 'ortillo', 'head'],
+            response: "<strong>Jocelyn Ortillo-Samin, RN, MA</strong> is our Director.<br><br>With 40+ years of nursing experience (ER, ICU, School Nursing) and an MA in Executive Nurse Administration from Columbia University, she leads our Placement & Consulting Services."
         },
         faculty: {
             keywords: ['faculty', 'teacher', 'instructor', 'staff', 'team', 'nenita', 'felicia', 'cecilia'],
