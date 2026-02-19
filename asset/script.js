@@ -402,138 +402,140 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{
-                        parts: [{
-                            text: `You are St. Bernadine AI, a helpful assistant for St. Bernadine School of Allied Health in Jersey City.
-USE the following School Information to answer questions:
+                        text: `You are St. Bernadine AI, a helpful assistant for St. Bernadine School of Allied Health in Jersey City.
+
+INSTRUCTIONS:
+1. If the user asks about the school (programs, tuition, location, etc.), USE the specific information below.
+2. If the user asks about GENERAL topics (World History, Science, Math, Life, etc.), ANSWER it using your own vast knowledge. You are a smart AI.
+
+SCHOOL INFORMATION:
 ${knowledgeContext}
 
-Your goal is to help students with information about programs (CNA, HHA, etc.), tuition, and location.
-You can also answer general questions (history, science, etc.) as a smart AI.
 Keep answers concise, friendly, and professional.
 IMPORTANT: Do NOT use Markdown (like **bold** or [link](url)).
 INSTEAD, use HTML tags for formatting: <b>bold</b>, <i>italics</i>, <br> for line breaks, and <a href='URL'>links</a>.
 User Question: ${input}`
-                        }]
                     }]
+                }]
                 })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.candidates && data.candidates.length > 0) {
-                    return data.candidates[0].content.parts[0].text;
-                }
-            } else {
-                console.warn("Gemini API Error:", response.status);
-            }
-        } catch (e) {
-            console.log("Gemini API unreachable. Falling back to local logic.");
-        }
-
-        // 3. Fallback to Local Knowledge Base
-        for (const key in schoolKnowledge) {
-            if (schoolKnowledge[key].keywords.some(word => lowerInput.includes(word))) {
-                return schoolKnowledge[key].response;
-            }
-        }
-
-        // 4. Final Fallback
-        return "I'm having trouble connecting to my brain right now (High Traffic).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
-    }
-
-
-
-    // --- Hero Slider ---
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-
-    if (slides.length > 0) {
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }, 5000); // Change slide every 5 seconds
-    }
-
-    // --- Stats Counter Animation ---
-    const counters = document.querySelectorAll('.counter');
-
-    if (counters.length > 0) {
-        const animateCounter = (counter) => {
-            const target = parseFloat(counter.getAttribute('data-target'));
-            const duration = 2000;
-            let start = 0;
-            const increment = target / (duration / 16);
-
-            const updateCount = () => {
-                start += increment;
-                if (start < target) {
-                    counter.innerText = Math.ceil(start);
-                    requestAnimationFrame(updateCount);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            updateCount();
-        };
-
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounter(entry.target);
-                    counterObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        counters.forEach(counter => counterObserver.observe(counter));
-    }
-
-    // --- FAQ Accordion ---
-    const faqItems = document.querySelectorAll('.faq-item');
-
-    faqItems.forEach(item => {
-        const question = item.querySelector('.faq-question');
-        question.addEventListener('click', () => {
-            // Close other items
-            faqItems.forEach(otherItem => {
-                if (otherItem !== item) {
-                    otherItem.classList.remove('active');
-                }
-            });
-            // Toggle current item
-            item.classList.toggle('active');
         });
-    });
 
-    // --- Header Scroll Effect ---
-    const header = document.querySelector('header');
-    if (header) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
+if (response.ok) {
+    const data = await response.json();
+    if (data.candidates && data.candidates.length > 0) {
+        return data.candidates[0].content.parts[0].text;
+    }
+} else {
+    console.warn("Gemini API Error:", response.status);
+}
+        } catch (e) {
+    console.log("Gemini API unreachable. Falling back to local logic.");
+}
+
+// 3. Fallback to Local Knowledge Base
+for (const key in schoolKnowledge) {
+    if (schoolKnowledge[key].keywords.some(word => lowerInput.includes(word))) {
+        return schoolKnowledge[key].response;
+    }
+}
+
+// 4. Final Fallback
+return "I'm having trouble connecting to my brain right now (High Traffic).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
+    }
+
+
+
+// --- Hero Slider ---
+const slides = document.querySelectorAll('.slide');
+let currentSlide = 0;
+
+if (slides.length > 0) {
+    setInterval(() => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }, 5000); // Change slide every 5 seconds
+}
+
+// --- Stats Counter Animation ---
+const counters = document.querySelectorAll('.counter');
+
+if (counters.length > 0) {
+    const animateCounter = (counter) => {
+        const target = parseFloat(counter.getAttribute('data-target'));
+        const duration = 2000;
+        let start = 0;
+        const increment = target / (duration / 16);
+
+        const updateCount = () => {
+            start += increment;
+            if (start < target) {
+                counter.innerText = Math.ceil(start);
+                requestAnimationFrame(updateCount);
             } else {
-                header.classList.remove('scrolled');
+                counter.innerText = target;
             }
-        }, { passive: true });
-    }
+        };
+        updateCount();
+    };
 
-    // --- Scroll Reveal Animations ---
-    const fadeElements = document.querySelectorAll('.fade-in-up, .reveal-image-left, .reveal-image-right, .reveal-scale');
-    if (fadeElements.length > 0) {
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    revealObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
 
-        fadeElements.forEach(el => revealObserver.observe(el));
-    }
-    // --- Cookie Consent Banner ---
-    const cookieBannerHTML = `
+    counters.forEach(counter => counterObserver.observe(counter));
+}
+
+// --- FAQ Accordion ---
+const faqItems = document.querySelectorAll('.faq-item');
+
+faqItems.forEach(item => {
+    const question = item.querySelector('.faq-question');
+    question.addEventListener('click', () => {
+        // Close other items
+        faqItems.forEach(otherItem => {
+            if (otherItem !== item) {
+                otherItem.classList.remove('active');
+            }
+        });
+        // Toggle current item
+        item.classList.toggle('active');
+    });
+});
+
+// --- Header Scroll Effect ---
+const header = document.querySelector('header');
+if (header) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }, { passive: true });
+}
+
+// --- Scroll Reveal Animations ---
+const fadeElements = document.querySelectorAll('.fade-in-up, .reveal-image-left, .reveal-image-right, .reveal-scale');
+if (fadeElements.length > 0) {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    fadeElements.forEach(el => revealObserver.observe(el));
+}
+// --- Cookie Consent Banner ---
+const cookieBannerHTML = `
         <div id="cookie-banner" class="cookie-banner">
             <div class="container">
                 <div class="cookie-content">
@@ -547,30 +549,30 @@ User Question: ${input}`
         </div>
     `;
 
-    // Check if user has already made a choice
-    if (!localStorage.getItem('cookieConsent')) {
-        // Inject banner
-        document.body.insertAdjacentHTML('beforeend', cookieBannerHTML);
+// Check if user has already made a choice
+if (!localStorage.getItem('cookieConsent')) {
+    // Inject banner
+    document.body.insertAdjacentHTML('beforeend', cookieBannerHTML);
 
-        const cookieBanner = document.getElementById('cookie-banner');
-        const acceptBtn = document.getElementById('accept-cookies');
-        const declineBtn = document.getElementById('decline-cookies');
+    const cookieBanner = document.getElementById('cookie-banner');
+    const acceptBtn = document.getElementById('accept-cookies');
+    const declineBtn = document.getElementById('decline-cookies');
 
-        // Show banner with a slight delay for animation
-        setTimeout(() => {
-            cookieBanner.classList.add('visible');
-        }, 1000);
+    // Show banner with a slight delay for animation
+    setTimeout(() => {
+        cookieBanner.classList.add('visible');
+    }, 1000);
 
-        acceptBtn.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'accepted');
-            cookieBanner.classList.remove('visible');
-            setTimeout(() => cookieBanner.remove(), 500);
-        });
+    acceptBtn.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'accepted');
+        cookieBanner.classList.remove('visible');
+        setTimeout(() => cookieBanner.remove(), 500);
+    });
 
-        declineBtn.addEventListener('click', () => {
-            localStorage.setItem('cookieConsent', 'declined');
-            cookieBanner.classList.remove('visible');
-            setTimeout(() => cookieBanner.remove(), 500);
-        });
-    }
+    declineBtn.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'declined');
+        cookieBanner.classList.remove('visible');
+        setTimeout(() => cookieBanner.remove(), 500);
+    });
+}
 });
