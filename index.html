@@ -22,8 +22,7 @@
     <meta property="og:title" content="Home - St. Bernadine School of Allied Health, Healthcare Services">
     <meta property="og:description"
         content="Start your healthcare career at St. Bernadine School of Allied Health. We provide premier clinical instruction and global career procurement since 1986.">
-    <meta property="og:image"
-        content="https://www.stbernadineschoolofallied.com/asset/images/logo.png">
+    <meta property="og:image" content="https://www.stbernadineschoolofallied.com/asset/images/logo.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
@@ -31,8 +30,7 @@
     <meta property="twitter:title" content="Home - St. Bernadine School of Allied Health, Healthcare Services">
     <meta property="twitter:description"
         content="Start your healthcare career at St. Bernadine School of Allied Health. We provide premier clinical instruction and global career procurement since 1986.">
-    <meta property="twitter:image"
-        content="https://www.stbernadineschoolofallied.com/asset/images/logo.png">
+    <meta property="twitter:image" content="https://www.stbernadineschoolofallied.com/asset/images/logo.png">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +43,39 @@
     <link rel="stylesheet" href="asset/styles.css?v=9.2">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#06752e">
+
+    <!-- JSON-LD Structured Data (Organization) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "St. Bernadine School of Allied Health",
+      "url": "https://www.stbernadineschoolofallied.com/",
+      "logo": "https://www.stbernadineschoolofallied.com/asset/images/logo.png",
+      "image": "https://www.stbernadineschoolofallied.com/asset/images/logo.png",
+      "description": "Premier clinical instruction and global career procurement for healthcare professionals since 1986.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "591 Summit Ave Suite 410",
+        "addressLocality": "Jersey City",
+        "addressRegion": "NJ",
+        "postalCode": "07306",
+        "addressCountry": "US"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-201-222-1116",
+        "contactType": "customer service",
+        "email": "school@stbernadineusa.com",
+        "areaServed": "US",
+        "availableLanguage": "English"
+      },
+      "sameAs": [
+        "https://www.facebook.com/stbernadineschool",
+        "https://www.linkedin.com/company/st-bernadine-school"
+      ]
+    }
+    </script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -54,7 +85,7 @@
                     })
                     .catch((error) => {
                         console.log('Service Worker registration failed:', error);
-                    });
+                   
             });
         }
     </script>
