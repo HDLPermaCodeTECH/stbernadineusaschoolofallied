@@ -402,7 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{
-                        text: `You are St. Bernadine AI, a helpful assistant for St. Bernadine School of Allied Health in Jersey City.
+                        parts: [{
+                            text: `You are St. Bernadine AI, a helpful assistant for St. Bernadine School of Allied Health in Jersey City.
 
 INSTRUCTIONS:
 1. If the user asks about the school (programs, tuition, location, etc.), USE the specific information below.
@@ -415,6 +416,7 @@ Keep answers concise, friendly, and professional.
 IMPORTANT: Do NOT use Markdown (like **bold** or [link](url)).
 INSTEAD, use HTML tags for formatting: <b>bold</b>, <i>italics</i>, <br> for line breaks, and <a href='URL'>links</a>.
 User Question: ${input}`
+                        }]
                     }]
                 }]
                 })
