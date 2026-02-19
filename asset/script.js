@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const partA = 'AIzaSyCuoC-xZpAAXx';
             const partB = 'SxyQ3JGokm-Jw7Lzz-vuE';
             const API_KEY = partA + partB;
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`;
 
             // Helper: Retry Fetch with Exponential Backoff
             async function fetchWithRetry(url, options, retries = 3, backoff = 2000) {
