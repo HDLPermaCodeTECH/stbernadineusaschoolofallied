@@ -387,25 +387,37 @@ document.addEventListener('DOMContentLoaded', () => {
             return "Hello! I can help you with <strong>Program Details</strong> (CNA, HHA, etc.), <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Tuition</strong></a>, <strong>Visa Sponsorship</strong>, or tell you about our <strong>Founder</strong>. What would you like to know?";
         }
 
-        // 2. Try Server AI
+        // 2. Try Direct Gemini API (Client-Side Fallback for Static Hosting)
         try {
-            // Check if we are running on a server that supports the API
-            const response = await fetch('/chat', {
+            const API_KEY = 'AIzaSyCmHsdOyUghILg2bQ4IM3vk97ds1l0ZTf8'; // Restricted Key
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: input })
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `You are St. Bernadine AI, a helpful assistant for St. Bernadine School of Allied Health in Jersey City.
+Your goal is to help students with information about programs (CNA, HHA, etc.), tuition, and location.
+You can also answer general questions (history, science, etc.) as a smart AI.
+Keep answers concise, friendly, and professional.
+User Question: ${input}`
+                        }]
+                    }]
+                })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                return data.response;
+                if (data.candidates && data.candidates.length > 0) {
+                    return data.candidates[0].content.parts[0].text;
+                }
             } else {
-                console.warn("AI Server Error/Unavailable:", response.status);
-                // Throw error to trigger catch block and fallback
-                throw new Error("API Error");
+                console.warn("Gemini API Error:", response.status);
             }
         } catch (e) {
-            console.log("AI Server unreachable or quota exceeded. Falling back to local logic.");
+            console.log("Gemini API unreachable. Falling back to local logic.");
         }
 
         // 3. Fallback to Local Knowledge Base
