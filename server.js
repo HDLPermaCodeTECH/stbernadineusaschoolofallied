@@ -456,52 +456,101 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         // Auto-Reply to Applicant
         const autoReplySubject = "Application Received - St. Bernadine School of Allied Health";
         const autoReplyHtml = `
-            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <!-- Header -->
-                <div style="background-color: #055923; padding: 40px 20px; text-align: center;">
-                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" style="width: 120px; height: auto; margin-bottom: 20px; background: #ffffff; padding: 10px; border-radius: 4px; pointer-events: none; user-select: none; -webkit-user-select: none;">
-                    <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Application Received</h1>
-                    <p style="color: #e2e8f0; margin: 10px 0 0; font-size: 14px; font-weight: 500; letter-spacing: 1px;">St. Bernadine School of Allied Health</p>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Application Received - St. Bernadine</title>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; color: #2d3748; }
+                    .email-wrapper { width: 100%; background-color: #f4f5f7; padding: 40px 0; }
+                    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+                    .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 40px 30px; text-align: center; }
+                    .logo-box { background: rgba(255,255,255,0.95); padding: 12px; border-radius: 12px; display: inline-block; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                    .logo { width: 110px; height: auto; display: block; }
+                    .header h1 { color: #ffffff; font-size: 26px; font-weight: 700; margin: 0 0 8px 0; letter-spacing: -0.5px; }
+                    .header p { color: #a7f3d0; font-size: 15px; margin: 0; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+                    .body { padding: 40px 40px 30px; background-color: #ffffff; }
+                    .greeting { font-size: 20px; font-weight: 600; color: #1a202c; margin: 0 0 20px 0; }
+                    .text { font-size: 16px; line-height: 1.6; color: #4a5568; margin: 0 0 24px 0; }
+                    .info-box { background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin: 30px 0; border-left: 4px solid #055923; }
+                    .info-box p { margin: 0; font-size: 16px; color: #2d3748; line-height: 1.5; }
+                    .highlight { color: #055923; font-weight: 700; }
+                    .next-steps { margin-top: 30px; padding-top: 30px; border-top: 1px solid #edf2f7; }
+                    .signature { margin-top: 30px; }
+                    .signature p { margin: 0; color: #4a5568; }
+                    .signature-name { font-weight: 700; color: #1a202c; font-size: 18px; margin-top: 4px !important; }
+                    .footer { background-color: #f8fafc; padding: 32px 40px; text-align: center; border-top: 1px solid #edf2f7; }
+                    .footer-brand { font-weight: 700; color: #2d3748; font-size: 16px; margin: 0 0 8px 0; }
+                    .footer-text { color: #718096; font-size: 13px; margin: 0 0 20px 0; }
+                    .social-links { margin-bottom: 24px; }
+                    .social-links img { width: 24px; height: 24px; margin: 0 8px; filter: grayscale(100%) opacity(60%); transition: all 0.3s ease; }
+                    .address { color: #a0aec0; font-size: 12px; margin: 0 0 16px 0; line-height: 1.5; }
+                    .links { margin: 0; }
+                    .links a { color: #055923; text-decoration: none; font-size: 12px; font-weight: 500; margin: 0 8px; }
+                    .ref { display: none; }
+                </style>
+            </head>
+            <body>
+                <div class="email-wrapper">
+                    <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                            <td class="header">
+                                <div class="logo-box">
+                                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" class="logo">
+                                </div>
+                                <h1>Application Received</h1>
+                                <p>St. Bernadine School of Allied Health</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="body">
+                                <p class="greeting">Hi ${data.firstName},</p>
+                                <p class="text">Thank you for taking the first step towards a rewarding career in healthcare. We are thrilled that you chose St. Bernadine School of Allied Health.</p>
+                                
+                                <div class="info-box">
+                                    <p>We have successfully received your enrollment application for the <span class="highlight">${data.Program}</span> program.</p>
+                                </div>
+                                
+                                <div class="next-steps">
+                                    <p class="text">Our admissions team is currently reviewing your information. We will reach out to you within the upcoming business days using the contact details provided regarding your next steps.</p>
+                                </div>
+                                
+                                <div class="signature">
+                                    <p>Best regards,</p>
+                                    <p class="signature-name">Admissions Team</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="footer">
+                                <p class="footer-brand">St. Bernadine School of Allied Health</p>
+                                <p class="footer-text">Excellence in Healthcare Education Since 1986</p>
+                                
+                                <div class="social-links">
+                                    <a href="https://facebook.com"><img src="https://img.icons8.com/ios-filled/50/000000/facebook-new.png" alt="Facebook"></a>
+                                    <a href="https://instagram.com"><img src="https://img.icons8.com/ios-filled/50/000000/instagram-new.png" alt="Instagram"></a>
+                                    <a href="https://linkedin.com"><img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" alt="LinkedIn"></a>
+                                </div>
+                                
+                                <p class="address">
+                                    591 Summit Ave Suite 410<br>
+                                    Jersey City, NJ 07306<br>
+                                    &copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.
+                                </p>
+                                
+                                <p class="links">
+                                    <a href="https://stbernadineschoolofallied.com/privacy.html">Privacy Policy</a> &bull; 
+                                    <a href="https://stbernadineschoolofallied.com/contact.html">Contact Us</a>
+                                </p>
+                                <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                
-                <!-- Body -->
-                <div style="padding: 50px 40px; color: #333333; line-height: 1.8;">
-                    <p style="font-size: 18px; margin-bottom: 25px; color: #055923; font-weight: 600;">Dear ${data.firstName},</p>
-                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Thank you for choosing St. Bernadine School of Allied Health for your professional journey.</p>
-                    
-                    <div style="background-color: #fcfcfc; border-left: 5px solid #921c1c; padding: 25px; margin: 30px 0; border-radius: 0 4px 4px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-                        <p style="margin: 0; font-size: 16px; color: #444;">We have successfully received your application for the <strong style="color: #921c1c;">${data.Program}</strong> program.</p>
-                    </div>
-
-                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Our admissions team is currently reviewing your details. We will contact you shortly regarding the next steps in your enrollment process.</p>
-                    
-                    <p style="font-size: 16px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #f0f0f0;">Best regards,</p>
-                    <p style="font-size: 18px; font-weight: bold; color: #055923; margin-top: 5px;">Admissions Team</p>
-                </div>
-
-                <!-- Footer -->
-                <div style="background-color: #f8fafc; padding: 40px 30px; text-align: center; border-top: 1px solid #e6e6e6;">
-                    <div style="margin-bottom: 25px;">
-                        <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
-                        <p style="margin: 5px 0 25px; color: #64748b; font-size: 13px;">Excellence in Healthcare Education Since 1986</p>
-                    </div>
-
-                    <div style="margin-bottom: 30px;">
-                        <a href="https://facebook.com" style="text-decoration: none; margin: 0 12px;"><img src="https://img.icons8.com/ios-filled/50/055923/facebook-new.png" alt="Facebook" style="width: 26px; height: 26px;"></a>
-                        <a href="https://instagram.com" style="text-decoration: none; margin: 0 12px;"><img src="https://img.icons8.com/ios-filled/50/055923/instagram-new.png" alt="Instagram" style="width: 26px; height: 26px;"></a>
-                        <a href="https://linkedin.com" style="text-decoration: none; margin: 0 12px;"><img src="https://img.icons8.com/ios-filled/50/055923/linkedin.png" alt="LinkedIn" style="width: 26px; height: 26px;"></a>
-                    </div>
-                    
-                    <p style="margin: 0 0 10px; color: #94a3b8; font-size: 12px;">591 Summit Ave Suite 410, Jersey City, NJ 07306</p>
-                    <p style="margin: 0 0 15px; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
-
-                    <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 5px;">
-                        <a href="https://stbernadineschoolofallied.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
-                        <a href="https://stbernadineschoolofallied.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
-                    </div>
-                    <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
-                </div>
-            </div>
+            </body>
+            </html>
         `;
         await sendEmail(data.email, autoReplySubject, autoReplyHtml);
         res.status(200).json({ message: 'Application Submitted Successfully!' });
@@ -624,48 +673,101 @@ app.post('/send-contact', async (req, res) => {
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
         const autoReplyHtml = `
-            <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <!-- Header -->
-                <div style="background-color: #055923; padding: 40px 20px; text-align: center;">
-                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" style="width: 120px; height: auto; margin-bottom: 20px; background: #ffffff; padding: 10px; border-radius: 4px; pointer-events: none; user-select: none; -webkit-user-select: none;">
-                    <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Message Received</h1>
-                    <p style="color: #e2e8f0; margin: 10px 0 0; font-size: 14px; font-weight: 500; letter-spacing: 1px;">St. Bernadine School of Allied Health</p>
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Message Received - St. Bernadine</title>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; color: #2d3748; }
+                    .email-wrapper { width: 100%; background-color: #f4f5f7; padding: 40px 0; }
+                    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+                    .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 40px 30px; text-align: center; }
+                    .logo-box { background: rgba(255,255,255,0.95); padding: 12px; border-radius: 12px; display: inline-block; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                    .logo { width: 110px; height: auto; display: block; }
+                    .header h1 { color: #ffffff; font-size: 26px; font-weight: 700; margin: 0 0 8px 0; letter-spacing: -0.5px; }
+                    .header p { color: #a7f3d0; font-size: 15px; margin: 0; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+                    .body { padding: 40px 40px 30px; background-color: #ffffff; }
+                    .greeting { font-size: 20px; font-weight: 600; color: #1a202c; margin: 0 0 20px 0; }
+                    .text { font-size: 16px; line-height: 1.6; color: #4a5568; margin: 0 0 24px 0; }
+                    .info-box { background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin: 30px 0; border-left: 4px solid #055923; }
+                    .info-box p { margin: 0; font-size: 16px; color: #2d3748; line-height: 1.5; }
+                    .highlight { color: #055923; font-weight: 700; }
+                    .next-steps { margin-top: 30px; padding-top: 30px; border-top: 1px solid #edf2f7; }
+                    .signature { margin-top: 30px; }
+                    .signature p { margin: 0; color: #4a5568; }
+                    .signature-name { font-weight: 700; color: #1a202c; font-size: 18px; margin-top: 4px !important; }
+                    .footer { background-color: #f8fafc; padding: 32px 40px; text-align: center; border-top: 1px solid #edf2f7; }
+                    .footer-brand { font-weight: 700; color: #2d3748; font-size: 16px; margin: 0 0 8px 0; }
+                    .footer-text { color: #718096; font-size: 13px; margin: 0 0 20px 0; }
+                    .social-links { margin-bottom: 24px; }
+                    .social-links img { width: 24px; height: 24px; margin: 0 8px; filter: grayscale(100%) opacity(60%); transition: all 0.3s ease; }
+                    .address { color: #a0aec0; font-size: 12px; margin: 0 0 16px 0; line-height: 1.5; }
+                    .links { margin: 0; }
+                    .links a { color: #055923; text-decoration: none; font-size: 12px; font-weight: 500; margin: 0 8px; }
+                    .ref { display: none; }
+                </style>
+            </head>
+            <body>
+                <div class="email-wrapper">
+                    <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                            <td class="header">
+                                <div class="logo-box">
+                                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" class="logo">
+                                </div>
+                                <h1>Message Received</h1>
+                                <p>St. Bernadine School of Allied Health</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="body">
+                                <p class="greeting">Hi ${name},</p>
+                                <p class="text">Thank you for taking the time to contact St. Bernadine School of Allied Health.</p>
+                                
+                                <div class="info-box">
+                                    <p>We have safely received your inquiry regarding: <br><br><span class="highlight">"${subject}"</span></p>
+                                </div>
+                                
+                                <div class="next-steps">
+                                    <p class="text">Our administrative team is actively reviewing your message. We aim to respond to all inquiries as comprehensively as possible, typically within 24 business hours.</p>
+                                </div>
+                                
+                                <div class="signature">
+                                    <p>Warm regards,</p>
+                                    <p class="signature-name">Administration</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="footer">
+                                <p class="footer-brand">St. Bernadine School of Allied Health</p>
+                                <p class="footer-text">Excellence in Healthcare Education Since 1986</p>
+                                
+                                <div class="social-links">
+                                    <a href="https://facebook.com"><img src="https://img.icons8.com/ios-filled/50/000000/facebook-new.png" alt="Facebook"></a>
+                                    <a href="https://instagram.com"><img src="https://img.icons8.com/ios-filled/50/000000/instagram-new.png" alt="Instagram"></a>
+                                    <a href="https://linkedin.com"><img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" alt="LinkedIn"></a>
+                                </div>
+                                
+                                <p class="address">
+                                    591 Summit Ave Suite 410<br>
+                                    Jersey City, NJ 07306<br>
+                                    &copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.
+                                </p>
+                                
+                                <p class="links">
+                                    <a href="https://stbernadineschoolofallied.com/privacy.html">Privacy Policy</a> &bull; 
+                                    <a href="https://stbernadineschoolofallied.com/contact.html">Contact Us</a>
+                                </p>
+                                <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
-                
-                <!-- Body -->
-                <div style="padding: 50px 40px; color: #333333; line-height: 1.8;">
-                    <p style="font-size: 18px; margin-bottom: 25px; color: #055923; font-weight: 600;">Dear ${name},</p>
-                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Thank you for contacting St. Bernadine School of Allied Health.</p>
-                    
-                    <div style="background-color: #fcfcfc; border-left: 5px solid #921c1c; padding: 25px; margin: 30px 0; border-radius: 0 4px 4px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-                        <p style="margin: 0; font-size: 16px; color: #444;">We have successfully received your inquiry regarding <strong style="color: #921c1c;">"${subject}"</strong>.</p>
-                    </div>
-
-                    <p style="font-size: 16px; margin-bottom: 25px; color: #555;">Our team is reviewing your message and will respond as soon as possible, usually within 24 hours.</p>
-                    
-                    <p style="font-size: 16px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #f0f0f0;">Best regards,</p>
-                    <p style="font-size: 18px; font-weight: bold; color: #055923; margin-top: 5px;">Administration</p>
-                </div>
-
-                <!-- Footer -->
-                <div style="background-color: #f8fafc; padding: 40px 30px; text-align: center; border-top: 1px solid #e6e6e6;">
-                    <div style="margin-bottom: 25px;">
-                        <p style="font-weight: 700; margin: 0; color: #055923; font-size: 16px;">St. Bernadine School of Allied Health</p>
-                    </div>
-                     <div style="margin-bottom: 30px;">
-                        <a href="https://facebook.com" style="text-decoration: none; margin: 0 12px;"><img src="https://img.icons8.com/ios-filled/50/055923/facebook-new.png" alt="Facebook" style="width: 26px; height: 26px;"></a>
-                        <a href="https://instagram.com" style="text-decoration: none; margin: 0 12px;"><img src="https://img.icons8.com/ios-filled/50/055923/instagram-new.png" alt="Instagram" style="width: 26px; height: 26px;"></a>
-                        <a href="https://linkedin.com" style="text-decoration: none; margin: 0 12px;"><img src="https://img.icons8.com/ios-filled/50/055923/linkedin.png" alt="LinkedIn" style="width: 26px; height: 26px;"></a>
-                    </div>
-                    <p style="margin: 0 0 10px; color: #94a3b8; font-size: 12px;">591 Summit Ave Suite 410, Jersey City, NJ 07306</p>
-                    <p style="margin: 0 0 15px; color: #94a3b8; font-size: 12px;">&copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.</p>
-                    <div style="font-size: 11px; color: #cbd5e1; margin-bottom: 5px;">
-                        <a href="https://stbernadineschoolofallied.com/privacy.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Privacy Policy</a> | 
-                        <a href="https://stbernadineschoolofallied.com/contact.html" style="color: #94a3b8; text-decoration: none; margin: 0 8px;">Contact Us</a>
-                    </div>
-                    <div style="display:none; max-height:0px; overflow:hidden;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
-                </div>
-            </div>
+            </body>
+            </html>
         `;
 
         await sendEmail(email, autoReplySubject, autoReplyHtml);
