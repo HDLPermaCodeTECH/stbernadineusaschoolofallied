@@ -655,6 +655,100 @@ const generateInquiryPDF = (data) => {
     });
 };
 
+const generateCareRequestPDF = (data) => {
+    return new Promise((resolve, reject) => {
+        const doc = new PDFDocument({ margin: 40, size: 'A4', bufferPages: true });
+        let buffers = [];
+        doc.on('data', buffers.push.bind(buffers));
+        doc.on('end', () => resolve(Buffer.concat(buffers)));
+        doc.on('error', reject);
+
+        // --- HEADER ---
+        const logoPath = path.join(__dirname, 'asset/images/4d-logo.png');
+        if (fs.existsSync(logoPath)) {
+            doc.image(logoPath, 40, 35, { width: 70 });
+        }
+
+        doc.font('Helvetica-Bold').fontSize(22).fillColor(PRIMARY_COLOR).text('ST. BERNADINE', 120, 42);
+        doc.fontSize(12).fillColor(SECON_COLOR).text('HOME CARE SERVICES', 120, 68);
+
+        doc.font('Helvetica').fontSize(9).fillColor('#888888').text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 0, 45, { align: 'right', width: 555 });
+        doc.text('Phone: +1 (201) 222-1116', 0, 58, { align: 'right', width: 555 });
+        doc.text('school@stbernadineschoolofallied.com', 0, 71, { align: 'right', width: 555 });
+        doc.text('www.stbernadineschoolofallied.com', 0, 84, { align: 'right', width: 555 });
+
+        // --- TITLE ---
+        doc.moveDown(4);
+        doc.fillColor(SECON_COLOR).font('Helvetica-Bold').fontSize(8).text(`DATE RECEIVED: ${new Date().toLocaleDateString()}`, 40, 108, { align: 'right', width: 515 });
+
+        // Use standard Hostinger-style header box
+        doc.rect(40, 120, 515, 35).fill(PRIMARY_COLOR);
+        doc.fillColor('white').font('Helvetica-Bold').fontSize(14).text('OFFICIAL HOME CARE SERVICE REQUEST', 40, 131, { align: 'center', width: 515 });
+
+        let y = 180;
+
+        const drawSectionHeader = (title) => {
+            if (y + 40 > 780) { doc.addPage(); y = 50; }
+            doc.rect(40, y, 515, 25).fill(BG_COLOR);
+            doc.rect(40, y, 4, 25).fill(PRIMARY_COLOR);
+            doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(12).text(title.toUpperCase(), 55, y + 7);
+            y += 35;
+        };
+
+        const drawRow = (leftLabel, leftValue, rightLabel, rightValue) => {
+            if (y + 30 > 780) { doc.addPage(); y = 50; }
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(leftLabel, 40, y);
+            doc.fillColor('#111111').font('Helvetica-Bold').fontSize(11).text(leftValue || 'N/A', 40, y + 12);
+
+            if (rightLabel !== undefined) {
+                doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(rightLabel, 310, y);
+                doc.fillColor('#111111').font('Helvetica-Bold').fontSize(11).text(rightValue || 'N/A', 310, y + 12);
+            }
+            doc.lineWidth(0.5).strokeColor(BORDER_COLOR).moveTo(40, y + 28).lineTo(555, y + 28).stroke();
+            y += 40;
+        };
+
+        const drawFullRow = (label, value) => {
+            const textHeight = doc.heightOfString(value || 'N/A', { width: 515, font: 'Helvetica-Bold', fontSize: 11 });
+            const rowHeight = Math.max(28, textHeight + 16);
+
+            if (y + rowHeight > 780) { doc.addPage(); y = 50; }
+
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(label, 40, y);
+            doc.fillColor('#111111').font('Helvetica-Bold').fontSize(11).text(value || 'N/A', 40, y + 12, { width: 515 });
+
+            doc.lineWidth(0.5).strokeColor(BORDER_COLOR).moveTo(40, y + rowHeight).lineTo(555, y + rowHeight).stroke();
+            y += rowHeight + 10;
+        };
+
+        // --- CONTENT ---
+        drawSectionHeader('Patient Information');
+        drawRow('First Name', data.patientFirstName, 'Last Name', data.patientLastName);
+        drawRow('Age', data.patientAge, 'Service Location', data.serviceLocation);
+
+        drawSectionHeader('Contact Person Details');
+        drawRow('Full Name', data.contactName, 'Relationship to Patient', data.relationship);
+        drawRow('Phone Number', data.contactPhone, 'Email Address', data.contactEmail);
+
+        drawSectionHeader('Care Requirements');
+        drawRow('Type of Care Needed', data.careType, 'Estimated Start Date', data.startDate);
+
+        drawFullRow('Specific Condition / Additional Details', data.careDetails);
+
+        // --- AUTOMATIC FOOTER ---
+        const pages = doc.bufferedPageRange();
+        for (let i = 0; i < pages.count; i++) {
+            doc.switchToPage(i);
+            doc.lineWidth(1).strokeColor(PRIMARY_COLOR).moveTo(40, 800).lineTo(555, 800).stroke();
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8)
+                .text(`St. Bernadine Priorities - Home Care Service Request`, 40, 810, { lineBreak: false });
+            doc.text(`Page ${i + 1} of ${pages.count}`, 0, 810, { align: 'right', width: 555, lineBreak: false });
+        }
+
+        doc.end();
+    });
+};
+
 app.post('/send-contact', async (req, res) => {
     try {
         const { name, email, contact_number, subject, message } = req.body;
@@ -956,7 +1050,15 @@ app.post('/request-care', async (req, res) => {
         const ccEmail = "placement@stbernadineusa.com"; // Standardized CC email as used previously
         const adminSubject = `[URGENT] Home Care Request: ${patientFirstName} ${patientLastName} - ${serviceLocation}`;
 
-        await sendEmail(adminEmail, adminSubject, htmlContent, null, contactEmail, ccEmail, null);
+        // Generate PDF and attach to Admin Email
+        const pdfBuffer = await generateCareRequestPDF(req.body);
+        const adminAttachments = [{
+            filename: `HomeCareRequest_${patientFirstName}_${patientLastName}.pdf`,
+            content: pdfBuffer,
+            contentType: 'application/pdf'
+        }];
+
+        await sendEmail(adminEmail, adminSubject, htmlContent, adminAttachments, contactEmail, ccEmail, null);
 
         // Auto-reply HTML Email to the Inquirer
         const autoReplyHtml = `
