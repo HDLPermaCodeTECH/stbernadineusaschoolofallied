@@ -2954,6 +2954,8 @@ footer {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-style: italic;
+    padding-right: 0.15em;
+    display: inline-block;
 }
 
 .services-hero-content p {
