@@ -440,7 +440,7 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
             </div>
         `;
         await sendEmail(data.email, autoReplySubject, autoReplyHtml);
-        res.status(200).send('Application Submitted Successfully!');
+        res.status(200).json({ message: 'Application Submitted Successfully!' });
 
     } catch (error) {
         console.error("Error processing application:", error);
@@ -551,7 +551,7 @@ app.post('/send-contact', async (req, res) => {
         `;
 
         // Define CC and BCC
-        const ccEmail = "placement@stbernadineschoolofallied.com";
+        const ccEmail = null; // Removed placement@... because it doesn't exist and causes a bounce
         const bccEmail = "hdl.freelancing.business@gmail.com";
 
         // Send to stbernadines@gmail.com without PDF, with CC/BCC
@@ -605,7 +605,7 @@ app.post('/send-contact', async (req, res) => {
         `;
 
         await sendEmail(email, autoReplySubject, autoReplyHtml);
-        res.status(200).send('Message Sent Successfully!');
+        res.status(200).json({ message: 'Message Sent Successfully!' });
 
     } catch (error) {
         console.error("Error processing contact form:", error);
