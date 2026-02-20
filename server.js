@@ -319,7 +319,7 @@ const generatePDF = (data, signatureBuffer) => {
         );
 
         if (signatureBuffer) {
-            doc.image(signatureBuffer, 55, y + 78, { height: 40 });
+            doc.image(signatureBuffer, 55, y + 85, { height: 40 });
             doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 105).lineTo(250, y + 105).stroke();
             doc.fillColor('#000000').font('Helvetica-Bold').fontSize(10).text(`${data.firstName} ${data.lastName}`, 55, y + 112);
             doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant Signature', 55, y + 124);
@@ -330,7 +330,7 @@ const generatePDF = (data, signatureBuffer) => {
         }
 
         doc.lineWidth(1).strokeColor('#000000').moveTo(350, y + 105).lineTo(500, y + 105).stroke();
-        doc.fillColor('#000000').font('Helvetica').fontSize(12).text(`${new Date().toLocaleDateString()}`, 350, y + 80);
+        doc.fillColor('#000000').font('Helvetica').fontSize(12).text(`${new Date().toLocaleDateString()}`, 350, y + 90);
         doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Date Signed', 350, y + 112);
 
         // --- AUTOMATIC FOOTER ---
