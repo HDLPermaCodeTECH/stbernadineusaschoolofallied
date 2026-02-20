@@ -309,8 +309,8 @@ const generatePDF = (data, signatureBuffer) => {
         checkPageBreak(150);
         y += 20;
 
-        doc.rect(40, y, 515, 120).fill('#F8FAFC');
-        doc.rect(40, y, 515, 120).lineWidth(1).strokeColor(BORDER_COLOR).stroke();
+        doc.rect(40, y, 515, 140).fill('#F8FAFC');
+        doc.rect(40, y, 515, 140).lineWidth(1).strokeColor(BORDER_COLOR).stroke();
 
         doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(10).text('APPLICANT DECLARATION', 55, y + 15);
         doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(
