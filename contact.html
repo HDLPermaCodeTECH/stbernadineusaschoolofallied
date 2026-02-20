@@ -255,8 +255,8 @@
             e.preventDefault(); const btn = this.querySelector('button[type="submit"]'); const originalText = btn.innerText; btn.innerText = 'Sending...'; btn.disabled = true; const formData = {
                 name: this.querySelector('input[type="text"]').value, email: this.querySelector('input[type="email"]').value, contact_number: this.querySelector('input[name="contact_number"]').value, subject: this.querySelectorAll('input[type="text"]')[1].value, /* 2nd text input is subject */ message: this.querySelector('textarea').value
             }; try {
-                // Use relative path for Hostinger deployment
-                const response = await fetch('/send-contact', {
+                // Use absolute path for Render backend deployment
+                const response = await fetch('https://st-bernadine-backend.onrender.com/send-contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
