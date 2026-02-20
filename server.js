@@ -6,7 +6,7 @@ const path = require('path');
 const cors = require('cors');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-const SibApiV3Sdk = require('sib-api-v3-sdk');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -173,10 +173,16 @@ app.post('/chat', async (req, res) => {
     }
 });
 
-// --- BREVO EMAIL & PDF CONFIGURATION ---
-const defaultClient = SibApiV3Sdk.ApiClient.instance;
-const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = process.env.EMAIL_PASS ? process.env.EMAIL_PASS.trim() : "";
+// --- NODEMAILER EMAIL & PDF CONFIGURATION ---
+const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || "smtp.hostinger.com",
+    port: process.env.EMAIL_PORT || 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 const generatePDF = (data, signatureBuffer) => {
     return new Promise((resolve, reject) => {
@@ -287,33 +293,24 @@ const generatePDF = (data, signatureBuffer) => {
 };
 
 const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc) => {
-    const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    const mailOptions = {
+        from: `"St. Bernadine System" <${process.env.EMAIL_USER}>`,
+        to: to,
+        subject: subject,
+        html: htmlContent,
+    };
 
-    sendSmtpEmail.subject = subject;
-    sendSmtpEmail.htmlContent = htmlContent;
-    sendSmtpEmail.sender = { "name": "St. Bernadine System", "email": process.env.EMAIL_USER };
-    sendSmtpEmail.to = [{ "email": to, "name": "Recipient" }];
-
-    if (attachments) {
-        sendSmtpEmail.attachment = attachments;
-    }
-    if (replyTo) {
-        sendSmtpEmail.replyTo = { "email": replyTo };
-    }
-    if (cc) {
-        sendSmtpEmail.cc = [{ "email": cc }];
-    }
-    if (bcc) {
-        sendSmtpEmail.bcc = [{ "email": bcc }];
-    }
+    if (attachments) mailOptions.attachments = attachments;
+    if (replyTo) mailOptions.replyTo = replyTo;
+    if (cc) mailOptions.cc = cc;
+    if (bcc) mailOptions.bcc = bcc;
 
     try {
-        const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
-        console.log('API called successfully. Returned data: ' + JSON.stringify(data));
-        return data;
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent: ' + info.response);
+        return info;
     } catch (error) {
-        console.error("Brevo API Error:", error);
+        console.error("Nodemailer Error:", error);
         throw error;
     }
 };
@@ -632,7 +629,6 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
-    console.log(`Using Brevo API for emails`);
+    console.log(`Using Nodemailer SMTP for emails`);
     console.log(`Gemini Chatbot: ${chatModel ? 'ACTIVE' : 'INACTIVE (Fallback Mode)'}`);
 });
-
