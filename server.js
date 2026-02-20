@@ -214,11 +214,11 @@ const generatePDF = (data, signatureBuffer) => {
         doc.moveDown(4);
 
         // --- TITLE BANNER ---
+        // Render application date top right above banner to avoid any overlap
+        doc.fillColor(SECON_COLOR).font('Helvetica-Bold').fontSize(8).text(`DATE MODIFIED: ${new Date().toLocaleDateString()}`, 40, 108, { align: 'right', width: 515 });
+
         doc.rect(40, 120, 515, 35).fill(PRIMARY_COLOR);
         doc.fillColor('white').font('Helvetica-Bold').fontSize(14).text('OFFICIAL STUDENT ENROLLMENT APPLICATION', 40, 131, { align: 'center', width: 515 });
-
-        // Render application date top right of banner
-        doc.fillColor('white').fontSize(9).text(`DATE MODIFIED: ${new Date().toLocaleDateString()}`, 40, 122, { align: 'right', width: 505 });
 
         let y = 180;
 
