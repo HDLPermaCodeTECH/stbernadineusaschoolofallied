@@ -137,14 +137,14 @@ const generatePDF = (data, signatureBuffer) => {
         );
 
         if (signatureBuffer) {
-            doc.image(signatureBuffer, 55, y + 70, { height: 40 });
+            doc.image(signatureBuffer, 55, y + 78, { height: 40 });
             doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 105).lineTo(250, y + 105).stroke();
-            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(10).text(`${data.firstName} ${data.lastName}`, 55, y + 75);
-            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant Signature', 55, y + 110);
+            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(10).text(`${data.firstName} ${data.lastName}`, 55, y + 112);
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant Signature', 55, y + 124);
         } else {
-            doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 95).lineTo(250, y + 95).stroke();
-            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(12).text(`${data.firstName} ${data.lastName}`, 55, y + 80);
-            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant E-Signature', 55, y + 100);
+            doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 105).lineTo(250, y + 105).stroke();
+            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(12).text(`${data.firstName} ${data.lastName}`, 55, y + 112);
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant E-Signature', 55, y + 124);
         }
 
         doc.lineWidth(1).strokeColor('#000000').moveTo(350, y + 95).lineTo(500, y + 95).stroke();
