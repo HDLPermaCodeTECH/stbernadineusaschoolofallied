@@ -855,6 +855,173 @@ app.post('/send-contact', async (req, res) => {
     }
 });
 
+app.post('/request-care', async (req, res) => {
+    try {
+        const {
+            patientFirstName, patientLastName, patientAge, serviceLocation,
+            contactName, relationship, contactPhone, contactEmail,
+            careType, startDate, careDetails
+        } = req.body;
+
+        console.log("Received Home Care Request:", req.body);
+
+        // Admin HTML Email
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>New Home Care Request - Admin</title>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; }
+                    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+                    .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 30px; text-align: center; color: white; }
+                    .header h1 { margin: 0 0 5px 0; font-size: 22px; }
+                    .header p { margin: 0; color: #a7f3d0; font-size: 14px; text-transform: uppercase; }
+                    .body { padding: 30px; }
+                    .info-box { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #055923; }
+                    .info-label { font-size: 12px; text-transform: uppercase; color: #6b7280; margin: 0 0 4px 0; }
+                    .info-value { font-size: 16px; font-weight: 600; color: #111827; margin: 0 0 15px 0; }
+                    .info-value:last-child { margin-bottom: 0; }
+                    .grid { display: table; width: 100%; }
+                    .col { display: table-cell; width: 50%; }
+                    .message-box { background-color: #f3f4f6; padding: 15px; border-radius: 6px; font-style: italic; color: #374151; }
+                    .footer { background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; }
+                </style>
+            </head>
+            <body>
+                <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                        <td class="header">
+                            <h1>New Home Care Request</h1>
+                            <p>St. Bernadine Priorities</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="body">
+                            <h3 style="margin-top:0; color:#111827;">Patient Details</h3>
+                            <div class="info-box">
+                                <div class="grid">
+                                    <div class="col">
+                                        <p class="info-label">Patient Name</p>
+                                        <p class="info-value">${patientFirstName} ${patientLastName}</p>
+                                        <p class="info-label">Age</p>
+                                        <p class="info-value">${patientAge}</p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="info-label">Service Location</p>
+                                        <p class="info-value">${serviceLocation}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 style="color:#111827;">Care Requirements</h3>
+                            <div class="info-box" style="border-left-color: #2563eb;">
+                                <div class="grid">
+                                    <div class="col">
+                                        <p class="info-label">Type of Care</p>
+                                        <p class="info-value">${careType}</p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="info-label">Est. Start Date</p>
+                                        <p class="info-value">${startDate}</p>
+                                    </div>
+                                </div>
+                                <p class="info-label" style="margin-top:10px;">Specific Condition / Requirements</p>
+                                <div class="message-box">${careDetails.replace(/\n/g, '<br>')}</div>
+                            </div>
+
+                            <h3 style="color:#111827;">Contact Person Details</h3>
+                            <div class="info-box" style="border-left-color: #d97706;">
+                                <p class="info-label">Name & Relationship</p>
+                                <p class="info-value">${contactName} (${relationship})</p>
+                                <p class="info-label">Contact Details</p>
+                                <p class="info-value">Phone: ${contactPhone}<br>Email: <a href="mailto:${contactEmail}">${contactEmail}</a></p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="footer">
+                            <p style="margin:0;">&copy; ${new Date().getFullYear()} St. Bernadine School of Allied Health. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+        `;
+
+        // Setting Admin notification recipients (main + CC to placement/homecare admins)
+        const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
+        const ccEmail = "placement@stbernadineusa.com"; // Standardized CC email as used previously
+        const adminSubject = `[URGENT] Home Care Request: ${patientFirstName} ${patientLastName} - ${serviceLocation}`;
+
+        await sendEmail(adminEmail, adminSubject, htmlContent, null, contactEmail, ccEmail, null);
+
+        // Auto-reply HTML Email to the Inquirer
+        const autoReplyHtml = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Home Care Request Received</title>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; }
+                    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+                    .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 30px; text-align: center; color: white; }
+                    .header h1 { margin: 0 0 5px 0; font-size: 24px; }
+                    .body { padding: 40px; color: #374151; line-height: 1.6; }
+                    .highlight-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 25px 0; color: #166534; }
+                    .footer { background-color: #f8fafc; padding: 25px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b; }
+                </style>
+            </head>
+            <body>
+                <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                        <td class="header">
+                            <h1>Request Received</h1>
+                            <p style="margin:0; color:#a7f3d0;">St. Bernadine Home Care Services</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="body">
+                            <h2 style="margin-top:0; color:#111827;">Hello ${contactName},</h2>
+                            <p>Thank you for reaching out to St. Bernadine School of Allied Health regarding home care services for <strong>${patientFirstName} ${patientLastName}</strong>.</p>
+                            
+                            <div class="highlight-box">
+                                <p style="margin:0;"><strong>We have successfully received your request for ${careType}</strong>. Our priority is ensuring the comfort and well-being of your loved ones.</p>
+                            </div>
+
+                            <p>A dedicated Care Coordinator is currently reviewing the details you provided. We will contact you at <strong>${contactPhone}</strong> within the next 24 hours to discuss the specific tailored care plan, finalize arrangements, and answer any questions you may have.</p>
+                            
+                            <p>If you have any immediate concerns, please do not hesitate to drop us a call at <a href="tel:+12012221116" style="color:#055923; text-decoration:none; font-weight:bold;">+1 (201) 222-1116</a>.</p>
+                            
+                            <p style="margin-bottom:0; margin-top:30px;">Warmly,</p>
+                            <p style="margin:0; font-weight:bold; color:#111827;">St. Bernadine Home Care Team</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="footer">
+                            <p style="margin:0 0 10px 0; font-weight:bold; color:#055923;">St. Bernadine School of Allied Health</p>
+                            <p style="margin:0;">591 Summit Ave Suite 410, Jersey City, NJ 07306</p>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+        `;
+
+        await sendEmail(contactEmail, `We received your Care Request for ${patientFirstName}`, autoReplyHtml, null, null, null, null);
+
+        res.status(200).json({ message: 'Care Request Submitted Successfully!' });
+
+    } catch (error) {
+        console.error("Error processing request care form:", error);
+        res.status(500).json({ error: 'Error: ' + error.message });
+    }
+});
+
 
 
 // Ensure uploads directory exists
