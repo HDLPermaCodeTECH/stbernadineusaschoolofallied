@@ -311,7 +311,8 @@
                     <a href="forms.html">Forms</a> <a href="contact.html">Contact Us</a> <a
                         href="referral.html">Referral</a> <a href="contact.html" class="btn btn-primary">Inquire Now</a>
                     <a href="payment.html" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make
-                        a Payment</a> </div>
+                        a Payment</a>
+                </div>
             </nav>
         </div>
     </header>
@@ -413,12 +414,13 @@
                 <div
                     style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1; font-size: 0.95rem; color: #b91c1c; font-weight: 600;">
                     <i class="fa-solid fa-triangle-exclamation"></i> IMPORTANT: Please compile all requirements and
-                    double-check that your application is complete before submitting. </div>
+                    double-check that your application is complete before submitting.
+                </div>
             </div>
             <div style="text-align: center; margin-bottom: 30px;"> <a href="payment.html" class="btn btn-primary"
                     style="width: 100%; max-width: 300px;">Make a Payment</a> </div>
-            <form id="application-form" action="https://stbernadineusaschoolofallied.onrender.com/send-email"
-                method="POST" enctype="multipart/form-data"> <!-- FormSubmit Configuration -->
+            <form id="application-form" action="/send-email" method="POST" enctype="multipart/form-data">
+                <!-- FormSubmit Configuration -->
                 <input type="hidden" name="_subject" value="New Student Application - St. Bernadine">
                 <input type="hidden" name="_template" value="box">
                 <input type="hidden" name="_captcha" value="false">
@@ -1168,7 +1170,7 @@
             btn.disabled = true;
             // Submit the form using Fetch API for better UX (Alert instead of raw page)
             const formData = new FormData(form);
-            fetch('https://stbernadineusaschoolofallied.onrender.com/send-email', {
+            fetch('/send-email', {
                 method: 'POST',
                 body: formData
             })
