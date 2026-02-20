@@ -109,44 +109,156 @@
             margin-bottom: 10px;
         }
 
-        /* Print Styles */
+        /* Professional Print Styles */
         @media print {
+            @page {
+                size: letter portrait;
+                margin: 0.75in;
+            }
 
             .top-bar,
             header,
             .services-hero,
             footer,
             .print-btn,
-            .cta-premium {
+            .cta-premium,
+            .feature-icon,
+            .section-header p,
+            .sub-heading,
+            .policy-card h3 i {
                 display: none !important;
             }
 
             body {
-                background: white;
+                background: white !important;
+                color: black !important;
+                font-size: 11pt !important;
+                line-height: 1.5 !important;
             }
 
+            .container {
+                max-width: 100% !important;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            /* Disable Grid Layouts */
+            .grid,
+            .grid-3,
+            .grid-2 {
+                display: block !important;
+                gap: 0 !important;
+            }
+
+            /* Override Section Styling */
             .section-padding {
-                padding: 20px 0;
+                padding: 10px 0 !important;
+                margin: 0 !important;
             }
 
+            .bg-gradient-warm,
+            .bg-fluid,
+            .section-decorated {
+                background: none !important;
+            }
+
+            .section-header {
+                text-align: left !important;
+                margin-bottom: 15px !important;
+            }
+
+            h2 {
+                font-size: 18pt !important;
+                color: #000 !important;
+                border-bottom: 2px solid #000 !important;
+                padding-bottom: 5px !important;
+                margin-top: 25px !important;
+                margin-bottom: 15px !important;
+                page-break-after: avoid;
+            }
+
+            h3 {
+                font-size: 14pt !important;
+                color: #000 !important;
+                margin-top: 15px !important;
+                margin-bottom: 5px !important;
+                page-break-after: avoid;
+            }
+
+            /* Convert Cards to Document Paragraphs */
             .program-card,
             .policy-card {
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 0 25px 0 !important;
                 break-inside: avoid;
-                box-shadow: none;
-                border: 1px solid #ccc;
+                page-break-inside: avoid;
+                height: auto !important;
+                display: block !important;
             }
 
-            h2,
-            h3 {
-                color: #000;
+            .program-content,
+            .policy-card {
+                text-align: left !important;
+                align-items: flex-start !important;
+                display: block !important;
             }
 
+            .program-content h3 {
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 4px;
+            }
+
+            /* Align Flex Meta Elements Left */
+            .program-content>div[style*="justify-content: center;"] {
+                justify-content: flex-start !important;
+                margin-bottom: 8px !important;
+            }
+
+            p {
+                margin-bottom: 10px !important;
+                font-size: 11pt !important;
+            }
+
+            ul {
+                margin-top: 5px !important;
+                margin-bottom: 10px !important;
+                padding-left: 20px !important;
+            }
+
+            li {
+                margin-bottom: 5px !important;
+            }
+
+            /* Custom Print Header */
             .print-header {
                 display: block !important;
                 text-align: center;
                 margin-bottom: 30px;
-                border-bottom: 2px solid #ccc;
-                padding-bottom: 20px;
+                border-bottom: 2px solid #000;
+                padding-bottom: 15px;
+            }
+
+            .print-header img {
+                height: 50px !important;
+                filter: grayscale(100%) !important;
+                margin-bottom: 10px !important;
+            }
+
+            .print-header h2 {
+                border: none !important;
+                margin: 0 0 5px 0 !important;
+                font-size: 16pt !important;
+                text-align: center !important;
+            }
+
+            .print-header p {
+                font-size: 10pt !important;
+                margin: 0 !important;
+                color: #333 !important;
             }
         }
     </style>
