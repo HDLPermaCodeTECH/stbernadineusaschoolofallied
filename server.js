@@ -293,8 +293,9 @@ const generatePDF = (data, signatureBuffer) => {
 };
 
 const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc) => {
+    const fromEmail = process.env.EMAIL_USER || "hdlpermacodetech@stbernadineschoolofallied.com";
     const mailOptions = {
-        from: `"St. Bernadine System" <${process.env.EMAIL_USER}>`,
+        from: `"St. Bernadine System" <${fromEmail}>`,
         to: to,
         subject: subject,
         html: htmlContent,
