@@ -184,110 +184,165 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+const PRIMARY_COLOR = '#055923';
+const SECON_COLOR = '#555555';
+const BORDER_COLOR = '#CBD5E1';
+const BG_COLOR = '#F8FAFC';
+
 const generatePDF = (data, signatureBuffer) => {
     return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({ margin: 50, size: 'A4' });
+        const doc = new PDFDocument({ margin: 40, size: 'A4', bufferPages: true });
         let buffers = [];
         doc.on('data', buffers.push.bind(buffers));
         doc.on('end', () => resolve(Buffer.concat(buffers)));
         doc.on('error', reject);
 
-        // Header
+        // --- HEADER ---
         const logoPath = path.join(__dirname, 'asset/images/4d-logo.png');
         if (fs.existsSync(logoPath)) {
-            doc.image(logoPath, 50, 45, { width: 80 });
+            doc.image(logoPath, 40, 35, { width: 70 });
         }
 
-        doc.font('Helvetica-Bold').fontSize(18).text('ST. BERNADINE', 150, 50);
-        doc.fontSize(12).text('SCHOOL OF ALLIED HEALTH', 150, 75);
-        doc.font('Helvetica').fontSize(10).text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 150, 95);
-        doc.text('Phone: +1 (201) 222-1116 | Email: school@stbernadineschoolofallied.com', 150, 110);
-        doc.moveDown(3);
+        doc.font('Helvetica-Bold').fontSize(22).fillColor(PRIMARY_COLOR).text('ST. BERNADINE', 120, 42);
+        doc.fontSize(12).fillColor(SECON_COLOR).text('SCHOOL OF ALLIED HEALTH', 120, 68);
 
-        // Title
-        doc.rect(50, 140, 495, 30).fill('#055923');
-        doc.fillColor('white').font('Helvetica-Bold').fontSize(14).text('STUDENT ENROLLMENT APPLICATION', 50, 148, { align: 'center', width: 495 });
-        doc.fillColor('black').moveDown(2);
+        doc.font('Helvetica').fontSize(9).fillColor('#888888').text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 0, 45, { align: 'right', width: 555 });
+        doc.text('Phone: +1 (201) 222-1116', 0, 58, { align: 'right', width: 555 });
+        doc.text('school@stbernadineschoolofallied.com', 0, 71, { align: 'right', width: 555 });
+        doc.text('www.stbernadineschoolofallied.com', 0, 84, { align: 'right', width: 555 });
 
-        let y = 190;
-        if (data['Program']) {
-            doc.font('Helvetica-Bold').fontSize(12).fillColor('#055923').text(`Program Applied For: ${data['Program']}`, 50, y, { align: 'center' });
-            doc.fillColor('black');
-            y += 30;
-        }
+        doc.moveDown(4);
 
-        const addField = (label, value) => {
-            doc.font('Helvetica-Bold').fontSize(11).text(label + ':', 50, y);
-            doc.font('Helvetica').fontSize(11).text(value || 'N/A', 200, y);
-            y += 20;
-            if (y > 750) {
+        // --- TITLE BANNER ---
+        doc.rect(40, 120, 515, 35).fill(PRIMARY_COLOR);
+        doc.fillColor('white').font('Helvetica-Bold').fontSize(14).text('OFFICIAL STUDENT ENROLLMENT APPLICATION', 40, 131, { align: 'center', width: 515 });
+
+        // Render application date top right of banner
+        doc.fontSize(9).text(`DATE MODIFIED: ${new Date().toLocaleDateString()}`, 40, 134, { align: 'right', width: 505 });
+
+        let y = 180;
+
+        // --- HELPER FUNCTIONS ---
+        const checkPageBreak = (neededHeight) => {
+            if (y + neededHeight > 750) {
                 doc.addPage();
                 y = 50;
             }
         };
 
-        addField('Full Name', `${data.firstName} ${data.middleName || ''} ${data.lastName}`);
-        addField('Address', `${data.address}`);
-        addField('City, State, Zip', `${data.city}, ${data.state} ${data.postalCode}`);
-        addField('Country', data.country);
-        addField('Phone', data.phone);
-        addField('Email', data.email);
+        const drawSectionHeader = (title) => {
+            checkPageBreak(40);
+            doc.rect(40, y, 515, 25).fill(BG_COLOR);
+            doc.rect(40, y, 4, 25).fill(PRIMARY_COLOR); // Left accent border
+            doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(12).text(title.toUpperCase(), 55, y + 7);
+            y += 35;
+        };
 
-        y += 10;
-        doc.lineWidth(1).moveTo(50, y).lineTo(545, y).stroke('black'); // Black Separator (Thinner)
-        y += 15;
+        const drawRow = (leftLabel, leftValue, rightLabel, rightValue) => {
+            checkPageBreak(30);
 
-        addField('Mother\'s Maiden Name', data.motherName);
-        addField('Father\'s Name', data.fatherName);
-        addField('Emergency Contact', data.emergencyContactName);
-        addField('Emergency Phone', data.emergencyContactPhone);
-        addField('Referred By', data.referrer);
+            // Left Column
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(leftLabel, 40, y);
+            doc.fillColor('#111111').font('Helvetica-Bold').fontSize(11).text(leftValue || 'N/A', 40, y + 12);
 
-        y += 10;
-        doc.lineWidth(1).moveTo(50, y).lineTo(545, y).stroke('black'); // Black Separator (Thinner)
-        y += 15;
+            // Right Column (if exists)
+            if (rightLabel !== undefined) {
+                doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(rightLabel, 310, y);
+                doc.fillColor('#111111').font('Helvetica-Bold').fontSize(11).text(rightValue || 'N/A', 310, y + 12);
+            }
 
-        addField('Profession', data.profession === 'Other' ? data.otherProfession : data.profession);
-        addField('School', data.school);
-        addField('Course', data.course);
-        addField('Year Graduated', data.yearGraduated);
+            // Bottom Border line for row
+            doc.lineWidth(0.5).strokeColor(BORDER_COLOR).moveTo(40, y + 28).lineTo(555, y + 28).stroke();
+            y += 40;
+        };
 
-        if (data.company1) {
-            y += 15;
-            doc.font('Helvetica-Bold').fillColor('#055923').text('Employment History:', 50, y);
-            doc.fillColor('black');
-            y += 20;
-            addField('1. Company', `${data.company1} (${data.dateEmployed1})`);
+        const drawFullRow = (label, value) => {
+            checkPageBreak(30);
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(label, 40, y);
+            doc.fillColor('#111111').font('Helvetica-Bold').fontSize(11).text(value || 'N/A', 40, y + 12, { width: 515 });
+
+            // Calculate height taken by value text
+            const textHeight = doc.heightOfString(value || 'N/A', { width: 515, font: 'Helvetica-Bold', fontSize: 11 });
+            const rowHeight = Math.max(28, textHeight + 16);
+
+            doc.lineWidth(0.5).strokeColor(BORDER_COLOR).moveTo(40, y + rowHeight).lineTo(555, y + rowHeight).stroke();
+            y += rowHeight + 10;
+        };
+
+        // --- CONTENT ---
+
+        if (data['Program']) {
+            doc.rect(40, y, 515, 40).fill('#F0FDF4');
+            doc.rect(40, y, 515, 40).lineWidth(1).strokeColor('#22C55E').stroke();
+            doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(11).text('PROGRAM APPLIED FOR:', 55, y + 14);
+            doc.fillColor('#166534').font('Helvetica-Bold').fontSize(14).text(data['Program'], 210, y + 12);
+            y += 60;
         }
-        if (data.company2) {
-            y += 5;
-            addField('2. Company', `${data.company2} (${data.dateEmployed2})`);
+
+        drawSectionHeader('Personal Information');
+        drawRow('First Name', data.firstName, 'Last Name', data.lastName);
+        drawRow('Middle Name', data.middleName, 'Date of Application', data.dateOfApplication);
+
+        drawSectionHeader('Contact Details');
+        drawFullRow('Street Address', data.address);
+        drawRow('City / Municipality', data.city, 'State / Province', data.state);
+        drawRow('Country', data.country, 'Postal/Zip Code', data.postalCode);
+        drawRow('Primary Phone', data.phone, 'Email Address', data.email);
+
+        drawSectionHeader('Family & Emergency Contact');
+        drawRow("Mother's Maiden Name", data.motherName, "Father's Name", data.fatherName);
+        drawRow('Emergency Contact Person', data.emergencyContactName, 'Emergency Contact Phone', data.emergencyContactPhone);
+
+        drawSectionHeader('Educational & Professional Background');
+        drawRow('Highest Education Level / Profession', data.profession === 'Other' ? data.otherProfession : data.profession, 'School Attended', data.school);
+        drawRow('Course / Major', data.course, 'Year Graduated', data.yearGraduated);
+
+        if (data.company1 || data.company2) {
+            drawSectionHeader('Employment History');
+            if (data.company1) drawRow('Company 1', data.company1, 'Dates Employed', data.dateEmployed1);
+            if (data.company2) drawRow('Company 2', data.company2, 'Dates Employed', data.dateEmployed2);
         }
 
-        doc.moveDown(2);
-        y = doc.y + 20;
-        if (y > 700) doc.addPage();
+        drawFullRow('Referred By', data.referrer);
 
-        doc.rect(50, y, 495, 160).fillOpacity(0.05).fill('#055923');
-        doc.fillOpacity(1);
-        doc.font('Helvetica-Bold').fillColor('#055923').text('Declaration:', 60, y + 10);
-        doc.font('Helvetica').fontSize(10).fillColor('black').text(
-            'I certify that my answers are true and complete to the best of my knowledge.',
-            60, y + 30, { width: 475 }
+        // --- SIGNATURE & DECLARATION ---
+        checkPageBreak(150);
+        y += 20;
+
+        doc.rect(40, y, 515, 120).fill('#F8FAFC');
+        doc.rect(40, y, 515, 120).lineWidth(1).strokeColor(BORDER_COLOR).stroke();
+
+        doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(10).text('APPLICANT DECLARATION', 55, y + 15);
+        doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(9).text(
+            'I hereby certify that all information provided in this application is true and correct to the best of my knowledge and belief. I understand that any false statements or omissions may disqualify me from enrollment or result in dismissal from St. Bernadine School of Allied Health.',
+            55, y + 35, { width: 485, align: 'justify' }
         );
 
-        y += 60;
         if (signatureBuffer) {
-            doc.text('Applicant Signature:', 60, y - 10);
-            doc.image(signatureBuffer, 60, y + 5, { height: 50 });
-            // Add Printed Name Below Signature
-            doc.font('Helvetica').fontSize(10).text(`${data.firstName} ${data.lastName}`, 60, y + 60);
+            doc.image(signatureBuffer, 55, y + 70, { height: 40 });
+            doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 105).lineTo(250, y + 105).stroke();
+            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(10).text(`${data.firstName} ${data.lastName}`, 55, y + 75);
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant Signature', 55, y + 110);
         } else {
-            doc.text('(Signed Digitally)', 60, y + 10);
-            doc.font('Helvetica').fontSize(10).text(`${data.firstName} ${data.lastName}`, 60, y + 25);
+            doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 95).lineTo(250, y + 95).stroke();
+            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(12).text(`${data.firstName} ${data.lastName}`, 55, y + 80);
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant E-Signature', 55, y + 100);
         }
 
-        doc.font('Helvetica-Oblique').fontSize(9).text(`Date: ${data.dateOfApplication}`, 350, y + 60);
+        doc.lineWidth(1).strokeColor('#000000').moveTo(350, y + 95).lineTo(500, y + 95).stroke();
+        doc.fillColor('#000000').font('Helvetica').fontSize(10).text(`${new Date().toLocaleDateString()}`, 350, y + 80);
+        doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Date Signed', 350, y + 100);
+
+        // --- AUTOMATIC FOOTER ---
+        const pages = doc.bufferedPageRange();
+        for (let i = 0; i < pages.count; i++) {
+            doc.switchToPage(i);
+            doc.lineWidth(1).strokeColor(PRIMARY_COLOR).moveTo(40, 800).lineTo(555, 800).stroke();
+            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8)
+                .text(`Application Reference: STB-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`, 40, 810);
+            doc.text(`Page ${i + 1} of ${pages.count}`, 0, 810, { align: 'right', width: 555 });
+        }
+
         doc.end();
     });
 };
