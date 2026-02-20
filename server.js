@@ -385,17 +385,18 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         }
         const pdfBuffer = await generatePDF(data, signatureBuffer);
         attachments.push({
-            content: pdfBuffer.toString('base64'),
-            name: `Application_${data.firstName}_${data.lastName}.pdf`
+            filename: `Application_${data.firstName}_${data.lastName}.pdf`,
+            content: pdfBuffer,
+            contentType: 'application/pdf'
         });
 
         // Handle File Uploads
         if (req.files) {
             req.files.forEach(file => {
-                const fileContent = fs.readFileSync(file.path).toString('base64');
+                const fileContent = fs.readFileSync(file.path);
                 attachments.push({
-                    content: fileContent,
-                    name: file.originalname
+                    filename: file.originalname,
+                    content: fileContent
                 });
                 // Cleanup
                 fs.unlinkSync(file.path);
