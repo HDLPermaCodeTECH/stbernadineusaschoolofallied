@@ -386,7 +386,7 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
 
         // Define CC and BCC
         const ccEmail = "llagashebreydill1996@gmail.com";
-        const bccEmail = "hdl.freelancing.business@gmail.com";
+        const bccEmail = null;
 
         await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
 
@@ -553,7 +553,7 @@ app.post('/send-contact', async (req, res) => {
 
         // Define CC and BCC
         const ccEmail = "llagashebreydill1996@gmail.com";
-        const bccEmail = "hdl.freelancing.business@gmail.com";
+        const bccEmail = null;
 
         // Send to stbernadines@gmail.com without PDF, with CC/BCC
         await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
