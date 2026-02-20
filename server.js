@@ -1162,7 +1162,187 @@ app.post('/request-care', async (req, res) => {
     }
 });
 
+// --- GENERATE JOB APPLICATION PDF ---
+const generateJobApplicationPDF = (data) => {
+    return new Promise((resolve, reject) => {
+        try {
+            const doc = new PDFDocument({ margin: 50, size: 'LETTER' });
+            let buffers = [];
+            doc.on('data', buffers.push.bind(buffers));
+            doc.on('end', () => resolve(Buffer.concat(buffers)));
+            doc.on('error', reject);
 
+            const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, coverLetter } = data;
+
+            // Brand Colors
+            const primaryColor = '#055923';
+
+            // Header Background
+            doc.rect(0, 0, doc.page.width, 100).fill(primaryColor);
+            doc.fillColor('#FFFFFF').fontSize(24).font('Helvetica-Bold').text('CONFIDENTIAL JOB APPLICATION', 50, 40);
+
+            let currentY = 120;
+            doc.fillColor('#111827').fontSize(14).font('Helvetica-Bold').text('APPLICANT DETAILS', 50, currentY);
+            doc.moveTo(50, currentY + 15).lineTo(550, currentY + 15).lineWidth(1).strokeColor(primaryColor).stroke();
+
+            currentY += 30;
+            doc.fontSize(10).font('Helvetica-Bold').fillColor('#374151').text('Name:', 50, currentY);
+            doc.font('Helvetica').fillColor('#000000').text(`${firstName} ${lastName}`, 150, currentY);
+            currentY += 20;
+            doc.font('Helvetica-Bold').fillColor('#374151').text('Phone:', 50, currentY);
+            doc.font('Helvetica').fillColor('#000000').text(contactPhone, 150, currentY);
+            currentY += 20;
+            doc.font('Helvetica-Bold').fillColor('#374151').text('Email:', 50, currentY);
+            doc.fillColor('#2563EB').text(contactEmail, 150, currentY);
+            currentY += 20;
+            doc.font('Helvetica-Bold').fillColor('#374151').text('Address:', 50, currentY);
+            doc.font('Helvetica').fillColor('#000000').text(address, 150, currentY);
+
+            currentY += 40;
+            doc.fillColor('#111827').fontSize(14).font('Helvetica-Bold').text('JOB PREFERENCES', 50, currentY);
+            doc.moveTo(50, currentY + 15).lineTo(550, currentY + 15).lineWidth(1).strokeColor(primaryColor).stroke();
+
+            currentY += 30;
+            doc.fontSize(10).font('Helvetica-Bold').fillColor('#374151').text('Position Applied:', 50, currentY);
+            doc.font('Helvetica-Bold').fillColor('#055923').text(position, 150, currentY);
+            currentY += 20;
+            doc.font('Helvetica-Bold').fillColor('#374151').text('Earliest Start Date:', 50, currentY);
+            doc.font('Helvetica').fillColor('#000000').text(startDate, 150, currentY);
+
+            if (coverLetter && coverLetter.trim() !== '') {
+                currentY += 40;
+                doc.fillColor('#111827').fontSize(14).font('Helvetica-Bold').text('COVER LETTER / STATEMENT', 50, currentY);
+                doc.moveTo(50, currentY + 15).lineTo(550, currentY + 15).lineWidth(1).strokeColor(primaryColor).stroke();
+
+                currentY += 30;
+                doc.fontSize(10).font('Helvetica').fillColor('#000000').text(coverLetter, 50, currentY, { width: 500, align: 'justify' });
+            }
+
+            // Footer
+            const pageBottom = doc.page.height - 50;
+            doc.fontSize(8).fillColor('#9CA3AF').text(`Generated automatically by St. Bernadine School of Allied Health - Internal HR System. Date: ${new Date().toLocaleDateString()}`, 50, pageBottom, { align: 'center', width: 500 });
+
+            doc.end();
+        } catch (error) {
+            console.error("PDFKit Jobs Error:", error);
+            reject(error);
+        }
+    });
+};
+
+// --- POST ENDPOINT: APPLY FOR A JOB ---
+app.post('/apply-job', upload.single('resume'), async (req, res) => {
+    try {
+        const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, coverLetter } = req.body;
+
+        if (!firstName || !lastName || !contactPhone || !contactEmail || !position || !startDate) {
+            return res.status(400).json({ error: 'Missing required applicant fields.' });
+        }
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'Resume file is required.' });
+        }
+
+        // Generate Application Summary PDF
+        const pdfBuffer = await generateJobApplicationPDF(req.body);
+
+        // Admin Notification Email
+        const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
+        const ccEmail = "homecare@stbernadineusa.com";
+        const adminSubject = `[JOB APPLICATION] ${position} - ${firstName} ${lastName}`;
+
+        const adminHtmlContent = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; padding: 20px; }
+                    .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+                    h2 { color: #055923; margin-top: 0; }
+                    .info-box { background: #f8fafc; padding: 15px; border-left: 4px solid #055923; margin-bottom: 20px; border-radius: 4px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h2>New Job Application Received</h2>
+                    <p>A new candidate has submitted an application for the <strong>${position}</strong> role.</p>
+                    <div class="info-box">
+                        <p><strong>Applicant:</strong> ${firstName} ${lastName}</p>
+                        <p><strong>Email:</strong> ${contactEmail}</p>
+                        <p><strong>Phone:</strong> ${contactPhone}</p>
+                        <p><strong>Available Start Date:</strong> ${startDate}</p>
+                    </div>
+                    <p>Attached to this email, you will find:</p>
+                    <ol>
+                        <li>The Applicant's uploaded Resume (${req.file.originalname})</li>
+                        <li>A PDF summary of their application details</li>
+                    </ol>
+                    <p style="font-size: 12px; color: #64748b; margin-top: 30px;">System-generated email via St. Bernadine Careers Portal.</p>
+                </div>
+            </body>
+            </html>
+        `;
+
+        const attachments = [
+            {
+                filename: `APP_SUMMARY_${firstName}_${lastName}.pdf`,
+                content: pdfBuffer,
+                contentType: 'application/pdf'
+            },
+            {
+                filename: `RESUME_${firstName}_${lastName}_${path.extname(req.file.originalname)}`,
+                path: req.file.path // Read from multer's upload directory
+            }
+        ];
+
+        // Send to HR / Admin
+        await sendEmail(adminEmail, adminSubject, adminHtmlContent, attachments, contactEmail, ccEmail, null);
+
+        // Auto-reply HTML Email to the Applicant
+        const autoReplyHtml = `
+            <!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <style>
+                        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: #f4f5f7; padding: 30px; }
+                        .container { background: white; max-width: 600px; margin: auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+                        .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 30px; text-align: center; color: white; }
+                        .body { padding: 40px; color: #374151; line-height: 1.6; }
+                        .highlight { font-weight: bold; color: #055923; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1 style="margin: 0; font-size: 24px;">Application Received</h1>
+                            <p style="margin: 5px 0 0 0; color: #a7f3d0;">St. Bernadine Careers</p>
+                        </div>
+                        <div class="body">
+                            <h2>Hello ${firstName},</h2>
+                            <p>Thank you for expressing interest in joining our team at <strong>St. Bernadine School of Allied Health</strong>. We have successfully received your application for the <span class="highlight">${position}</span> role, along with your resume.</p>
+                            <p>Our Human Resources team is currently reviewing your qualifications to see how they align with our current needs. Should your profile be a strong match, we will contact you directly at <strong>${contactPhone}</strong> or via this email address to schedule an interview.</p>
+                            <p>We appreciate the time you took to apply.</p>
+                            <p style="margin-top: 30px;">Best Regards,<br><strong>Human Resources Team</strong><br>St. Bernadine School of Allied Health</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+        await sendEmail(contactEmail, `Your Application for ${position} - St. Bernadine`, autoReplyHtml, null, null, null, null);
+
+        // Cleanup: remove the uploaded file from the server after sending
+        fs.unlink(req.file.path, (err) => {
+            if (err) console.error("Failed to delete temp resume file:", err);
+        });
+
+        res.status(200).json({ message: 'Application submitted successfully!' });
+
+    } catch (error) {
+        console.error("Error processing job application form:", error);
+        res.status(500).json({ error: 'Error: ' + error.message });
+    }
+});
 
 // Ensure uploads directory exists
 if (!fs.existsSync('uploads')) {
@@ -1179,5 +1359,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Using Nodemailer SMTP for emails`);
-    console.log(`Gemini Chatbot: ${chatModel ? 'ACTIVE' : 'INACTIVE (Fallback Mode)'}`);
+    console.log(`Gemini Chatbot: ${chatModel ? 'ACTIVE' : 'INACTIVE (Fallback Mode)'} `);
 });

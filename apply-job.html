@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for a Job - St. Bernadine of Allied Health</title>
+    <link rel="icon" type="image/png" href="favicon.png?v=21">
+    <link rel="shortcut icon" href="favicon.ico?v=21">
+    <meta name="keywords"
+        content="Healthcare Jobs, Nursing Jobs NJ, Caregiver Jobs, Join St. Bernadine, Healthcare Careers NJ">
+    <meta name="description"
+        content="Apply for a rewarding career at St. Bernadine School of Allied Health. We are hiring caregivers, nurses, and office administrators.">
+    <meta name="author" content="St. Bernadine School">
+    <link rel="canonical" href="https://www.stbernadineschoolofallied.com/apply-job.html">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="asset/styles.css?v=10.29">
+    <!-- Intl Tel Input CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+    <style>
+        .iti {
+            width: 100%;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+        }
+
+        .grid-2-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .grid-2-form {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* File Upload Styling */
+        input[type="file"] {
+            border: 1px dashed var(--primary-color);
+            background: #f8fafc;
+            padding: 20px 12px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            background: #f0fdf4;
+            border-color: #06752e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-content">
+                <div class="top-bar-left"> <a href="mailto:school@stbernadineschoolofallied.com"><i
+                            class="fa-solid fa-envelope"></i> school@stbernadineschoolofallied.com</a> <a
+                        href="tel:+12012221116"><i class="fa-solid fa-phone"></i> +1 (201) 222-1116</a> </div>
+                <div class="top-bar-right">
+                    <div class="social-icons-small"> <a href="#"><i class="fa-brands fa-facebook-f"></i></a> <a
+                            href="#"><i class="fa-brands fa-instagram"></i></a> <a href="#"><i
+                                class="fa-brands fa-linkedin-in"></i></a> </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Navigation -->
+    <header>
+        <div class="container">
+            <nav class="navbar"> <a href="https://www.stbernadineschoolofallied.com/" class="logo"> <img
+                        src="asset/images/4d-logo.png" alt="St. Bernadine Logo"> </a>
+                <div class="nav-links"> <a href="https://www.stbernadineschoolofallied.com/">Home</a> <a
+                        href="about.html">About Us</a> <a href="services.html">Services</a> <a href="blog.html">Blog</a>
+                    <a href="forms.html">Forms</a> <a href="contact.html">Contact Us</a> <a
+                        href="referral.html">Referral</a> <a href="contact.html" class="btn btn-primary">Inquire Now</a>
+                    <a href="payment.html" class="btn btn-primary" style="margin-left: 10px; background: #0f172a;">Make
+                        a Payment</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="services-hero fade-in-up">
+        <div class="services-hero-bg"
+            style="background: linear-gradient(135deg, rgba(4,47,19,0.9) 0%, rgba(6,117,46,0.8) 100%), url('asset/images/mission-care.webp') center/cover;">
+        </div>
+        <div class="services-hero-content"> <span class="hero-badge"><i class="fa-solid fa-briefcase"></i> Join Our
+                Team</span>
+            <h1>Apply for a <span class="hero-ampersand">Career</span></h1>
+            <p>We are looking for passionate, dedicated professionals to join our family. Be part of a mission-driven
+                organization providing top-tier healthcare and education.</p>
+        </div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-accent-line"></div>
+    </div>
+
+    <section class="section-padding fade-in-up bg-premium-light">
+        <div class="container" style="max-width: 900px;">
+            <div class="p-40"
+                style="background: var(--white); border-radius: 12px; box-shadow: var(--shadow-lg); border: 1px solid #E2E8F0;">
+                <div class="section-header text-center" style="margin-bottom: 30px;">
+                    <h2 style="font-size: 2rem;">Job Application Form</h2>
+                    <p style="color: var(--text-medium);">Submit your details and resume below. Our HR team will review
+                        your application.</p>
+                </div>
+
+                <form id="apply-job-form" enctype="multipart/form-data">
+                    <!-- Personal Information -->
+                    <div class="form-section-title">Personal Information</div>
+                    <div class="grid-2-form">
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">First Name
+                                <span style="color:red;">*</span></label>
+                            <input type="text" name="firstName"
+                                style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
+                                required>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Last Name <span
+                                    style="color:red;">*</span></label>
+                            <input type="text" name="lastName"
+                                style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="grid-2-form">
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Phone Number <span
+                                    style="color:red;">*</span></label>
+                            <input type="tel" id="contactNumber" name="contactPhone"
+                                style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
+                                required>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Email Address <span
+                                    style="color:red;">*</span></label>
+                            <input type="email" name="contactEmail"
+                                style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
+                                required>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Home Address (City, State,
+                            Zip) <span style="color:red;">*</span></label>
+                        <input type="text" name="address" placeholder="e.g. Jersey City, NJ 07306"
+                            style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;" required>
+                    </div>
+
+                    <!-- Job Preferences -->
+                    <div class="form-section-title">Job Preferences</div>
+                    <div class="grid-2-form">
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Position Applied For
+                                <span style="color:red;">*</span></label>
+                            <select name="position"
+                                style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px; background: white;"
+                                required>
+                                <option value="" disabled selected>Select Position</option>
+                                <option value="Caregiver / Companion">Caregiver / Companion</option>
+                                <option value="Certified Home Health Aide (CHHA)">Certified Home Health Aide (CHHA)
+                                </option>
+                                <option value="Certified Nursing Assistant (CNA)">Certified Nursing Assistant (CNA)
+                                </option>
+                                <option value="Registered Nurse (RN)">Registered Nurse (RN)</option>
+                                <option value="Licensed Practical Nurse (LPN)">Licensed Practical Nurse (LPN)</option>
+                                <option value="Office / Administration">Office / Administration</option>
+                                <option value="Instructor / Educator">Instructor / Educator</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Available Start Date
+                                <span style="color:red;">*</span></label>
+                            <input type="date" name="startDate"
+                                style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Documents & Details -->
+                    <div class="form-section-title">Documents & Cover Letter</div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Upload Resume (PDF, DOC,
+                            DOCX) <span style="color:red;">*</span></label>
+                        <input type="file" name="resume" accept=".pdf,.doc,.docx" style="width: 100%;" required>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600;">Cover Letter / Personal
+                            Statement (Optional)</label>
+                        <textarea name="coverLetter" rows="5"
+                            placeholder="Tell us why you'd be a great fit for this position..."
+                            style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; font-size: 1.1rem; padding: 15px;">Submit Job Application</button>
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: var(--text-light);"><i
+                            class="fa-solid fa-lock" style="color: var(--primary-color);"></i> Your information is
+                        secure and safely encrypted.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"> <img src="asset/images/4d-logo.png" alt="St. Bernadine Logo"
+                        class="footer-logo">
+                    <p>Empowering clinical healthcare professionals through excellence in education and professional
+                        development since 1986.</p>
+                    <div class="footer-socials"> <a href="#"><i class="fa-brands fa-facebook fa-lg"></i></a> <a
+                            href="#"><i class="fa-brands fa-instagram fa-lg"></i></a> <a href="#"><i
+                                class="fa-brands fa-linkedin fa-lg"></i></a> </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Programs</h3>
+                    <ul>
+                        <li><a href="cna-program.html">CNA Certification</a></li>
+                        <li><a href="ch-hha-program.html">CH-HHA Training</a></li>
+                        <li><a href="cma-program.html">CMA Certification</a></li>
+                        <li><a href="pct-program.html">Patient Care Technician</a></li>
+                        <li><a href="medical-assistant-program.html">Medical Assistant</a></li>
+                        <li><a href="ekg-phlebotomy-program.html">EKG/Phlebotomy</a></li>
+                        <li><a href="cpr-program.html">CPR & First Aid</a></li>
+                        <li><a href="newborn-care-program.html">Newborn Care Specialist</a></li>
+                        <li><a href="continuing-education.html">Continuing Education</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="apply.html#admissions">Admissions</a></li>
+                        <li><a href="tuition.html">Tuition & Aid</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-contact">
+                        <li><i class="fa-solid fa-location-dot"></i> 591 Summit Ave Suite 410, Jersey City, NJ 07306,
+                            United States </li>
+                        <li><i class="fa-solid fa-phone"></i> +1 (201) 222-1116</li>
+                        <li><i class="fa-solid fa-envelope"></i> school@stbernadineschoolofallied.com</li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Subscribe</h3>
+                    <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.9rem;">Get updates on class dates, job
+                        openings, and healthcare tips.</p>
+                    <form class="footer-subscribe-form"> <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 St. Bernadine. All rights reserved. | <a href="privacy.html"
+                        style="color: inherit; text-decoration: none;">Privacy & Safety</a> | <a href="terms.html"
+                        style="color: inherit; text-decoration: none;">Terms & Conditions</a></p>
+            </div>
+        </div>
+    </footer>
+    <!-- Custom JS -->
+    <script src="asset/script.js?v=10.29"></script>
+    <!-- Intl Tel Input JS -->
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+    <script>
+        // Initialize Intl Tel Input
+        const input = document.querySelector("#contactNumber");
+        const iti = window.intlTelInput(input, {
+            utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
+            preferredCountries: ["us", "ph", "ca", "gb"],
+            separateDialCode: true,
+        });
+
+        // Form Submit Logic for File Upload
+        document.getElementById('apply-job-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = 'Submitting Application...';
+            btn.disabled = true;
+
+            const formElement = this;
+            const formData = new FormData(formElement);
+
+            // Append formatted phone number
+            formData.set('contactPhone', iti.getNumber());
+
+            try {
+                // Use relative path for backend deployment
+                const response = await fetch('/apply-job', {
+                    method: 'POST',
+                    body: formData // Note: Content-Type is NOT set manually so browser can set boundaries for multipart/form-data
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('Job Application Sent Successfully! Our HR team will review your application soon.');
+                    formElement.reset();
+                } else {
+                    alert(`Error (${response.status}): ${result.error || result.message || 'Failed to submit application.'}`);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Network/Server Error: Failed to fetch.\\nPlease try again later or email us directly.');
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
