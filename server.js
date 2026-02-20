@@ -1047,7 +1047,7 @@ app.post('/request-care', async (req, res) => {
 
         // Setting Admin notification recipients (main + CC to placement/homecare admins)
         const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
-        const ccEmail = "placement@stbernadineusa.com"; // Standardized CC email as used previously
+        const ccEmail = "homecare@stbernadineusa.com";
         const adminSubject = `[URGENT] Home Care Request: ${patientFirstName} ${patientLastName} - ${serviceLocation}`;
 
         // Generate PDF and attach to Admin Email
