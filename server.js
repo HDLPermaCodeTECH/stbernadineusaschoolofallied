@@ -12,8 +12,18 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
+const corsOptions = {
+    origin: [
+        'https://stbernadineschoolofallied.com',
+        'https://www.stbernadineschoolofallied.com',
+        'https://hdlpermacodetech.github.io',
+        'http://localhost:5500',
+        'http://127.0.0.1:5500'
+    ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 
