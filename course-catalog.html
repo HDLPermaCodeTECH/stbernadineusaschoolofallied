@@ -4,42 +4,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 Course Catalog - St. Bernadine School of Allied Health</title>
+    <title>Course Catalog - St. Bernadine School of Allied Health</title>
     <link rel="icon" type="image/png" href="favicon.png?v=21">
     <link rel="shortcut icon" href="favicon.ico?v=21">
-    <meta name="description"
-        content="View the 2026 Course Catalog for St. Bernadine School of Allied Health. Explore our allied health programs, curriculum, and policies.">
-    <meta name="keywords"
-        content="Course Catalog, Allied Health Programs, School Curriculum, Healthcare Training Courses, Student Handbook">
-    <meta name="author" content="St. Bernadine School">
-    <link rel="canonical" href="https://www.stbernadineschoolofallied.com/course-catalog.html">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.stbernadineschoolofallied.com/course-catalog.html">
-    <meta property="og:title" content="2026 Course Catalog - St. Bernadine School of Allied Health">
-    <meta property="og:description"
-        content="View the 2026 Course Catalog for St. Bernadine School of Allied Health. Explore our allied health programs, curriculum, and policies.">
-    <meta property="og:image" content="https://www.stbernadineschoolofallied.com/asset/images/logo.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://www.stbernadineschoolofallied.com/course-catalog.html">
-    <meta property="twitter:title" content="2026 Course Catalog - St. Bernadine School of Allied Health">
-    <meta property="twitter:description"
-        content="View the 2026 Course Catalog for St. Bernadine School of Allied Health. Explore our allied health programs, curriculum, and policies.">
-    <meta property="twitter:image" content="https://www.stbernadineschoolofallied.com/asset/images/logo.png">
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap"
         rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="asset/styles.css?v=10.29">
+
+    <meta name="description"
+        content="View the 2026 Course Catalog for St. Bernadine School of Allied Health. Explore our allied health programs, curriculum, and policies.">
+    <meta name="author" content="St. Bernadine School">
+
     <style>
+        :root {
+            --primary: #06752e;
+            --secondary: #902017;
+            --text-dark: #0f172a;
+            --text-light: #64748B;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--bg-light);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
+        }
+
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 0 auto;
+            background: var(--white);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.8in;
+            position: relative;
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            max-width: 200px;
+            margin-bottom: 1rem;
+        }
+
+        .doc-title {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .academic-year {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* UI Controls */
         .ui-controls {
             position: fixed;
             top: 20px;
@@ -52,7 +104,7 @@
         }
 
         .btn-print {
-            background: #06752e;
+            background: var(--primary);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -71,662 +123,147 @@
             background: #044b1c;
         }
 
-        .catalog-summary-text {
-            color: var(--text-medium);
-            line-height: 1.8;
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
+        /* Catalog specific styles */
+        .catalog-section {
+            margin-bottom: 40px;
         }
 
-        .policy-card {
-            background: var(--white);
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: var(--shadow-sm);
-            height: 100%;
+        .catalog-section h2 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--text-dark);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
 
-        .policy-card h3 {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            margin-bottom: 15px;
+        .program-item {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            page-break-inside: avoid;
         }
 
-        .policy-card p {
-            color: var(--text-medium);
-            font-size: 0.95rem;
-            line-height: 1.7;
+        .program-left {
+            flex: 0 0 35%;
+            padding-right: 20px;
         }
 
-        .policy-card ul {
-            padding-left: 20px;
-            margin-top: 15px;
-            color: var(--text-medium);
-            font-size: 0.95rem;
-            line-height: 1.7;
+        .program-right {
+            flex: 1;
         }
 
-        .policy-card ul li {
+        .program-left h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .program-meta {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .program-right p {
             margin-bottom: 10px;
         }
 
-        /* Web Layout Base */
-        .print-layout {
-            display: none;
+        .program-right ul {
+            padding-left: 20px;
+            color: var(--text-light);
         }
 
-        /* Highly Professional Print Document Styles */
+        .policy-section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .policy-section h4 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .policy-section ul {
+            padding-left: 20px;
+            color: var(--text-light);
+            margin-top: 10px;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
         @media print {
-            @page {
-                size: letter portrait;
-                margin: 0.5in 0.75in;
-            }
-
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                -webkit-transition: none !important;
-                transition: none !important;
-                -webkit-animation: none !important;
-                animation: none !important;
-            }
-
             body {
-                background: white !important;
-                color: #1a202c !important;
-                /* Deep professional slate */
-                font-family: 'Inter', sans-serif !important;
-                font-size: 11pt !important;
-                line-height: 1.6 !important;
+                background: none;
             }
 
-            .web-layout,
-            .ui-controls,
-            .chat-toggle-btn,
-            .chatbot-container,
-            iframe {
-                display: none !important;
-            }
-
-            .print-layout {
-                display: block !important;
-            }
-
-            /* Print Document Typography */
-            /* Print Header matched to Tuition Schedule */
-            .print-header {
-                text-align: center;
-                border-bottom: 2px solid #06752e;
-                padding-bottom: 2rem;
-                margin-bottom: 2rem;
-            }
-
-            .print-header img {
-                max-width: 200px;
-                display: block;
-                margin: 0 auto 1rem auto;
-            }
-
-            .print-header h1 {
-                font-size: 2.5rem;
-                color: #0f172a !important;
-                margin-bottom: 0.5rem;
-                font-family: 'Poppins', sans-serif !important;
-                font-weight: 700;
-            }
-
-            .print-header .academic-year {
-                font-size: 1.2rem;
-                color: #902017 !important;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                font-family: 'Poppins', sans-serif !important;
-            }
-
-            .print-header p {
-                margin-top: 10px;
-                color: #64748b !important;
-            }
-
-            /* Document Pages */
-            .print-doc-page {
-                page-break-after: always;
-                padding-top: 0.5in;
-            }
-
-            .print-doc-page:last-child {
-                page-break-after: auto;
-            }
-
-            .print-doc-header {
-                font-size: 9pt;
-                color: #94a3b8 !important;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                border-bottom: 1px solid #e2e8f0;
-                padding-bottom: 10px;
-                margin-bottom: 30px;
-                display: none;
-                /* Hide the sub-page headers so the doc flows smoothly */
-            }
-
-            .print-doc-title {
-                font-size: 20pt;
-                font-weight: 700;
-                color: #0f172a !important;
-                margin-bottom: 20px;
-                border-bottom: 2px solid #0f172a;
-                padding-bottom: 15px;
-            }
-
-            /* Clean List for Programs */
-            .print-program-item {
-                display: flex;
-                border-bottom: 1px solid #e2e8f0;
-                padding: 20px 0;
-                page-break-inside: avoid;
-                /* Prevent program blocks from cutting in half */
-            }
-
-            .print-program-left {
-                flex: 0 0 35%;
-                padding-right: 20px;
-            }
-
-            .print-program-right {
-                flex: 1;
-            }
-
-            .print-program-left h3 {
-                font-size: 13pt;
-                font-weight: 700;
-                color: #0f172a !important;
-                margin: 0 0 10px 0;
-                line-height: 1.3;
-            }
-
-            .print-program-meta {
-                font-size: 10pt;
-                color: #475569 !important;
-                font-weight: 600;
-            }
-
-            .print-program-right p {
-                margin: 0 0 10px 0;
-            }
-
-            .print-program-right ul {
+            .page {
+                box-shadow: none;
                 margin: 0;
-                padding-left: 20px;
-                color: #475569 !important;
+                width: auto;
+                height: auto;
+                padding: 0;
+                border: none;
             }
 
-            .print-policy-section {
-                margin-bottom: 30px;
-                page-break-inside: avoid;
+            .no-print {
+                display: none;
             }
 
-            .print-policy-section h4 {
-                font-size: 14pt;
-                color: #0f172a !important;
-                margin: 0 0 10px 0;
+            .ui-controls {
+                display: none;
             }
+        }
 
-            .print-policy-section ul {
-                padding-left: 20px;
-                color: #475569 !important;
+        @media screen and (max-width: 8.5in) {
+            .page {
+                width: 100%;
+                margin-top: 5rem;
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="web-layout">
-        <!-- Navigation -->
-        <div class="top-bar">
-            <div class="container">
-                <div class="top-bar-content">
-                    <div class="top-bar-left">
-                        <a href="mailto:school@stbernadineschoolofallied.com"><i class="fa-solid fa-envelope"></i>
-                            school@stbernadineschoolofallied.com</a>
-                        <a href="tel:+12012221116"><i class="fa-solid fa-phone"></i> +1 (201) 222-1116</a>
-                    </div>
-                    <div class="top-bar-right">
-                        <div class="social-icons-small">
-                            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Navigation -->
-        <header>
-            <div class="container">
-                <nav class="navbar">
-                    <a href="https://www.stbernadineschoolofallied.com/" class="logo">
-                        <img src="asset/images/4d-logo.png" alt="St. Bernadine Logo">
-                    </a>
-                    <div class="nav-links">
-                        <a href="https://www.stbernadineschoolofallied.com/">Home</a>
-                        <a href="about.html">About Us</a>
-                        <a href="services.html">Services</a>
-                        <a href="blog.html">Blog</a>
-                        <a href="forms.html">Forms</a>
-                        <a href="contact.html">Contact Us</a>
-                        <a href="referral.html">Referral</a>
-                        <a href="contact.html" class="btn btn-primary">Inquire Now</a>
-                        <a href="payment.html" class="btn btn-primary"
-                            style="margin-left: 10px; background: #0f172a;">Make
-                            a Payment</a>
-                    </div>
-                </nav>
-            </div>
-        </header>
 
-        <!-- Hero Section -->
-        <div class="services-hero fade-in-up">
-            <div class="services-hero-bg"
-                style="background: linear-gradient(135deg, rgba(4,47,19,0.95) 0%, rgba(6,117,46,0.9) 100%), url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;">
-            </div>
-            <div class="services-hero-content">
-                <span class="hero-badge"><i class="fa-solid fa-book-open"></i> Academic Year 2026</span>
-                <h1>Course <span class="hero-ampersand">Catalog&nbsp;</span></h1>
-                <p>Empowering the Future of Healthcare Professionals. Explore our comprehensive accredited programs
-                    designed
-                    to advance your clinical career.</p>
-                <div class="hero-stats-row">
-                    <div class="hero-stat-item">
-                        <strong>9+</strong>
-                        <span>Accredited Programs</span>
-                    </div>
-                    <div class="hero-stat-divider"></div>
-                    <div class="hero-stat-item">
-                        <strong>100%</strong>
-                        <span>Hands-On Training</span>
-                    </div>
-                    <div class="hero-stat-divider"></div>
-                    <div class="hero-stat-item">
-                        <strong>50+</strong>
-                        <span>Clinical Partners</span>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-orb hero-orb-1"></div>
-            <div class="hero-orb hero-orb-2"></div>
-            <div class="hero-accent-line"></div>
-        </div>
+    <div class="ui-controls no-print">
+        <button onclick="window.print()" class="btn-print">
+            <i class="fa-solid fa-print"></i> Print / Save as PDF
+        </button>
+    </div>
 
-        <!-- Introduction Section -->
-        <section class="section-padding bg-fluid section-decorated" id="introduction">
-            <div class="container">
-                <div class="section-header text-center">
-                    <span class="sub-heading">Welcome</span>
-                    <h2>Welcome to St. Bernadine</h2>
-                </div>
-                <p class="catalog-summary-text">
-                    Since 1986, St. Bernadine School of Allied Health, Healthcare Services has been dedicated to
-                    providing
-                    top-tier education and training for individuals aspiring to enter the healthcare field. Our programs
-                    are designed to equip students with practical skills, theoretical knowledge, and the professional
-                    ethics necessary to succeed. We are accredited and recognized by the NJ Department of Education, NJ
-                    Department of Health, and
-                    other leading regulatory bodies.
-                </p>
-            </div>
-        </section>
-
-        <!-- Certification Programs Section -->
-        <section class="section-padding fade-in-up" id="certification-programs">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Academic Programs</h2>
-                    <p>Detailed curriculum overviews for our 2026 academic year.</p>
-                </div>
-
-                <div class="grid grid-3">
-                    <!-- CNA -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-user-nurse"></i></div>
-                            <h3>Certified Nurse Aide (CNA)</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 90 Hours</span>
-                                <span><i class="fa-solid fa-calendar"></i> 4-6 Weeks</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">Prepares students to provide basic nursing care in long-term
-                                care
-                                facilities, hospitals, and private homes.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Curriculum:</strong> Anatomy & Physiology, Infection Control, Vital Signs,
-                                    Personal Care Skills, Patient Rights.</li>
-                                <li><strong>Prerequisites:</strong> High School Diploma or GED, 18 years of age.</li>
-                                <li><strong>Outcome:</strong> State Licensure</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- CH-HHA -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-house-chimney-medical"></i></div>
-                            <h3>Certified Homemaker Home Health Aide (CH-HHA)</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 76 Hours</span>
-                                <span><i class="fa-solid fa-calendar"></i> 3-4 Weeks</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">Designed for individuals who wish to provide care in a home
-                                setting focusing on personal care and management.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Curriculum:</strong> Personal Care, Nutrition, Safe Transfer Techniques,
-                                    Home
-                                    Safety.</li>
-                                <li><strong>Requirement:</strong> High School Level</li>
-                                <li><strong>Outcome:</strong> NJ State Certification</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- CMA -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-pills"></i></div>
-                            <h3>Certified Medication Aide (CMA)</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 56 Hours</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">Advanced training for CNAs or CHHAs to administer
-                                non-parenteral
-                                medications in assisted living facilities.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Prerequisites:</strong> Active CNA or CHHA license in NJ, Sponsorship from a
-                                    facility.</li>
-                                <li><strong>Training:</strong> Includes clinical medication pass under nurse
-                                    supervision.
-                                </li>
-                                <li><strong>Outcome:</strong> State Certification</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- PCT -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-user-gear"></i></div>
-                            <h3>Patient Care Technician (PCT)</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 220 Hours</span>
-                                <span><i class="fa-solid fa-calendar"></i> 5 Months</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">A comprehensive program combining CNA skills with EKG and
-                                Phlebotomy training for advanced hospital roles.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Curriculum:</strong> Advanced clinical skills, EKG monitoring, blood draw.
-                                </li>
-                                <li><strong>Prerequisites:</strong> High School Diploma/GED required.</li>
-                                <li><strong>Includes Externship:</strong> Yes</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Medical Assistant -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-hospital-user"></i></div>
-                            <h3>Certified Medical Assistant</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 620 Hours</span>
-                                <span><i class="fa-solid fa-calendar"></i> 5 Months</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">Comprehensive clinical and administrative training for
-                                outpatient
-                                clinics and medical offices.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Curriculum:</strong> Front-office administration, vital signs, phlebotomy,
-                                    basic
-                                    assisting.</li>
-                                <li><strong>Includes Externship:</strong> Yes</li>
-                                <li><strong>Materials:</strong> All-inclusive</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- EKG/Phlebotomy -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-vial"></i></div>
-                            <h3>EKG/Phlebotomy Program</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 140 Hours</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">Dedicated training to blood draw, venipuncture, and
-                                cardiovascular
-                                monitoring techniques.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Schedule:</strong> Day or Weekend</li>
-                                <li><strong>Outcome:</strong> Technical Certification</li>
-                                <li><strong>Focus:</strong> High-demand specialized skills</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- CPR/BLS -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                            <h3>CPR and Basic Life Support (BLS)</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 5 Hours</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">Intensive training in American Heart Association certified
-                                life-saving skills.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Schedule:</strong> Weekdays/Weekends (10am to 3pm)</li>
-                                <li><strong>Outcome:</strong> AHA Certification</li>
-                                <li><strong>Renewal:</strong> Valid for 2 years</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Newborn Care -->
-                    <div class="program-card">
-                        <div class="program-content" style="text-align: center; align-items: center;">
-                            <div class="feature-icon"><i class="fa-solid fa-baby"></i></div>
-                            <h3>Certified Newborn Care Specialist</h3>
-                            <div
-                                style="display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; color: var(--primary-color); font-weight: 600; font-size: 0.9rem;">
-                                <span><i class="fa-regular fa-clock"></i> 10 Hours</span>
-                            </div>
-                            <p style="font-size: 0.9rem;">Comprehensive training (Baby Nursing) for specialized neonatal
-                                and
-                                infant care.</p>
-                            <ul class="program-list"
-                                style="margin-top: 15px; margin-bottom: 20px; list-style: disc; padding-left: 20px; color: var(--text-dark); text-align: left; width: 100%; font-size: 0.9rem;">
-                                <li><strong>Schedule:</strong> Weekend Class (10am to 3pm)</li>
-                                <li><strong>Focus:</strong> Infant feeding, sleep conditioning, postpartum care basics.
-                                </li>
-                                <li><strong>Outcome:</strong> Specialist Certificate</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Admissions & Policies Section -->
-        <section class="section-padding bg-gradient-warm section-decorated" id="policies">
-            <div class="container">
-                <div class="section-header text-center">
-                    <h2>Admissions & Policies</h2>
-                    <p>Important guidelines for enrollment and academic success.</p>
-                </div>
-
-                <div class="grid grid-3">
-                    <div class="policy-card">
-                        <h3><i class="fa-solid fa-file-signature"></i> Enrollment Requirements</h3>
-                        <p>To enroll in our programs, applicants must provide:</p>
-                        <ul>
-                            <li>Completed Application Form</li>
-                            <li>Valid Government ID</li>
-                            <li>High School Diploma / GED (for applicable programs)</li>
-                            <li>Medical Clearance / Physical Exam</li>
-                            <li>Criminal Background Check (for clinical placement)</li>
-                        </ul>
-                    </div>
-
-                    <div class="policy-card">
-                        <h3><i class="fa-solid fa-money-bill-transfer"></i> Refund Policy</h3>
-                        <p>Tuition refunds are processed strictly according to the NJ State Education Department
-                            regulations.</p>
-                        <ul>
-                            <li>Withdrawal within the first week of class typically results in a partial refund based on
-                                hours attended.</li>
-                            <li>Administrative and registration fees are non-refundable.</li>
-                        </ul>
-                    </div>
-
-                    <div class="policy-card">
-                        <h3><i class="fa-solid fa-clipboard-user"></i> Attendance & Conduct</h3>
-                        <p>Professionalism and punctuality are vital in healthcare.</p>
-                        <ul>
-                            <li>Students are expected to attend all scheduled classes and clinical rotations.</li>
-                            <li>A minimum attendance of <strong>90%</strong> is required to graduate.</li>
-                            <li>Strict adherence to the professional dress code and conduct policy is mandatory.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Print Button Overlay -->
-        <div class="ui-controls no-print">
-            <button onclick="window.print()" class="btn-print">
-                <i class="fa-solid fa-print"></i> Print / Save as PDF
-            </button>
-        </div>
-
-        <!-- Footer -->
-        <footer id="contact">
-            <div class="container">
-                <div class="footer-grid">
-                    <div class="footer-brand">
-                        <img src="asset/images/4d-logo.png" alt="St. Bernadine Logo" class="footer-logo">
-                        <p>Empowering clinical healthcare professionals through excellence in education and professional
-                            development since 1986.</p>
-                        <div class="footer-socials">
-                            <a href="#"><i class="fa-brands fa-facebook fa-lg"></i></a>
-                            <a href="#"><i class="fa-brands fa-instagram fa-lg"></i></a>
-                            <a href="#"><i class="fa-brands fa-linkedin fa-lg"></i></a>
-                        </div>
-                    </div>
-                    <div class="footer-links">
-                        <h3>Programs</h3>
-                        <ul>
-                            <li><a href="cna-program.html">CNA Certification</a></li>
-                            <li><a href="ch-hha-program.html">CH-HHA Training</a></li>
-                            <li><a href="cma-program.html">CMA Certification</a></li>
-                            <li><a href="pct-program.html">Patient Care Technician</a></li>
-                            <li><a href="medical-assistant-program.html">Medical Assistant</a></li>
-                            <li><a href="ekg-phlebotomy-program.html">EKG/Phlebotomy</a></li>
-                            <li><a href="cpr-program.html">CPR & First Aid</a></li>
-                            <li><a href="newborn-care-program.html">Newborn Care Specialist</a></li>
-                            <li><a href="continuing-education.html">Continuing Education</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-links">
-                        <h3>Quick Links</h3>
-                        <ul>
-                            <li><a href="about.html">About Us</a></li>
-                            <li><a href="apply.html#admissions">Admissions</a></li>
-                            <li><a href="tuition.html">Tuition & Aid</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-links">
-                        <h3>Contact Us</h3>
-                        <ul class="footer-contact">
-                            <li><i class="fa-solid fa-location-dot"></i> 591 Summit Ave Suite 410, Jersey City, NJ
-                                07306,
-                                United States
-                            </li>
-                            <li><i class="fa-solid fa-phone"></i> +1 (201) 222-1116</li>
-                            <li><i class="fa-solid fa-envelope"></i> school@stbernadineschoolofallied.com</li>
-                        </ul>
-                    </div>
-                    <div class="footer-links">
-                        <h3>Subscribe</h3>
-                        <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.9rem;">Get updates on class dates,
-                            job
-                            openings, and healthcare tips.</p>
-                        <form class="footer-subscribe-form">
-                            <input type="email" placeholder="Enter your email" required>
-                            <button type="submit" class="btn btn-primary">Subscribe</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2026 St. Bernadine. All rights reserved. | <a href="privacy.html"
-                            style="color: inherit; text-decoration: none;">Privacy & Safety</a> | <a href="terms.html"
-                            style="color: inherit; text-decoration: none;">Terms & Conditions</a></p>
-                </div>
-            </div>
-        </footer>
-    </div><!-- End web-layout -->
-
-    <!-- ============================================== -->
-    <!-- HIGHLY PROFESSIONAL STANDALONE PRINT DOCUMENT  -->
-    <!-- ============================================== -->
-    <div class="print-layout">
-
-        <!-- HEADER -->
-        <div class="print-header">
-            <img src="asset/images/4d-logo.png" alt="St. Bernadine Logo">
-            <h1>Course Catalog</h1>
+    <div class="page">
+        <div class="header">
+            <img src="asset/images/4d-logo.png" alt="St. Bernadine Logo" class="logo">
+            <h1 class="doc-title">Course Catalog</h1>
             <div class="academic-year">2026 Academic Year</div>
-            <p>591 Summit Ave Suite 410, Jersey City, NJ 07306 | (201) 222-1116<br>
-                school@stbernadineschoolofallied.com | www.stbernadineschoolofallied.com</p>
+            <p style="margin-top: 10px; color: var(--text-light);">591 Summit Ave Suite 410, Jersey City, NJ 07306 |
+                (201) 222-1116<br>school@stbernadineschoolofallied.com | www.stbernadineschoolofallied.com</p>
         </div>
 
-        <!-- PAGE CONTENT -->
-        <div class="print-doc-page" style="padding-top: 0;">
+        <div class="catalog-section">
+            <h2>About St. Bernadine</h2>
+            <p style="margin-bottom: 20px; color: var(--text-dark);">Since 1986, St. Bernadine School of Allied Health,
+                Healthcare Services has been dedicated to providing top-tier education and training for individuals
+                aspiring to enter the healthcare field. Our programs are designed to equip students with practical
+                skills, theoretical knowledge, and the professional ethics necessary to succeed. We are accredited and
+                recognized by the NJ Department of Education, NJ Department of Health, and other leading regulatory
+                bodies.</p>
+        </div>
 
-            <h2 class="print-doc-title">About St. Bernadine</h2>
-            <p style="margin-bottom: 40px;">Since 1986, St. Bernadine School of Allied Health, Healthcare Services has
-                been dedicated to providing top-tier education and training for individuals aspiring to enter the
-                healthcare field. Our programs are designed to equip students with practical skills, theoretical
-                knowledge, and the professional ethics necessary to succeed. We are accredited and recognized by the NJ
-                Department of Education, NJ Department of Health, and other leading regulatory bodies.</p>
+        <div class="catalog-section">
+            <h2>Healthcare Certification Programs</h2>
 
-            <h2 class="print-doc-title">Healthcare Certification Programs</h2>
-
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item">
+                <div class="program-left">
                     <h3>Certified Nurse Aide (CNA)</h3>
-                    <div class="print-program-meta">90 Hours | 4-6 Weeks</div>
+                    <div class="program-meta">90 Hours | 4-6 Weeks</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>Prepares students to provide basic nursing care in long-term care facilities, hospitals, and
                         private homes.</p>
                     <ul>
@@ -738,12 +275,12 @@
                 </div>
             </div>
 
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item">
+                <div class="program-left">
                     <h3>Certified Homemaker Home Health Aide (CH-HHA)</h3>
-                    <div class="print-program-meta">76 Hours | 3-4 Weeks</div>
+                    <div class="program-meta">76 Hours | 3-4 Weeks</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>Designed for individuals who wish to care for patients in a home setting focusing on personal
                         care and management.</p>
                     <ul>
@@ -755,12 +292,12 @@
                 </div>
             </div>
 
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item">
+                <div class="program-left">
                     <h3>Certified Medication Aide (CMA)</h3>
-                    <div class="print-program-meta">56 Hours</div>
+                    <div class="program-meta">56 Hours</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>Advanced training for CNAs or CHHAs to administer non-parenteral medications in assisted living
                         facilities.</p>
                     <ul>
@@ -772,16 +309,12 @@
                 </div>
             </div>
 
-        </div>
-
-        <div class="print-doc-page">
-
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item">
+                <div class="program-left">
                     <h3>Patient Care Technician (PCT)</h3>
-                    <div class="print-program-meta">220 Hours | 5 Months</div>
+                    <div class="program-meta">220 Hours | 5 Months</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>A comprehensive program combining CNA skills with EKG and Phlebotomy training for advanced
                         hospital roles.</p>
                     <ul>
@@ -792,12 +325,12 @@
                 </div>
             </div>
 
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item">
+                <div class="program-left">
                     <h3>Certified Medical Assistant</h3>
-                    <div class="print-program-meta">620 Hours | 5 Months</div>
+                    <div class="program-meta">620 Hours | 5 Months</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>Comprehensive clinical and administrative training for outpatient clinics and medical offices.
                     </p>
                     <ul>
@@ -809,12 +342,12 @@
                 </div>
             </div>
 
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item">
+                <div class="program-left">
                     <h3>EKG/Phlebotomy Program</h3>
-                    <div class="print-program-meta">140 Hours</div>
+                    <div class="program-meta">140 Hours</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>Dedicated training to blood draw, venipuncture, and cardiovascular monitoring techniques.</p>
                     <ul>
                         <li><strong>Schedule:</strong> Day or Weekend</li>
@@ -824,12 +357,12 @@
                 </div>
             </div>
 
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item">
+                <div class="program-left">
                     <h3>CPR & BLS</h3>
-                    <div class="print-program-meta">5 Hours</div>
+                    <div class="program-meta">5 Hours</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>Intensive training in American Heart Association certified life-saving skills.</p>
                     <ul>
                         <li><strong>Schedule:</strong> Weekdays/Weekends (10am - 3pm)</li>
@@ -838,12 +371,12 @@
                 </div>
             </div>
 
-            <div class="print-program-item">
-                <div class="print-program-left">
+            <div class="program-item" style="border-bottom: none;">
+                <div class="program-left">
                     <h3>Newborn Care Specialist</h3>
-                    <div class="print-program-meta">10 Hours</div>
+                    <div class="program-meta">10 Hours</div>
                 </div>
-                <div class="print-program-right">
+                <div class="program-right">
                     <p>Comprehensive training (Baby Nursing) for specialized neonatal and infant care.</p>
                     <ul>
                         <li><strong>Schedule:</strong> Weekend Class (10am - 3pm)</li>
@@ -854,15 +387,16 @@
             </div>
         </div>
 
-        <!-- POLICIES -->
-        <div class="print-doc-page">
+        <div class="page-break"></div>
 
-            <h2 class="print-doc-title">Admissions & Campus Policies</h2>
-            <p style="margin-bottom: 30px;">Important guidelines for enrollment and academic success. All students are
-                bound by these overarching rules during their tenure at St. Bernadine School of Allied Health.</p>
+        <div class="catalog-section" style="margin-top: 40px;">
+            <h2>Admissions & Campus Policies</h2>
+            <p style="margin-bottom: 30px; color: var(--text-dark);">Important guidelines for enrollment and academic
+                success. All students are bound by these overarching rules during their tenure at St. Bernadine School
+                of Allied Health.</p>
 
-            <div class="print-policy-section">
-                <h4>Enrollment Requirements</h4>
+            <div class="policy-section">
+                <h4><i class="fa-solid fa-file-contract"></i> Enrollment Requirements</h4>
                 <p>To enroll in our programs, applicants must provide:</p>
                 <ul>
                     <li>Completed Application Form</li>
@@ -873,8 +407,8 @@
                 </ul>
             </div>
 
-            <div class="print-policy-section">
-                <h4>Refund Policy</h4>
+            <div class="policy-section">
+                <h4><i class="fa-solid fa-money-bill-transfer"></i> Refund Policy</h4>
                 <p>Tuition refunds are processed strictly according to the NJ State Education Department regulations.
                 </p>
                 <ul>
@@ -886,8 +420,8 @@
                 </ul>
             </div>
 
-            <div class="print-policy-section">
-                <h4>Attendance & Conduct Requirements</h4>
+            <div class="policy-section">
+                <h4><i class="fa-solid fa-clipboard-user"></i> Attendance & Conduct Requirements</h4>
                 <p>Professionalism and punctuality are cornerstones of any medical profession.</p>
                 <ul>
                     <li>Students are expected to attend all scheduled classes, laboratory sessions, and clinical
@@ -905,9 +439,6 @@
             </div>
         </div>
     </div>
-    <!-- END PRINT LAYOUT -->
-
-    <script src="asset/script.js?v=10.29"></script>
 </body>
 
 </html>
