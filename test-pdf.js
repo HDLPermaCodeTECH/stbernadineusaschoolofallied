@@ -9,7 +9,7 @@ const BG_COLOR = '#F8FAFC';
 
 const generatePDF = (data, signatureBuffer) => {
     return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({ margin: 40, size: 'A4', bufferPages: true });
+        const doc = new PDFDocument({ compress: false, margin: 40, size: 'A4', bufferPages: true });
         let buffers = [];
         doc.on('data', buffers.push.bind(buffers));
         doc.on('end', () => resolve(Buffer.concat(buffers)));
@@ -36,7 +36,7 @@ const generatePDF = (data, signatureBuffer) => {
         doc.fillColor('white').font('Helvetica-Bold').fontSize(14).text('OFFICIAL STUDENT ENROLLMENT APPLICATION', 40, 131, { align: 'center', width: 515 });
 
         // Render application date top right of banner
-        doc.fontSize(9).text(`DATE MODIFIED: ${new Date().toLocaleDateString()}`, 40, 134, { align: 'right', width: 505 });
+        doc.fillColor('white').fontSize(9).text(`DATE MODIFIED: ${new Date().toLocaleDateString()}`, 40, 131, { align: 'right', width: 505 });
 
         let y = 180;
 
@@ -148,17 +148,23 @@ const generatePDF = (data, signatureBuffer) => {
         }
 
         doc.lineWidth(1).strokeColor('#000000').moveTo(350, y + 95).lineTo(500, y + 95).stroke();
-        doc.fillColor('#000000').font('Helvetica').fontSize(10).text(`${new Date().toLocaleDateString()}`, 350, y + 80);
-        doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Date Signed', 350, y + 100);
+        doc.fillColor('#000000').font('Helvetica').fontSize(12).text(`${new Date().toLocaleDateString()}`, 350, y + 70);
+        doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Date Signed', 350, y + 102);
 
         // --- AUTOMATIC FOOTER ---
         const pages = doc.bufferedPageRange();
         for (let i = 0; i < pages.count; i++) {
             doc.switchToPage(i);
+            // Disable bottom margin temporarily so footer does not cause a page break
+            let oldBottomMargin = doc.page.margins.bottom;
+            doc.page.margins.bottom = 0;
+
             doc.lineWidth(1).strokeColor(PRIMARY_COLOR).moveTo(40, 800).lineTo(555, 800).stroke();
             doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8)
-                .text(`Application Reference: STB-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`, 40, 810);
-            doc.text(`Page ${i + 1} of ${pages.count}`, 0, 810, { align: 'right', width: 555 });
+                .text(`Application Reference: STB-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`, 40, 810, { lineBreak: false });
+            doc.text(`Page ${i + 1} of ${pages.count}`, 0, 810, { align: 'right', width: 555, lineBreak: false });
+
+            doc.page.margins.bottom = oldBottomMargin;
         }
 
         doc.end();
