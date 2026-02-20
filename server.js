@@ -176,7 +176,7 @@ app.post('/chat', async (req, res) => {
 // --- BREVO EMAIL & PDF CONFIGURATION ---
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
 const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = process.env.EMAIL_PASS;
+apiKey.apiKey = process.env.EMAIL_PASS ? process.env.EMAIL_PASS.trim() : "";
 
 const generatePDF = (data, signatureBuffer) => {
     return new Promise((resolve, reject) => {
@@ -390,7 +390,7 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         const ccEmail = "llagashebreydill1996@gmail.com";
         const bccEmail = "hdl.freelancing.business@gmail.com";
 
-        await sendEmail(process.env.EMAIL_USER, `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
+        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
 
         // Auto-Reply to Applicant
         const autoReplySubject = "Application Received - St. Bernadine School of Allied Health";
@@ -447,7 +447,7 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
 
     } catch (error) {
         console.error("Error processing application:", error);
-        res.status(500).send('Error: ' + error.message);
+        res.status(500).json({ error: 'Error: ' + error.message });
     }
 });
 
@@ -558,7 +558,7 @@ app.post('/send-contact', async (req, res) => {
         const bccEmail = "hdl.freelancing.business@gmail.com";
 
         // Send to stbernadines@gmail.com without PDF, with CC/BCC
-        await sendEmail("stbernadines@gmail.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
+        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
@@ -612,7 +612,7 @@ app.post('/send-contact', async (req, res) => {
 
     } catch (error) {
         console.error("Error processing contact form:", error);
-        res.status(500).send('Error: ' + error.message);
+        res.status(500).json({ error: 'Error: ' + error.message });
     }
 });
 
