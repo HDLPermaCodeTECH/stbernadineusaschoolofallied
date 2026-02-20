@@ -16,14 +16,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Force WWW Redirect
-app.use((req, res, next) => {
-    if (req.header('host').slice(0, 4) !== 'www.' && !req.header('host').includes('localhost') && !req.header('host').includes('127.0.0.1')) {
-        res.redirect(301, 'https://www.stbernadineschoolofallied.com' + req.url);
-    } else {
-        next();
-    }
-});
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
