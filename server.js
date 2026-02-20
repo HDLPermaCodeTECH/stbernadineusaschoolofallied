@@ -440,6 +440,12 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                     .footer-text { margin: 5px 0 15px; color: #64748b; font-size: 13px; }
                     .address { margin: 0; color: #94a3b8; font-size: 12px; }
                     .ref { display: none; }
+                    @media (prefers-color-scheme: dark) {
+                        body, .email-wrapper, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
+                        .text, .info-label, .footer-text, .address, .greeting, p { color: #cbd5e1 !important; }
+                        .footer-brand, .highlight, .info-value, .info-value-small { color: #a7f3d0 !important; }
+                        .info-box, .message-box { background-color: #2d3748 !important; border-color: #4a5568 !important; }
+                    }
                 </style>
             </head>
             <body>
@@ -528,6 +534,12 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                     .links { margin: 0; }
                     .links a { color: #055923; text-decoration: none; font-size: 12px; font-weight: 500; margin: 0 8px; }
                     .ref { display: none; }
+                    @media (prefers-color-scheme: dark) {
+                        body, .email-wrapper, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
+                        .text, .info-label, .footer-text, .address, .greeting, p, .signature-name { color: #cbd5e1 !important; }
+                        .footer-brand, .highlight, .info-value, .info-value-small, .links a { color: #a7f3d0 !important; }
+                        .info-box, .message-box { background-color: #2d3748 !important; border-color: #4a5568 !important; }
+                    }
                 </style>
             </head>
             <body>
@@ -786,6 +798,12 @@ app.post('/send-contact', async (req, res) => {
                     .footer-text { margin: 5px 0 15px; color: #64748b; font-size: 13px; }
                     .address { margin: 0; color: #94a3b8; font-size: 12px; }
                     .ref { display: none; }
+                    @media (prefers-color-scheme: dark) {
+                        body, .email-wrapper, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
+                        .text, .info-label, .footer-text, .address, .greeting, p, .info-contact, .message-label { color: #cbd5e1 !important; }
+                        .footer-brand, .highlight, .info-value, .info-value-small { color: #a7f3d0 !important; }
+                        .info-box, .message-box { background-color: #2d3748 !important; border-color: #4a5568 !important; color: #e2e8f0 !important; }
+                    }
                 </style>
             </head>
             <body>
@@ -877,6 +895,12 @@ app.post('/send-contact', async (req, res) => {
                     .links { margin: 0; }
                     .links a { color: #055923; text-decoration: none; font-size: 12px; font-weight: 500; margin: 0 8px; }
                     .ref { display: none; }
+                    @media (prefers-color-scheme: dark) {
+                        body, .email-wrapper, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
+                        .text, .info-label, .footer-text, .address, .greeting, p, .signature-name { color: #cbd5e1 !important; }
+                        .footer-brand, .highlight, .info-value, .info-value-small, .links a { color: #a7f3d0 !important; }
+                        .info-box, .message-box { background-color: #2d3748 !important; border-color: #4a5568 !important; }
+                    }
                 </style>
             </head>
             <body>
@@ -982,6 +1006,14 @@ app.post('/request-care', async (req, res) => {
                     .col { display: table-cell; width: 50%; }
                     .message-box { background-color: #f3f4f6; padding: 15px; border-radius: 6px; font-style: italic; color: #374151; }
                     .footer { background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; }
+                    @media (prefers-color-scheme: dark) {
+                        body, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
+                        p, .info-label, h3 { color: #cbd5e1 !important; }
+                        .info-value, strong { color: #a7f3d0 !important; }
+                        .info-box, .message-box { background-color: #2d3748 !important; border-color: #4a5568 !important; color: #e2e8f0 !important; }
+                        .info-value a { color: #a7f3d0 !important; }
+                        .footer p { color: #818cf8 !important; } 
+                    }
                 </style>
             </head>
             <body>
@@ -1076,6 +1108,12 @@ app.post('/request-care', async (req, res) => {
                     .body { padding: 40px; color: #374151; line-height: 1.6; }
                     .highlight-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 25px 0; color: #166534; }
                     .footer { background-color: #f8fafc; padding: 25px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b; }
+                    @media (prefers-color-scheme: dark) {
+                        body, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
+                        p, h2, a { color: #cbd5e1 !important; }
+                        strong, .footer p:first-child { color: #a7f3d0 !important; }
+                        .highlight-box { background-color: #2d3748 !important; border-color: #4a5568 !important; color: #e2e8f0 !important; }
+                    }
                 </style>
             </head>
             <body>
