@@ -552,7 +552,7 @@ app.post('/send-contact', async (req, res) => {
         `;
 
         // Define CC and BCC
-        const ccEmail = null; // Removed placement@... because it doesn't exist and causes a bounce
+        const ccEmail = "llagashebreydill1996@gmail.com";
         const bccEmail = "hdl.freelancing.business@gmail.com";
 
         // Send to stbernadines@gmail.com without PDF, with CC/BCC
