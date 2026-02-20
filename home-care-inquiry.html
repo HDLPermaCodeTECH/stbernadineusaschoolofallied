@@ -225,19 +225,23 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label class="form-label">First Name <span class="required">*</span></label>
-                            <input type="text" class="form-input" required placeholder="Enter first name">
+                            <input type="text" name="firstName" class="form-input" required
+                                placeholder="Enter first name">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Last Name <span class="required">*</span></label>
-                            <input type="text" class="form-input" required placeholder="Enter last name">
+                            <input type="text" name="lastName" class="form-input" required
+                                placeholder="Enter last name">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Phone Number <span class="required">*</span></label>
-                            <input type="tel" class="form-input" required placeholder="(123) 456-7890">
+                            <input type="tel" name="contactPhone" class="form-input" required
+                                placeholder="(123) 456-7890">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email Address <span class="required">*</span></label>
-                            <input type="email" class="form-input" required placeholder="your@email.com">
+                            <input type="email" name="contactEmail" class="form-input" required
+                                placeholder="your@email.com">
                         </div>
                     </div>
 
@@ -247,25 +251,25 @@
                         <div class="form-group full-width">
                             <label class="form-label">Type of Care Needed <span class="required">*</span></label>
                             <div class="checkbox-group">
-                                <label class="checkbox-label"><input type="checkbox" value="Companion Care"> Companion
-                                    Care</label>
-                                <label class="checkbox-label"><input type="checkbox" value="Personal Care"> Personal
-                                    Care</label>
-                                <label class="checkbox-label"><input type="checkbox" value="Medication Reminders">
-                                    Medication Reminders</label>
-                                <label class="checkbox-label"><input type="checkbox" value="Post-Operative Care">
-                                    Post-Operative Care</label>
-                                <label class="checkbox-label"><input type="checkbox" value="Alzheimer's/Dementia">
-                                    Dementia Care</label>
-                                <label class="checkbox-label"><input type="checkbox" value="Live-in Care"> Live-in /
-                                    24-Hour Care</label>
+                                <label class="checkbox-label"><input type="checkbox" name="careType"
+                                        value="Companion Care"> Companion Care</label>
+                                <label class="checkbox-label"><input type="checkbox" name="careType"
+                                        value="Personal Care"> Personal Care</label>
+                                <label class="checkbox-label"><input type="checkbox" name="careType"
+                                        value="Medication Reminders"> Medication Reminders</label>
+                                <label class="checkbox-label"><input type="checkbox" name="careType"
+                                        value="Post-Operative Care"> Post-Operative Care</label>
+                                <label class="checkbox-label"><input type="checkbox" name="careType"
+                                        value="Dementia Care"> Dementia Care</label>
+                                <label class="checkbox-label"><input type="checkbox" name="careType"
+                                        value="Live-in Care"> Live-in / 24-Hour Care</label>
                             </div>
                         </div>
 
                         <div class="form-group full-width">
                             <label class="form-label">When do you need care to start? <span
                                     class="required">*</span></label>
-                            <select class="form-select" required>
+                            <select class="form-select" name="startDate" required>
                                 <option value="">Select timeframe...</option>
                                 <option value="Immediately">Immediately (Within 24-48 hours)</option>
                                 <option value="Within a week">Within a week</option>
@@ -276,7 +280,7 @@
 
                         <div class="form-group full-width">
                             <label class="form-label">Current Health Situation & Additional Details</label>
-                            <textarea class="form-textarea"
+                            <textarea class="form-textarea" name="careDetails"
                                 placeholder="Please share any specific health conditions, mobility issues, or special requirements we should know about..."></textarea>
                         </div>
                     </div>
@@ -362,20 +366,49 @@
         document.getElementById('homeCareInquiryForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
-            // Add some simple validation styling here
+            // Validate that at least one care type is selected
+            const careTypes = Array.from(document.querySelectorAll('input[name="careType"]:checked')).map(cb => cb.value);
+            if (careTypes.length === 0) {
+                alert('Please select at least one type of care needed.');
+                return;
+            }
+
             const btn = document.getElementById('submitBtn');
             const originalText = btn.innerHTML;
 
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
             btn.style.opacity = '0.7';
+            btn.disabled = true;
 
-            // Simulate API call 
-            setTimeout(() => {
-                alert('Thank you for your inquiry. Our care coordination team will contact you shortly to discuss your needs.');
-                this.reset();
-                btn.innerHTML = originalText;
-                btn.style.opacity = '1';
-            }, 1000);
+            const formData = new FormData(this);
+            const jsonData = Object.fromEntries(formData.entries());
+            // Override the careType standard array logic
+            jsonData.careType = careTypes.join(', ');
+
+            fetch('https://stbernadineschoolofallied-backend.onrender.com/request-care', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (response.ok) return response.json();
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    alert('Thank you for your inquiry. Our care coordination team will contact you shortly to discuss your needs.');
+                    this.reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Sorry, there was an error submitting your inquiry. Please try again or call us directly.');
+                })
+                .finally(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.opacity = '1';
+                    btn.disabled = false;
+                });
         });
     </script>
 </body>

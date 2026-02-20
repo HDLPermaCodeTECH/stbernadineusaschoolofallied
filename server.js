@@ -976,8 +976,7 @@ app.post('/send-contact', async (req, res) => {
 app.post('/request-care', async (req, res) => {
     try {
         const {
-            patientFirstName, patientLastName, patientAge, serviceLocation,
-            contactName, relationship, contactPhone, contactEmail,
+            firstName, lastName, contactPhone, contactEmail,
             careType, startDate, careDetails
         } = req.body;
 
@@ -990,7 +989,7 @@ app.post('/request-care', async (req, res) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>New Home Care Request - Admin</title>
+                <title>New Home Care Inquiry - Admin</title>
                 <style>
                     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; }
                     .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
@@ -1020,29 +1019,21 @@ app.post('/request-care', async (req, res) => {
                 <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
                     <tr>
                         <td class="header">
-                            <h1>New Home Care Request</h1>
+                            <h1>New Home Care Inquiry</h1>
                             <p>St. Bernadine Priorities</p>
                         </td>
                     </tr>
                     <tr>
                         <td class="body">
-                            <h3 style="margin-top:0; color:#111827;">Patient Details</h3>
-                            <div class="info-box">
-                                <div class="grid">
-                                    <div class="col">
-                                        <p class="info-label">Patient Name</p>
-                                        <p class="info-value">${patientFirstName} ${patientLastName}</p>
-                                        <p class="info-label">Age</p>
-                                        <p class="info-value">${patientAge}</p>
-                                    </div>
-                                    <div class="col">
-                                        <p class="info-label">Service Location</p>
-                                        <p class="info-value">${serviceLocation}</p>
-                                    </div>
-                                </div>
+                            <h3 style="color:#111827;">Contact Person Details</h3>
+                            <div class="info-box" style="border-left-color: #d97706;">
+                                <p class="info-label">Name</p>
+                                <p class="info-value">${firstName} ${lastName}</p>
+                                <p class="info-label">Contact Details</p>
+                                <p class="info-value">Phone: ${contactPhone}<br>Email: <a href="mailto:${contactEmail}">${contactEmail}</a></p>
                             </div>
 
-                            <h3 style="color:#111827;">Care Requirements</h3>
+                            <h3 style="color:#111827;">Inquiry Details</h3>
                             <div class="info-box" style="border-left-color: #2563eb;">
                                 <div class="grid">
                                     <div class="col">
@@ -1055,15 +1046,7 @@ app.post('/request-care', async (req, res) => {
                                     </div>
                                 </div>
                                 <p class="info-label" style="margin-top:10px;">Specific Condition / Requirements</p>
-                                <div class="message-box">${careDetails.replace(/\n/g, '<br>')}</div>
-                            </div>
-
-                            <h3 style="color:#111827;">Contact Person Details</h3>
-                            <div class="info-box" style="border-left-color: #d97706;">
-                                <p class="info-label">Name & Relationship</p>
-                                <p class="info-value">${contactName} (${relationship})</p>
-                                <p class="info-label">Contact Details</p>
-                                <p class="info-value">Phone: ${contactPhone}<br>Email: <a href="mailto:${contactEmail}">${contactEmail}</a></p>
+                                <div class="message-box">${careDetails ? careDetails.replace(/\n/g, '<br>') : 'None provided'}</div>
                             </div>
                         </td>
                     </tr>
@@ -1077,20 +1060,13 @@ app.post('/request-care', async (req, res) => {
             </html>
         `;
 
-        // Setting Admin notification recipients (main + CC to placement/homecare admins)
+        // Setting Admin notification recipients
         const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
         const ccEmail = "homecare@stbernadineusa.com";
-        const adminSubject = `[URGENT] Home Care Request: ${patientFirstName} ${patientLastName} - ${serviceLocation}`;
+        const adminSubject = `[HOME CARE INQUIRY] from ${firstName} ${lastName}`;
 
-        // Generate PDF and attach to Admin Email
-        const pdfBuffer = await generateCareRequestPDF(req.body);
-        const adminAttachments = [{
-            filename: `HomeCareRequest_${patientFirstName}_${patientLastName}.pdf`,
-            content: pdfBuffer,
-            contentType: 'application/pdf'
-        }];
-
-        await sendEmail(adminEmail, adminSubject, htmlContent, adminAttachments, contactEmail, ccEmail, null);
+        // Don't generate a PDF for a simple inquiry
+        await sendEmail(adminEmail, adminSubject, htmlContent, null, contactEmail, ccEmail, null);
 
         // Auto-reply HTML Email to the Inquirer
         const autoReplyHtml = `
@@ -1126,14 +1102,14 @@ app.post('/request-care', async (req, res) => {
                     </tr>
                     <tr>
                         <td class="body">
-                            <h2 style="margin-top:0; color:#111827;">Hello ${contactName},</h2>
-                            <p>Thank you for reaching out to St. Bernadine School of Allied Health regarding home care services for <strong>${patientFirstName} ${patientLastName}</strong>.</p>
+                            <h2 style="margin-top:0; color:#111827;">Hello ${firstName},</h2>
+                            <p>Thank you for reaching out to St. Bernadine School of Allied Health regarding home care services.</p>
                             
                             <div class="highlight-box">
-                                <p style="margin:0;"><strong>We have successfully received your request for ${careType}</strong>. Our priority is ensuring the comfort and well-being of your loved ones.</p>
+                                <p style="margin:0;"><strong>We have successfully received your inquiry for ${careType}</strong>. Our priority is ensuring the comfort and well-being of your loved ones.</p>
                             </div>
 
-                            <p>A dedicated Care Coordinator is currently reviewing the details you provided. We will contact you at <strong>${contactPhone}</strong> within the next 24 hours to discuss the specific tailored care plan, finalize arrangements, and answer any questions you may have.</p>
+                            <p>A dedicated Care Coordinator is currently reviewing your inquiry. We will contact you at <strong>${contactPhone}</strong> within the next 24 hours to discuss your needs and answer any questions you may have.</p>
                             
                             <p>If you have any immediate concerns, please do not hesitate to drop us a call at <a href="tel:+12012221116" style="color:#055923; text-decoration:none; font-weight:bold;">+1 (201) 222-1116</a>.</p>
                             
@@ -1152,7 +1128,7 @@ app.post('/request-care', async (req, res) => {
             </html>
         `;
 
-        await sendEmail(contactEmail, `We received your Care Request for ${patientFirstName}`, autoReplyHtml, null, null, null, null);
+        await sendEmail(contactEmail, `We received your Care Inquiry`, autoReplyHtml, null, null, null, null);
 
         res.status(200).json({ message: 'Care Request Submitted Successfully!' });
 
