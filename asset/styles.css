@@ -5581,3 +5581,34 @@ body:not(.js-loaded) .reveal-scale {
         gap: 30px;
     }
 }
+
+/* Mobile fixes for Logo Slider to prevent disappearing on small screens */
+@media (max-width: 768px) {
+    .logo-track {
+        gap: 40px;
+    }
+
+    .logo-track img {
+        height: 60px;
+    }
+
+    .logo-slider::before,
+    .logo-slider::after {
+        width: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-track {
+        gap: 30px;
+    }
+
+    .logo-track img {
+        height: 45px;
+    }
+
+    .logo-slider::before,
+    .logo-slider::after {
+        width: 30px;
+    }
+}
