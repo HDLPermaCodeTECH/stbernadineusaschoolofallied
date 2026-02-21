@@ -1246,23 +1246,9 @@ const generateJobApplicationPDF = (data) => {
                     addText(data.CertsTraining);
                 }
 
-                // PROJECTS & ACHIEVEMENTS
-                if (data.ProjectsAchieve) {
-                    addSectionHeader('Projects & Achievements');
-                    addText(data.ProjectsAchieve);
-                }
-
-                // VOLUNTEER EXPERIENCE
-                if (data.Volunteer) {
-                    addSectionHeader('Volunteer Experience');
-                    addText(data.Volunteer);
-                }
-
-                // LANGUAGES
-                if (data.Languages) {
-                    addSectionHeader('Languages');
-                    addText(data.Languages);
-                }
+                // PROJECTS & ACHIEVEMENTS Removed
+                // VOLUNTEER EXPERIENCE Removed
+                // LANGUAGES Removed
 
                 // REFERENCES
                 if (data.References) {

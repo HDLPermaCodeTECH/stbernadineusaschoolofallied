@@ -285,7 +285,7 @@
                             <label
                                 style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">First
                                 Name <span style="color: #e11d48;">*</span></label>
-                            <input type="text" required
+                            <input type="text" name="FirstName" required
                                 style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
                                 onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
@@ -294,7 +294,7 @@
                             <label
                                 style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Last
                                 Name <span style="color: #e11d48;">*</span></label>
-                            <input type="text" required
+                            <input type="text" name="LastName" required
                                 style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
                                 onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
@@ -306,7 +306,7 @@
                             <label
                                 style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Email
                                 Address <span style="color: #e11d48;">*</span></label>
-                            <input type="email" required
+                            <input type="email" name="Email" required
                                 style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
                                 onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
@@ -315,7 +315,7 @@
                             <label
                                 style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Phone
                                 Number <span style="color: #e11d48;">*</span></label>
-                            <input type="tel" required
+                            <input type="tel" name="Phone" required
                                 style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
                                 onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
                                 onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
@@ -627,31 +627,9 @@
                         <h3
                             style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
                             Projects & Achievements (Optional)</h3>
-                        <div style="margin-bottom: 30px;">
-                            <textarea id="projectsAchieve" name="ProjectsAchieve" rows="3"
-                                placeholder="Project Title – Brief description of scope, tools used, and results."
-                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
-                        </div>
-
-                        <!-- Volunteer Experience -->
-                        <h3
-                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
-                            Volunteer Experience (Optional)</h3>
-                        <div style="margin-bottom: 30px;">
-                            <textarea id="volunteer" name="Volunteer" rows="3"
-                                placeholder="Role – Organization Name (Month Year - Month Year)&#10;- Contribution or impact"
-                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
-                        </div>
-
-                        <!-- Languages -->
-                        <h3
-                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
-                            Languages</h3>
-                        <div style="margin-bottom: 30px;">
-                            <textarea id="languages" name="Languages" rows="2"
-                                placeholder="- English (Native)&#10;- Spanish (Professional Proficiency)"
-                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
-                        </div>
+                        <!-- Volunteer Experience Removed -->
+                        <!-- Languages Removed -->
+                        <!-- Projects Removed -->
 
                         <!-- References -->
                         <h3
@@ -762,9 +740,7 @@
                 document.getElementById('job1Details'),
                 document.getElementById('eduDegree'),
                 document.getElementById('eduSchool'),
-                document.getElementById('eduDates'),
-                document.getElementById('languages'),
-                document.getElementById('references')
+                document.getElementById('eduDates')
             ];
 
             if (method === 'manual') {
