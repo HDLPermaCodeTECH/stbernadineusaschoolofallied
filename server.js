@@ -1148,55 +1148,162 @@ const generateJobApplicationPDF = (data) => {
             doc.on('end', () => resolve(Buffer.concat(buffers)));
             doc.on('error', reject);
 
-            const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, coverLetter } = data;
+            const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, AppMethod } = data;
 
             // Brand Colors
             const primaryColor = '#055923';
 
-            // Header Background
-            doc.rect(0, 0, doc.page.width, 100).fill(primaryColor);
-            doc.fillColor('#FFFFFF').fontSize(24).font('Helvetica-Bold').text('CONFIDENTIAL JOB APPLICATION', 50, 40);
+            // Layout constants
+            const contentWidth = doc.page.width - 100;
 
-            let currentY = 120;
-            doc.fillColor('#111827').fontSize(14).font('Helvetica-Bold').text('APPLICANT DETAILS', 50, currentY);
-            doc.moveTo(50, currentY + 15).lineTo(550, currentY + 15).lineWidth(1).strokeColor(primaryColor).stroke();
+            // --- HEADER ---
+            // If photo exists, place it in top right, but using absolute coordinate just for photo
+            if (data.photoPath) {
+                // Ensure photo fits and doesn't push text around by absolute positioning
+                doc.image(data.photoPath, doc.page.width - 120, 50, { width: 70 });
+            }
 
-            currentY += 30;
-            doc.fontSize(10).font('Helvetica-Bold').fillColor('#374151').text('Name:', 50, currentY);
-            doc.font('Helvetica').fillColor('#000000').text(`${firstName} ${lastName}`, 150, currentY);
-            currentY += 20;
-            doc.font('Helvetica-Bold').fillColor('#374151').text('Phone:', 50, currentY);
-            doc.font('Helvetica').fillColor('#000000').text(contactPhone, 150, currentY);
-            currentY += 20;
-            doc.font('Helvetica-Bold').fillColor('#374151').text('Email:', 50, currentY);
-            doc.fillColor('#2563EB').text(contactEmail, 150, currentY);
-            currentY += 20;
-            doc.font('Helvetica-Bold').fillColor('#374151').text('Address:', 50, currentY);
-            doc.font('Helvetica').fillColor('#000000').text(address, 150, currentY);
+            // Name
+            doc.fillColor(primaryColor).fontSize(28).font('Helvetica-Bold').text(`${firstName} ${lastName}`);
 
-            currentY += 40;
-            doc.fillColor('#111827').fontSize(14).font('Helvetica-Bold').text('JOB PREFERENCES', 50, currentY);
-            doc.moveTo(50, currentY + 15).lineTo(550, currentY + 15).lineWidth(1).strokeColor(primaryColor).stroke();
+            // Subtitle / Job Applied For
+            doc.fillColor('#374151').fontSize(14).font('Helvetica').text(`Applying for: ${position}`, { continued: true }).text(`  |  Available: ${startDate}`);
+            doc.moveDown(0.5);
 
-            currentY += 30;
-            doc.fontSize(10).font('Helvetica-Bold').fillColor('#374151').text('Position Applied:', 50, currentY);
-            doc.font('Helvetica-Bold').fillColor('#055923').text(position, 150, currentY);
-            currentY += 20;
-            doc.font('Helvetica-Bold').fillColor('#374151').text('Earliest Start Date:', 50, currentY);
-            doc.font('Helvetica').fillColor('#000000').text(startDate, 150, currentY);
+            // Contact Info line
+            let contactArr = [address, contactPhone, contactEmail];
+            if (data.linkedin) contactArr.push(data.linkedin);
+            if (data.portfolio) contactArr.push(data.portfolio);
+            const contactString = contactArr.filter(Boolean).join('  |  ');
+            doc.fillColor('#6b7280').fontSize(10).font('Helvetica').text(contactString, { width: contentWidth - (data.photoPath ? 80 : 0) });
 
-            if (coverLetter && coverLetter.trim() !== '') {
-                currentY += 40;
-                doc.fillColor('#111827').fontSize(14).font('Helvetica-Bold').text('COVER LETTER / STATEMENT', 50, currentY);
-                doc.moveTo(50, currentY + 15).lineTo(550, currentY + 15).lineWidth(1).strokeColor(primaryColor).stroke();
+            doc.moveDown(1.5);
 
-                currentY += 30;
-                doc.fontSize(10).font('Helvetica').fillColor('#000000').text(coverLetter, 50, currentY, { width: 500, align: 'justify' });
+            // Helper for Section Headers
+            const addSectionHeader = (title) => {
+                doc.moveDown(1);
+                doc.fillColor(primaryColor).fontSize(14).font('Helvetica-Bold').text(title.toUpperCase());
+                doc.moveTo(doc.x, doc.y + 2).lineTo(560, doc.y + 2).lineWidth(1).strokeColor('#e2e8f0').stroke();
+                doc.moveDown(0.8);
+            };
+
+            // Helpers for Content
+            const addText = (text, options = {}) => {
+                if (!text) return;
+                doc.fillColor('#1f2937').fontSize(10).font(options.font || 'Helvetica').text(text, { align: 'left', width: contentWidth, ...options });
+            };
+
+            if (AppMethod === 'manual') {
+                // PROFESSIONAL SUMMARY
+                if (data.ProfessionalSummary) {
+                    addSectionHeader('Professional Summary');
+                    addText(data.ProfessionalSummary);
+                }
+
+                // CORE COMPETENCIES
+                if (data.CoreCompetencies) {
+                    addSectionHeader('Core Competencies');
+                    addText(data.CoreCompetencies);
+                }
+
+                // PROFESSIONAL EXPERIENCE
+                if (data.Job1Title || data.Job2Title) {
+                    addSectionHeader('Professional Experience');
+
+                    if (data.Job1Title) {
+                        doc.fillColor('#111827').fontSize(12).font('Helvetica-Bold').text(data.Job1Title, { continued: true })
+                            .fillColor('#4b5563').font('Helvetica').text(` — ${data.Job1Company || ''}`);
+                        doc.fillColor('#6b7280').fontSize(10).font('Helvetica-Oblique').text(data.Job1Dates || '');
+                        doc.moveDown(0.5);
+                        addText(data.Job1Details);
+                        doc.moveDown(1);
+                    }
+
+                    if (data.Job2Title) {
+                        doc.fillColor('#111827').fontSize(12).font('Helvetica-Bold').text(data.Job2Title, { continued: true })
+                            .fillColor('#4b5563').font('Helvetica').text(` — ${data.Job2Company || ''}`);
+                        doc.fillColor('#6b7280').fontSize(10).font('Helvetica-Oblique').text(data.Job2Dates || '');
+                        doc.moveDown(0.5);
+                        addText(data.Job2Details);
+                    }
+                }
+
+                // EDUCATION
+                if (data.EduDegree) {
+                    addSectionHeader('Education');
+                    doc.fillColor('#111827').fontSize(12).font('Helvetica-Bold').text(data.EduDegree, { continued: true })
+                        .fillColor('#4b5563').font('Helvetica').text(` — ${data.EduSchool || ''}`);
+                    doc.fillColor('#6b7280').fontSize(10).font('Helvetica-Oblique').text(data.EduDates || '');
+                    if (data.EduDetails) {
+                        doc.moveDown(0.5);
+                        addText(data.EduDetails);
+                    }
+                }
+
+                // CERTIFICATIONS & TRAINING
+                if (data.CertsTraining) {
+                    addSectionHeader('Certifications & Training');
+                    addText(data.CertsTraining);
+                }
+
+                // PROJECTS & ACHIEVEMENTS
+                if (data.ProjectsAchieve) {
+                    addSectionHeader('Projects & Achievements');
+                    addText(data.ProjectsAchieve);
+                }
+
+                // VOLUNTEER EXPERIENCE
+                if (data.Volunteer) {
+                    addSectionHeader('Volunteer Experience');
+                    addText(data.Volunteer);
+                }
+
+                // LANGUAGES
+                if (data.Languages) {
+                    addSectionHeader('Languages');
+                    addText(data.Languages);
+                }
+
+                // REFERENCES
+                if (data.References) {
+                    addSectionHeader('References');
+                    addText(data.References);
+                }
+
+                // SIGNATURE
+                if (data.SignatureData) {
+                    doc.moveDown(3);
+                    doc.fillColor('#4b5563').fontSize(10).font('Helvetica').text('I certify that all information provided in this application is true and complete to the best of my knowledge.', { width: contentWidth });
+                    doc.moveDown(1);
+
+                    // Prevent breaking signature across pages awkwardly
+                    if (doc.y > doc.page.height - 150) doc.addPage();
+
+                    const base64Data = data.SignatureData.replace(/^data:image\/png;base64,/, "");
+                    const sigImg = Buffer.from(base64Data, 'base64');
+                    doc.image(sigImg, 50, doc.y, { height: 50 });
+                    doc.moveDown(4); // Move past image height
+
+                    doc.moveTo(50, doc.y).lineTo(250, doc.y).lineWidth(1).strokeColor('#000000').stroke();
+                    doc.moveDown(0.5);
+                    doc.fillColor('#000000').fontSize(10).font('Helvetica-Bold').text(`${firstName} ${lastName}`);
+                    doc.font('Helvetica').text(new Date().toLocaleDateString());
+                }
+
+            } else {
+                // IT WAS A RESUME UPLOAD, just print cover letter if they have one
+                if (data.coverLetter && data.coverLetter.trim() !== '') {
+                    addSectionHeader('Cover Letter / Message');
+                    addText(data.coverLetter);
+                } else {
+                    doc.moveDown(2);
+                    doc.fillColor('#4b5563').fontSize(12).font('Helvetica-Oblique').text('The applicant chose to upload a resume directly. Please refer to the attached document for their full professional profile.');
+                }
             }
 
             // Footer
-            const pageBottom = doc.page.height - 50;
-            doc.fontSize(8).fillColor('#9CA3AF').text(`Generated automatically by St. Bernadine School of Allied Health - Internal HR System. Date: ${new Date().toLocaleDateString()}`, 50, pageBottom, { align: 'center', width: 500 });
+            doc.moveDown(3);
+            doc.fontSize(8).fillColor('#9CA3AF').text(`Generated automatically by St. Bernadine School of Allied Health - Internal HR System. Date: ${new Date().toLocaleDateString()}`, { align: 'center', width: contentWidth });
 
             doc.end();
         } catch (error) {
@@ -1207,20 +1314,33 @@ const generateJobApplicationPDF = (data) => {
 };
 
 // --- POST ENDPOINT: APPLY FOR A JOB ---
-app.post('/apply-job', upload.single('resume'), async (req, res) => {
+app.post('/apply-job', upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'applicantPhoto', maxCount: 1 }]), async (req, res) => {
     try {
-        const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, coverLetter } = req.body;
+        const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, coverLetter, AppMethod, SignatureData } = req.body;
 
         if (!firstName || !lastName || !contactPhone || !contactEmail || !position || !startDate) {
             return res.status(400).json({ error: 'Missing required applicant fields.' });
         }
 
-        if (!req.file) {
+        const files = req.files || {};
+
+        if (AppMethod === 'upload' && !files['resume']) {
             return res.status(400).json({ error: 'Resume file is required.' });
         }
 
+        if (AppMethod === 'manual') {
+            if (!files['applicantPhoto']) return res.status(400).json({ error: 'Professional photo is required.' });
+            if (!SignatureData) return res.status(400).json({ error: 'Signature is required.' });
+        }
+
+        // Attach photo path to data for PDF generator if it exists
+        const pdfData = { ...req.body };
+        if (files['applicantPhoto']) {
+            pdfData.photoPath = files['applicantPhoto'][0].path;
+        }
+
         // Generate Application Summary PDF
-        const pdfBuffer = await generateJobApplicationPDF(req.body);
+        const pdfBuffer = await generateJobApplicationPDF(pdfData);
 
         // Admin Notification Email
         const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
@@ -1247,11 +1367,13 @@ app.post('/apply-job', upload.single('resume'), async (req, res) => {
                         <p><strong>Email:</strong> ${contactEmail}</p>
                         <p><strong>Phone:</strong> ${contactPhone}</p>
                         <p><strong>Available Start Date:</strong> ${startDate}</p>
+                        <p><strong>Method:</strong> ${AppMethod === 'manual' ? 'Detailed Manual Form' : 'Resume Upload'}</p>
                     </div>
                     <p>Attached to this email, you will find:</p>
                     <ol>
-                        <li>The Applicant's uploaded Resume (${req.file.originalname})</li>
                         <li>A PDF summary of their application details</li>
+                        ${files['resume'] ? `<li>The Applicant's uploaded Resume (${files['resume'][0].originalname})</li>` : ''}
+                        ${files['applicantPhoto'] ? `<li>The Applicant's uploaded professional photo</li>` : ''}
                     </ol>
                     <p style="font-size: 12px; color: #64748b; margin-top: 30px;">System-generated email via St. Bernadine Careers Portal.</p>
                 </div>
@@ -1264,12 +1386,22 @@ app.post('/apply-job', upload.single('resume'), async (req, res) => {
                 filename: `APP_SUMMARY_${firstName}_${lastName}.pdf`,
                 content: pdfBuffer,
                 contentType: 'application/pdf'
-            },
-            {
-                filename: `RESUME_${firstName}_${lastName}_${path.extname(req.file.originalname)}`,
-                path: req.file.path // Read from multer's upload directory
             }
         ];
+
+        if (files['resume']) {
+            attachments.push({
+                filename: `RESUME_${firstName}_${lastName}_${path.extname(files['resume'][0].originalname)}`,
+                path: files['resume'][0].path
+            });
+        }
+
+        if (files['applicantPhoto']) {
+            attachments.push({
+                filename: `PHOTO_${firstName}_${lastName}_${path.extname(files['applicantPhoto'][0].originalname)}`,
+                path: files['applicantPhoto'][0].path
+            });
+        }
 
         // Send to HR / Admin
         await sendEmail(adminEmail, adminSubject, adminHtmlContent, attachments, contactEmail, ccEmail, null);
@@ -1295,7 +1427,7 @@ app.post('/apply-job', upload.single('resume'), async (req, res) => {
                         </div>
                         <div class="body">
                             <h2>Hello ${firstName},</h2>
-                            <p>Thank you for expressing interest in joining our team at <strong>St. Bernadine School of Allied Health</strong>. We have successfully received your application for the <span class="highlight">${position}</span> role, along with your resume.</p>
+                            <p>Thank you for expressing interest in joining our team at <strong>St. Bernadine School of Allied Health</strong>. We have successfully received your application for the <span class="highlight">${position}</span> role.</p>
                             <p>Our Human Resources team is currently reviewing your qualifications to see how they align with our current needs. Should your profile be a strong match, we will contact you directly at <strong>${contactPhone}</strong> or via this email address to schedule an interview.</p>
                             <p>We appreciate the time you took to apply.</p>
                             <p style="margin-top: 30px;">Best Regards,<br><strong>Human Resources Team</strong><br>St. Bernadine School of Allied Health</p>
@@ -1307,10 +1439,17 @@ app.post('/apply-job', upload.single('resume'), async (req, res) => {
 
         await sendEmail(contactEmail, `Your Application for ${position} - St. Bernadine`, autoReplyHtml, null, null, null, null);
 
-        // Cleanup: remove the uploaded file from the server after sending
-        fs.unlink(req.file.path, (err) => {
-            if (err) console.error("Failed to delete temp resume file:", err);
-        });
+        // Cleanup: remove uploaded files
+        if (files['resume']) {
+            fs.unlink(files['resume'][0].path, (err) => {
+                if (err) console.error("Failed to delete temp resume file:", err);
+            });
+        }
+        if (files['applicantPhoto']) {
+            fs.unlink(files['applicantPhoto'][0].path, (err) => {
+                if (err) console.error("Failed to delete temp photo file:", err);
+            });
+        }
 
         res.status(200).json({ message: 'Application submitted successfully!' });
 

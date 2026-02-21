@@ -384,6 +384,27 @@
                     <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
                         <div>
                             <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">LinkedIn
+                                Profile (Optional)</label>
+                            <input type="url" name="LinkedIn" placeholder="https://linkedin.com/in/..."
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Portfolio
+                                / Website (Optional)</label>
+                            <input type="url" name="Portfolio" placeholder="https://yourwebsite.com"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label
                                 style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Highest
                                 Education <span style="color: #e11d48;">*</span></label>
                             <select name="Education" required
@@ -462,143 +483,183 @@
                             onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
                     </div>
 
-                    <div id="manual-form-section" style="display: none;">
-
-                        <h3
-                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
-                            Licenses & Certifications</h3>
-
-                        <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
-                            <div>
-                                <label
-                                    style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Professional
-                                    License Number (RN, LPN, CHHA, etc.)</label>
-                                <input type="text" name="LicenseNumber" placeholder="Enter License #"
-                                    style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
-                                    onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
-                                    onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
-                            </div>
-                            <div>
-                                <label
-                                    style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">License
-                                    State & Expiration Date</label>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="text" name="LicenseState" placeholder="State (e.g. NJ)"
-                                        style="flex: 1; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
-                                        onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
-                                        onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
-                                    <input type="date" name="LicenseExp"
-                                        style="flex: 2; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
-                                        onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
-                                        onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-2" style="gap: 20px; margin-bottom: 30px;">
-                            <div>
-                                <label
-                                    style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">CPR
-                                    / BLS Certification Status <span style="color: #e11d48;">*</span></label>
-                                <select name="CPRStatus" required
-                                    style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; appearance: auto; cursor: pointer;"
-                                    onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
-                                    onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
-                                    <option value="">Select Status...</option>
-                                    <option value="Current & Active">Current & Active</option>
-                                    <option value="Expired">Expired</option>
-                                    <option value="Do Not Have">Do Not Have</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label
-                                    style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Other
-                                    Relevant Certifications</label>
-                                <input type="text" name="OtherCerts" placeholder="ACLS, PALS, Phlebotomy, etc."
-                                    style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
-                                    onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
-                                    onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
-                            </div>
-                        </div>
-
-                        <h3
-                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
-                            Employment History</h3>
+                    <div id="manual-form-section"
+                        style="display: none; margin-top: 40px; border-top: 2px solid #e2e8f0; padding-top: 30px;">
 
                         <div
-                            style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                            <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 15px;">Most Recent
-                                Employer
-                                <span style="color: #e11d48;">*</span>
-                            </h4>
-                            <div class="grid grid-2" style="gap: 20px; margin-bottom: 15px;">
-                                <div>
-                                    <input type="text" id="empName" id="empName" name="Employer1Name"
-                                        placeholder="Company Name" required
-                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
-                                </div>
-                                <div>
-                                    <input type="text" id="empTitle" id="empTitle" name="Employer1Title"
-                                        placeholder="Job Title / Position" required
-                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
-                                </div>
-                            </div>
-                            <div class="grid grid-2" style="gap: 20px;">
-                                <div>
-                                    <input type="text" id="empDates" id="empDates" name="Employer1Dates"
-                                        placeholder="Dates of Employment (e.g. 2020 - Present)" required
-                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
-                                </div>
-                                <div>
-                                    <input type="text" id="empReason" id="empReason" name="Employer1Reason"
-                                        placeholder="Reason for Leaving" required
-                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
-                                </div>
-                            </div>
+                            style="margin-bottom: 30px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px;">
+                            <h4 style="font-size: 1rem; color: var(--primary-color); margin-bottom: 10px;"><i
+                                    class="fa-solid fa-camera" style="margin-right: 8px;"></i> Professional Photo <span
+                                    style="color: #e11d48;">*</span></h4>
+                            <p style="font-size: 0.9rem; color: #475569; margin-bottom: 15px;">Please upload a recent
+                                2x2 professional photo of yourself (JPG/PNG). This will be attached to your application
+                                profile.</p>
+                            <input type="file" id="applicant-photo" name="applicantPhoto" accept="image/jpeg, image/png"
+                                style="width: 100%; padding: 12px 16px; border: 1px dashed var(--primary-color); border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #fff; cursor: pointer;">
                         </div>
 
+                        <!-- Professional Summary -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 20px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            Professional Summary</h3>
+                        <div style="margin-bottom: 30px;">
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">A
+                                short paragraph highlighting your career achievements, strengths, and what makes you
+                                unique. <span style="color: #e11d48;">*</span></label>
+                            <textarea id="profSummary" name="ProfessionalSummary" rows="4"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Core Competencies -->
                         <h3
                             style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
-                            Availability & References</h3>
-
-                        <div style="margin-bottom: 20px;">
+                            Core Competencies</h3>
+                        <div style="margin-bottom: 30px;">
                             <label
-                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Availability
-                                / Desired Schedule <span style="color: #e11d48;">*</span></label>
-                            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px;">
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
-                                        type="checkbox" name="Availability" value="Full-Time Days"> Full-Time
-                                    Days</label>
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
-                                        type="checkbox" name="Availability" value="Part-Time Days"> Part-Time
-                                    Days</label>
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
-                                        type="checkbox" name="Availability" value="Evenings"> Evenings</label>
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
-                                        type="checkbox" name="Availability" value="Weekends"> Weekends</label>
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
-                                        type="checkbox" name="Availability" value="Per Diem"> Per Diem</label>
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">List
+                                your top skills (e.g., Critical Care, EHR/EMR, Leadership, Patient Education). <span
+                                    style="color: #e11d48;">*</span></label>
+                            <textarea id="coreCompetencies" name="CoreCompetencies" rows="3"
+                                placeholder="- Skill 1&#10;- Skill 2&#10;- Skill 3"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Professional Experience -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            Professional Experience</h3>
+
+                        <!-- Job 1 -->
+                        <div
+                            style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                            <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 15px;">Most Recent Role
+                                <span style="color: #e11d48;">*</span></h4>
+                            <div class="grid grid-2" style="gap: 20px; margin-bottom: 15px;">
+                                <div><input type="text" id="job1Title" name="Job1Title" placeholder="Job Title"
+                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                </div>
+                                <div><input type="text" id="job1Company" name="Job1Company"
+                                        placeholder="Company Name, Location"
+                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <input type="text" id="job1Dates" name="Job1Dates" placeholder="Month Year - Present"
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-dark);">Key
+                                    responsibilities, quantifiable impacts, and tools/technologies used.</label>
+                                <textarea id="job1Details" name="Job1Details" rows="4"
+                                    placeholder="- Key responsibility..."
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; resize: vertical;"></textarea>
                             </div>
                         </div>
 
-                        <div style="margin-bottom: 30px;">
-                            <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 15px;">Professional
-                                Reference (Supervisor/Manager Preferred) <span style="color: #e11d48;">*</span></h4>
-                            <div class="grid grid-3" style="gap: 15px;">
-                                <input type="text" id="refName" name="RefName" placeholder="Full Name" required
-                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; outline: none; background-color: #f8fafc;"
-                                    onfocus="this.style.backgroundColor='#fff'; this.style.borderColor='var(--primary-color)';"
-                                    onblur="this.style.backgroundColor='#f8fafc'; this.style.borderColor='#cbd5e1';">
-                                <input type="tel" id="refPhone" name="RefPhone" placeholder="Phone Number" required
-                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; outline: none; background-color: #f8fafc;"
-                                    onfocus="this.style.backgroundColor='#fff'; this.style.borderColor='var(--primary-color)';"
-                                    onblur="this.style.backgroundColor='#f8fafc'; this.style.borderColor='#cbd5e1';">
-                                <input type="text" id="refTitle" name="RefTitle" placeholder="Relationship / Title"
-                                    required
-                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; outline: none; background-color: #f8fafc;"
-                                    onfocus="this.style.backgroundColor='#fff'; this.style.borderColor='var(--primary-color)';"
-                                    onblur="this.style.backgroundColor='#f8fafc'; this.style.borderColor='#cbd5e1';">
+                        <!-- Job 2 -->
+                        <div
+                            style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+                            <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 15px;">Previous Role
+                                (Optional)</h4>
+                            <div class="grid grid-2" style="gap: 20px; margin-bottom: 15px;">
+                                <div><input type="text" id="job2Title" name="Job2Title" placeholder="Job Title"
+                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                </div>
+                                <div><input type="text" id="job2Company" name="Job2Company"
+                                        placeholder="Company Name, Location"
+                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                </div>
                             </div>
+                            <div style="margin-bottom: 15px;">
+                                <input type="text" id="job2Dates" name="Job2Dates" placeholder="Month Year - Month Year"
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <textarea id="job2Details" name="Job2Details" rows="4"
+                                    placeholder="- Key responsibility..."
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; resize: vertical;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Education -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            Education</h3>
+                        <div
+                            style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+                            <div class="grid grid-2" style="gap: 20px; margin-bottom: 15px;">
+                                <div><input type="text" id="eduDegree" name="EduDegree"
+                                        placeholder="Degree / Certification"
+                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                </div>
+                                <div><input type="text" id="eduSchool" name="EduSchool"
+                                        placeholder="School Name, Location"
+                                        style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <input type="text" id="eduDates" name="EduDates" placeholder="Month Year - Month Year"
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label
+                                    style="display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-dark);">Relevant
+                                    coursework, honors, or GPA (Optional)</label>
+                                <textarea id="eduDetails" name="EduDetails" rows="2"
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; resize: vertical;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Certifications & Training -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            Certifications & Training (Optional)</h3>
+                        <div style="margin-bottom: 30px;">
+                            <textarea id="certsTraining" name="CertsTraining" rows="3"
+                                placeholder="- Certification Name – Issuing Organization, Year"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Projects & Achievements -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            Projects & Achievements (Optional)</h3>
+                        <div style="margin-bottom: 30px;">
+                            <textarea id="projectsAchieve" name="ProjectsAchieve" rows="3"
+                                placeholder="Project Title – Brief description of scope, tools used, and results."
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Volunteer Experience -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            Volunteer Experience (Optional)</h3>
+                        <div style="margin-bottom: 30px;">
+                            <textarea id="volunteer" name="Volunteer" rows="3"
+                                placeholder="Role – Organization Name (Month Year - Month Year)&#10;- Contribution or impact"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Languages -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            Languages</h3>
+                        <div style="margin-bottom: 30px;">
+                            <textarea id="languages" name="Languages" rows="2"
+                                placeholder="- English (Native)&#10;- Spanish (Professional Proficiency)"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- References -->
+                        <h3
+                            style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                            References</h3>
+                        <div style="margin-bottom: 30px;">
+                            <textarea id="references" name="References" rows="3"
+                                placeholder="Name, Title - Contact Info (or 'Available upon request')"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; outline: none; resize: vertical;"></textarea>
                         </div>
 
                         <h3
@@ -622,7 +683,8 @@
                                     references. <span style="color: #e11d48;">*</span></span>
                             </label>
 
-                            <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+                            <label
+                                style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 25px;">
                                 <input type="checkbox" required name="Truthfulness"
                                     style="margin-top: 4px; transform: scale(1.2);">
                                 <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">I certify
@@ -630,6 +692,27 @@
                                     all information provided in this application is true and complete to the best of my
                                     knowledge. <span style="color: #e11d48;">*</span></span>
                             </label>
+
+                            <!-- Signature Section -->
+                            <div style="margin-top: 20px;">
+                                <label
+                                    style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Signature
+                                    <span style="color: #e11d48;">*</span></label>
+                                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Please draw your
+                                    signature in the box below using your mouse or touchscreen.</p>
+
+                                <div
+                                    style="border: 1px solid #cbd5e1; border-radius: 8px; background-color: #fff; display: inline-block; position: relative;">
+                                    <canvas id="signature-pad" width="400" height="150"
+                                        style="touch-action: none; cursor: crosshair; display: block; border-radius: 8px;"></canvas>
+                                    <button type="button" id="clear-signature"
+                                        style="position: absolute; top: 10px; right: 10px; background: rgba(226, 232, 240, 0.8); border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; color: #475569; transition: all 0.2s;">Clear</button>
+                                </div>
+                                <input type="hidden" id="signature-data" name="SignatureData" required>
+                                <p id="signature-error"
+                                    style="color: #e11d48; font-size: 0.85rem; margin-top: 5px; display: none;">
+                                    Signature is required.</p>
+                            </div>
                         </div>
 
                     </div> <!-- End of Manual Form Section -->
@@ -669,13 +752,18 @@
 
             // Required inputs inside manual section
             const manualInputs = [
-                document.getElementById('empName'),
-                document.getElementById('empTitle'),
-                document.getElementById('empDates'),
-                document.getElementById('empReason'),
-                document.getElementById('refName'),
-                document.getElementById('refPhone'),
-                document.getElementById('refTitle')
+                document.getElementById('applicant-photo'),
+                document.getElementById('profSummary'),
+                document.getElementById('coreCompetencies'),
+                document.getElementById('job1Title'),
+                document.getElementById('job1Company'),
+                document.getElementById('job1Dates'),
+                document.getElementById('job1Details'),
+                document.getElementById('eduDegree'),
+                document.getElementById('eduSchool'),
+                document.getElementById('eduDates'),
+                document.getElementById('languages'),
+                document.getElementById('references')
             ];
 
             if (method === 'manual') {
@@ -691,9 +779,91 @@
             }
         }
 
+        // Initialize Signature Pad
+        const canvas = document.getElementById('signature-pad');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let hasSignature = false;
+
+        // Set up context
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Helper to get coordinates
+        function getCoordinates(e) {
+            if (e.touches && e.touches.length > 0) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: e.touches[0].clientX - rect.left,
+                    y: e.touches[0].clientY - rect.top
+                };
+            }
+            return {
+                x: e.offsetX,
+                y: e.offsetY
+            };
+        }
+
+        // Start drawing
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getCoordinates(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        }
+
+        // Draw
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getCoordinates(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            hasSignature = true;
+            document.getElementById('signature-error').style.display = 'none';
+            e.preventDefault();
+        }
+
+        // Stop drawing
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        // Event Listeners for canvas
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        // Clear button
+        document.getElementById('clear-signature').addEventListener('click', function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSignature = false;
+        });
+
         // Form Submission Logic
         document.getElementById('jobApplicationForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+
+            const method = document.querySelector('input[name="AppMethod"]:checked').value;
+
+            // Validate Signature for Manual Applicants
+            if (method === 'manual' && !hasSignature) {
+                document.getElementById('signature-error').style.display = 'block';
+                // Scroll to signature
+                document.getElementById('signature-pad').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            if (method === 'manual' && hasSignature) {
+                document.getElementById('signature-data').value = canvas.toDataURL('image/png');
+            }
 
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerHTML;
@@ -712,13 +882,11 @@
             formData.append('address', `${formData.get('Address')}, ${formData.get('City')}, ${formData.get('State')} ${formData.get('Zip')}`);
             formData.append('position', formData.get('Position'));
             formData.append('startDate', formData.get('StartDate'));
+            formData.append('linkedin', formData.get('LinkedIn'));
+            formData.append('portfolio', formData.get('Portfolio'));
             formData.append('coverLetter', formData.get('CoverLetter'));
 
-            // Append file expressly to 'resume' which is what multer expects
-            const resumeFile = document.getElementById('resume-file').files[0];
-            if (resumeFile) {
-                formData.append('resume', resumeFile);
-            }
+            // The 'resume' and 'applicantPhoto' files are automatically appended by the browser because they are <input type="file" name="...">
 
             try {
                 // Determine API URL based on environment (local vs production)
