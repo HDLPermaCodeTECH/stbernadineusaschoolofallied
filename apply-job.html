@@ -327,7 +327,7 @@
                         <label
                             style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Position
                             Applying For <span style="color: #e11d48;">*</span></label>
-                        <select id="job-role" required
+                        <select id="job-role" name="Position" required
                             style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; appearance: auto; cursor: pointer;"
                             onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
                             onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
@@ -340,11 +340,116 @@
                         </select>
                     </div>
 
+                    <div style="margin-bottom: 20px;">
+                        <label
+                            style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Street
+                            Address <span style="color: #e11d48;">*</span></label>
+                        <input type="text" name="Address" required
+                            style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                            onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';"
+                            placeholder="123 Main St">
+                    </div>
+
+                    <div class="grid grid-3" style="gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">City
+                                <span style="color: #e11d48;">*</span></label>
+                            <input type="text" name="City" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">State
+                                <span style="color: #e11d48;">*</span></label>
+                            <input type="text" name="State" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';"
+                                placeholder="NJ">
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Zip
+                                Code <span style="color: #e11d48;">*</span></label>
+                            <input type="text" name="Zip" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Highest
+                                Education <span style="color: #e11d48;">*</span></label>
+                            <select name="Education" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; appearance: auto; cursor: pointer;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                                <option value="">Select Level...</option>
+                                <option value="High School / GED">High School / GED</option>
+                                <option value="Associate Degree">Associate Degree</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="Doctorate">Doctorate</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Years
+                                of Experience <span style="color: #e11d48;">*</span></label>
+                            <input type="number" name="Experience" min="0" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Available
+                                Start Date <span style="color: #e11d48;">*</span></label>
+                            <input type="date" name="StartDate" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Legally
+                                Authorized to Work in US? <span style="color: #e11d48;">*</span></label>
+                            <select name="WorkAuth" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; appearance: auto; cursor: pointer;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                                <option value="">Select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label
+                            style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Upload
+                            Resume (PDF, DOCX) <span style="color: #e11d48;">*</span></label>
+                        <input type="file" name="Resume" accept=".pdf,.doc,.docx" required
+                            style="width: 100%; padding: 14px 16px; border: 1px dashed #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; cursor: pointer;"
+                            onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                            onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                    </div>
+
                     <div style="margin-bottom: 30px;">
                         <label
                             style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Cover
                             Letter / Message</label>
-                        <textarea rows="5"
+                        <textarea rows="5" name="CoverLetter"
                             style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; resize: vertical;"
                             onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
                             onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';"
