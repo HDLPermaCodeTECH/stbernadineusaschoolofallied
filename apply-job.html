@@ -445,6 +445,164 @@
                             onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
                     </div>
 
+                    <h3
+                        style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                        Licenses & Certifications</h3>
+
+                    <div class="grid grid-2" style="gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Professional
+                                License Number (RN, LPN, CHHA, etc.)</label>
+                            <input type="text" name="LicenseNumber" placeholder="Enter License #"
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">License
+                                State & Expiration Date</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" name="LicenseState" placeholder="State (e.g. NJ)"
+                                    style="flex: 1; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                    onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                    onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                                <input type="date" name="LicenseExp"
+                                    style="flex: 2; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                    onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                    onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="gap: 20px; margin-bottom: 30px;">
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">CPR
+                                / BLS Certification Status <span style="color: #e11d48;">*</span></label>
+                            <select name="CPRStatus" required
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; appearance: auto; cursor: pointer;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                                <option value="">Select Status...</option>
+                                <option value="Current & Active">Current & Active</option>
+                                <option value="Expired">Expired</option>
+                                <option value="Do Not Have">Do Not Have</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label
+                                style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Other
+                                Relevant Certifications</label>
+                            <input type="text" name="OtherCerts" placeholder="ACLS, PALS, Phlebotomy, etc."
+                                style="width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
+                                onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
+                        </div>
+                    </div>
+
+                    <h3
+                        style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                        Employment History</h3>
+
+                    <div
+                        style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                        <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 15px;">Most Recent Employer
+                            <span style="color: #e11d48;">*</span></h4>
+                        <div class="grid grid-2" style="gap: 20px; margin-bottom: 15px;">
+                            <div>
+                                <input type="text" name="Employer1Name" placeholder="Company Name" required
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
+                            </div>
+                            <div>
+                                <input type="text" name="Employer1Title" placeholder="Job Title / Position" required
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
+                            </div>
+                        </div>
+                        <div class="grid grid-2" style="gap: 20px;">
+                            <div>
+                                <input type="text" name="Employer1Dates"
+                                    placeholder="Dates of Employment (e.g. 2020 - Present)" required
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
+                            </div>
+                            <div>
+                                <input type="text" name="Employer1Reason" placeholder="Reason for Leaving" required
+                                    style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; background-color: #fff; outline: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3
+                        style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                        Availability & References</h3>
+
+                    <div style="margin-bottom: 20px;">
+                        <label
+                            style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Availability
+                            / Desired Schedule <span style="color: #e11d48;">*</span></label>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
+                                    type="checkbox" name="Availability" value="Full-Time Days"> Full-Time Days</label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
+                                    type="checkbox" name="Availability" value="Part-Time Days"> Part-Time Days</label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
+                                    type="checkbox" name="Availability" value="Evenings"> Evenings</label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
+                                    type="checkbox" name="Availability" value="Weekends"> Weekends</label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input
+                                    type="checkbox" name="Availability" value="Per Diem"> Per Diem</label>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 15px;">Professional
+                            Reference (Supervisor/Manager Preferred) <span style="color: #e11d48;">*</span></h4>
+                        <div class="grid grid-3" style="gap: 15px;">
+                            <input type="text" name="RefName" placeholder="Full Name" required
+                                style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; outline: none; background-color: #f8fafc;"
+                                onfocus="this.style.backgroundColor='#fff'; this.style.borderColor='var(--primary-color)';"
+                                onblur="this.style.backgroundColor='#f8fafc'; this.style.borderColor='#cbd5e1';">
+                            <input type="tel" name="RefPhone" placeholder="Phone Number" required
+                                style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; outline: none; background-color: #f8fafc;"
+                                onfocus="this.style.backgroundColor='#fff'; this.style.borderColor='var(--primary-color)';"
+                                onblur="this.style.backgroundColor='#f8fafc'; this.style.borderColor='#cbd5e1';">
+                            <input type="text" name="RefTitle" placeholder="Relationship / Title" required
+                                style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; outline: none; background-color: #f8fafc;"
+                                onfocus="this.style.backgroundColor='#fff'; this.style.borderColor='var(--primary-color)';"
+                                onblur="this.style.backgroundColor='#f8fafc'; this.style.borderColor='#cbd5e1';">
+                        </div>
+                    </div>
+
+                    <h3
+                        style="font-size: 1.25rem; color: var(--text-dark); margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                        Legal / Background</h3>
+
+                    <div
+                        style="margin-bottom: 30px; background: rgba(225, 29, 72, 0.05); padding: 20px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                        <p style="font-size: 0.9rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">As a
+                            healthcare and education provider, St. Bernadine School of Allied Health requires all
+                            employees to undergo a comprehensive background check and fingerprinting prior to
+                            employment.</p>
+
+                        <label
+                            style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 15px;">
+                            <input type="checkbox" required name="BackgroundConsent"
+                                style="margin-top: 4px; transform: scale(1.2);">
+                            <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">I consent to a
+                                background check, including criminal history, license verification, and employment
+                                references. <span style="color: #e11d48;">*</span></span>
+                        </label>
+
+                        <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" required name="Truthfulness"
+                                style="margin-top: 4px; transform: scale(1.2);">
+                            <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">I certify that
+                                all information provided in this application is true and complete to the best of my
+                                knowledge. <span style="color: #e11d48;">*</span></span>
+                        </label>
+                    </div>
+
                     <div style="margin-bottom: 30px;">
                         <label
                             style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Cover
