@@ -5562,7 +5562,10 @@ body:not(.js-loaded) .reveal-scale {
         width: 100%;
         transform: none;
         order: -1;
-        /* Depending on structure, reset specific orders if necessary */
+    }
+
+    .career-image-wrapper {
+        order: -1;
     }
 
     .homecare-content-wrapper,
