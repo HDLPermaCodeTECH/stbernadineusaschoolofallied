@@ -1142,7 +1142,7 @@ app.post('/request-care', async (req, res) => {
 const generateJobApplicationPDF = (data) => {
     return new Promise((resolve, reject) => {
         try {
-            const doc = new PDFDocument({ margin: 50, size: 'LETTER' });
+            const doc = new PDFDocument({ margin: 0, size: 'LETTER', bufferPages: true });
             let buffers = [];
             doc.on('data', buffers.push.bind(buffers));
             doc.on('end', () => resolve(Buffer.concat(buffers)));
@@ -1150,146 +1150,202 @@ const generateJobApplicationPDF = (data) => {
 
             const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, AppMethod } = data;
 
-            // Brand Colors
-            const primaryColor = '#055923';
+            // Brand Colors - Premium Professional 
+            const primaryColor = '#055923'; // Deep Green
+            const accentColor = '#10b981'; // Bright green accent
+            const textDark = '#1f2937';
+            const textLight = '#6b7280';
+            const bgLight = '#f8fafc';
 
-            // Layout constants
-            const contentWidth = doc.page.width - 100;
+            const marginX = 50;
+            const contentWidth = doc.page.width - (marginX * 2);
 
-            // --- HEADER ---
-            // If photo exists, place it in top right, but using absolute coordinate just for photo
+            // --- HEADER BANNER ---
+            doc.rect(0, 0, doc.page.width, 140).fill(primaryColor);
+            doc.rect(0, 140, doc.page.width, 4).fill(accentColor); // Accent divider
+
+            // Header Text
+            doc.fillColor('#ffffff').fontSize(36).font('Helvetica-Bold').text(`${firstName} ${lastName}`.toUpperCase(), marginX, 40);
+
+            doc.fontSize(14).font('Helvetica').fillColor('#a7f3d0')
+                .text(`Application: ${position}  |  Available: ${startDate}`, marginX, 85);
+
+            // Contact Info
+            let contactArr = [address, contactPhone, contactEmail, data.linkedin, data.portfolio].filter(Boolean);
+            doc.fontSize(10).font('Helvetica').fillColor('#e2e8f0')
+                .text(contactArr.join('   •   '), marginX, 110, { width: contentWidth });
+
+            // Ensure photo fits in header if present
             if (data.photoPath) {
-                // Ensure photo fits and doesn't push text around by absolute positioning
-                doc.image(data.photoPath, doc.page.width - 120, 50, { width: 70 });
+                const photoSize = 80;
+                doc.save();
+                doc.roundedRect(doc.page.width - marginX - photoSize, 30, photoSize, photoSize, 4).clip();
+                doc.image(data.photoPath, doc.page.width - marginX - photoSize, 30, { width: photoSize, height: photoSize });
+                doc.restore();
+                doc.roundedRect(doc.page.width - marginX - photoSize, 30, photoSize, photoSize, 4).lineWidth(2).strokeColor('#ffffff').stroke();
             }
 
-            // Name
-            doc.fillColor(primaryColor).fontSize(28).font('Helvetica-Bold').text(`${firstName} ${lastName}`);
+            // Set initial cursor position for body content
+            doc.y = 170;
+            doc.x = marginX;
 
-            // Subtitle / Job Applied For
-            doc.fillColor('#374151').fontSize(14).font('Helvetica').text(`Applying for: ${position}`, { continued: true }).text(`  |  Available: ${startDate}`);
-            doc.moveDown(0.5);
-
-            // Contact Info line
-            let contactArr = [address, contactPhone, contactEmail];
-            if (data.linkedin) contactArr.push(data.linkedin);
-            if (data.portfolio) contactArr.push(data.portfolio);
-            const contactString = contactArr.filter(Boolean).join('  |  ');
-            doc.fillColor('#6b7280').fontSize(10).font('Helvetica').text(contactString, { width: contentWidth - (data.photoPath ? 80 : 0) });
-
-            doc.moveDown(1.5);
-
-            // Helper for Section Headers
-            const addSectionHeader = (title) => {
-                doc.moveDown(1);
-                doc.fillColor(primaryColor).fontSize(14).font('Helvetica-Bold').text(title.toUpperCase());
-                doc.moveTo(doc.x, doc.y + 2).lineTo(560, doc.y + 2).lineWidth(1).strokeColor('#e2e8f0').stroke();
-                doc.moveDown(0.8);
+            const ensureSpace = (space) => {
+                if (doc.y + space > doc.page.height - 80) {
+                    doc.addPage();
+                    doc.y = 50;
+                }
             };
 
-            // Helpers for Content
+            const addSectionHeader = (title) => {
+                ensureSpace(60);
+                doc.moveDown(1);
+                const startY = doc.y;
+                doc.rect(marginX, startY, contentWidth, 26).fill(bgLight);
+                doc.rect(marginX, startY, 4, 26).fill(primaryColor); // left thick border
+                doc.fillColor(primaryColor).fontSize(12).font('Helvetica-Bold').text(title.toUpperCase(), marginX + 15, startY + 8);
+                doc.y = startY + 40;
+                doc.x = marginX;
+            };
+
             const addText = (text, options = {}) => {
                 if (!text) return;
-                doc.fillColor('#1f2937').fontSize(10).font(options.font || 'Helvetica').text(text, { align: 'left', width: contentWidth, ...options });
+                doc.fillColor(textDark).fontSize(10).font(options.font || 'Helvetica')
+                    .text(text, marginX, doc.y, { align: 'left', width: contentWidth, ...options });
+                doc.moveDown(0.5);
             };
 
             if (AppMethod === 'manual') {
                 // PROFESSIONAL SUMMARY
                 if (data.ProfessionalSummary) {
                     addSectionHeader('Professional Summary');
-                    addText(data.ProfessionalSummary);
+                    addText(data.ProfessionalSummary, { lineGap: 2 });
                 }
 
                 // CORE COMPETENCIES
                 if (data.CoreCompetencies) {
                     addSectionHeader('Core Competencies');
-                    addText(data.CoreCompetencies);
+
+                    // Render dynamically like tags
+                    const cTags = data.CoreCompetencies.split(',').map(s => s.trim()).filter(Boolean);
+                    if (cTags.length > 0 && cTags.length <= 15) {
+                        let tagX = marginX;
+                        let tagY = doc.y;
+                        cTags.forEach(tag => {
+                            const w = doc.widthOfString(tag) + 20;
+                            if (tagX + w > marginX + contentWidth) {
+                                tagX = marginX;
+                                tagY += 30;
+                            }
+                            doc.roundedRect(tagX, tagY, w, 22, 11).fill('#e2e8f0');
+                            doc.fillColor(textDark).fontSize(9).font('Helvetica-Bold').text(tag, tagX + 10, tagY + 6);
+                            tagX += w + 10;
+                        });
+                        doc.y = tagY + 35;
+                    } else {
+                        addText(data.CoreCompetencies, { lineGap: 2 });
+                    }
                 }
 
                 // PROFESSIONAL EXPERIENCE
                 if (data.Job1Title || data.Job2Title) {
                     addSectionHeader('Professional Experience');
 
-                    if (data.Job1Title) {
-                        doc.fillColor('#111827').fontSize(12).font('Helvetica-Bold').text(data.Job1Title, { continued: true })
-                            .fillColor('#4b5563').font('Helvetica').text(` — ${data.Job1Company || ''}`);
-                        doc.fillColor('#6b7280').fontSize(10).font('Helvetica-Oblique').text(data.Job1Dates || '');
-                        doc.moveDown(0.5);
-                        addText(data.Job1Details);
-                        doc.moveDown(1);
-                    }
+                    const renderJob = (title, company, dates, details) => {
+                        if (!title) return;
+                        ensureSpace(80);
 
-                    if (data.Job2Title) {
-                        doc.fillColor('#111827').fontSize(12).font('Helvetica-Bold').text(data.Job2Title, { continued: true })
-                            .fillColor('#4b5563').font('Helvetica').text(` — ${data.Job2Company || ''}`);
-                        doc.fillColor('#6b7280').fontSize(10).font('Helvetica-Oblique').text(data.Job2Dates || '');
-                        doc.moveDown(0.5);
-                        addText(data.Job2Details);
-                    }
+                        const startY = doc.y;
+                        doc.fillColor(textDark).fontSize(12).font('Helvetica-Bold').text(title, marginX, startY);
+                        doc.fillColor(primaryColor).fontSize(10).font('Helvetica-Bold').text(company || '', marginX, startY + 16);
+
+                        const dateW = doc.widthOfString(dates || '');
+                        doc.fillColor(textLight).fontSize(10).font('Helvetica-Oblique').text(dates || '', marginX + contentWidth - dateW, startY + 16);
+
+                        doc.y = startY + 36;
+                        addText(details, { lineGap: 2 });
+                        doc.moveDown(1);
+                    };
+
+                    renderJob(data.Job1Title, data.Job1Company, data.Job1Dates, data.Job1Details);
+                    renderJob(data.Job2Title, data.Job2Company, data.Job2Dates, data.Job2Details);
                 }
 
                 // EDUCATION
                 if (data.EduDegree) {
                     addSectionHeader('Education');
-                    doc.fillColor('#111827').fontSize(12).font('Helvetica-Bold').text(data.EduDegree, { continued: true })
-                        .fillColor('#4b5563').font('Helvetica').text(` — ${data.EduSchool || ''}`);
-                    doc.fillColor('#6b7280').fontSize(10).font('Helvetica-Oblique').text(data.EduDates || '');
-                    if (data.EduDetails) {
-                        doc.moveDown(0.5);
-                        addText(data.EduDetails);
-                    }
+                    ensureSpace(60);
+
+                    const startY = doc.y;
+                    doc.fillColor(textDark).fontSize(12).font('Helvetica-Bold').text(data.EduDegree, marginX, startY);
+                    doc.fillColor(primaryColor).fontSize(10).font('Helvetica-Bold').text(data.EduSchool || '', marginX, startY + 16);
+
+                    const dateW = doc.widthOfString(data.EduDates || '');
+                    doc.fillColor(textLight).fontSize(10).font('Helvetica-Oblique').text(data.EduDates || '', marginX + contentWidth - dateW, startY + 16);
+
+                    doc.y = startY + 36;
+                    addText(data.EduDetails, { lineGap: 2 });
                 }
 
                 // CERTIFICATIONS & TRAINING
                 if (data.CertsTraining) {
                     addSectionHeader('Certifications & Training');
-                    addText(data.CertsTraining);
+                    addText(data.CertsTraining, { lineGap: 2 });
                 }
-
-                // PROJECTS & ACHIEVEMENTS Removed
-                // VOLUNTEER EXPERIENCE Removed
-                // LANGUAGES Removed
 
                 // REFERENCES
                 if (data.References) {
                     addSectionHeader('References');
-                    addText(data.References);
+                    addText(data.References, { lineGap: 2 });
                 }
 
                 // SIGNATURE
                 if (data.SignatureData) {
-                    doc.moveDown(3);
-                    doc.fillColor('#4b5563').fontSize(10).font('Helvetica').text('I certify that all information provided in this application is true and complete to the best of my knowledge.', { width: contentWidth });
-                    doc.moveDown(1);
+                    ensureSpace(160);
 
-                    // Prevent breaking signature across pages awkwardly
-                    if (doc.y > doc.page.height - 150) doc.addPage();
+                    doc.moveDown(1);
+                    let sigStartY = doc.y;
+                    doc.rect(marginX, sigStartY, contentWidth, 1).fill('#e2e8f0');
+                    doc.y = sigStartY + 15;
+
+                    doc.fillColor(textLight).fontSize(9).font('Helvetica-Oblique')
+                        .text('I certify that all information provided in this application is true and complete to the best of my knowledge.', marginX, doc.y, { width: contentWidth });
+
+                    doc.y += 20;
 
                     const base64Data = data.SignatureData.replace(/^data:image\/png;base64,/, "");
                     const sigImg = Buffer.from(base64Data, 'base64');
-                    doc.image(sigImg, 50, doc.y, { height: 50 });
-                    doc.moveDown(4); // Move past image height
+                    // Draw signature
+                    doc.image(sigImg, marginX, doc.y, { height: 45 });
 
-                    doc.moveTo(50, doc.y).lineTo(250, doc.y).lineWidth(1).strokeColor('#000000').stroke();
-                    doc.moveDown(0.5);
-                    doc.fillColor('#000000').fontSize(10).font('Helvetica-Bold').text(`${firstName} ${lastName}`);
-                    doc.font('Helvetica').text(new Date().toLocaleDateString());
+                    doc.y += 50;
+                    doc.moveTo(marginX, doc.y).lineTo(marginX + 200, doc.y).lineWidth(1).strokeColor(textDark).stroke();
+
+                    doc.y += 5;
+                    doc.fillColor(textDark).fontSize(11).font('Helvetica-Bold').text(`${firstName} ${lastName}`, marginX, doc.y);
+                    doc.fillColor(textLight).fontSize(10).font('Helvetica').text(new Date().toLocaleDateString(), marginX, doc.y + 15);
+                    doc.moveDown(2);
                 }
 
             } else {
-                // IT WAS A RESUME UPLOAD, just print cover letter if they have one
+                // RESUME UPLOAD
                 if (data.coverLetter && data.coverLetter.trim() !== '') {
-                    addSectionHeader('Cover Letter / Message');
-                    addText(data.coverLetter);
+                    addSectionHeader('Cover Letter');
+                    addText(data.coverLetter, { lineGap: 2 });
                 } else {
-                    doc.moveDown(2);
-                    doc.fillColor('#4b5563').fontSize(12).font('Helvetica-Oblique').text('The applicant chose to upload a resume directly. Please refer to the attached document for their full professional profile.');
+                    addSectionHeader('Application Note');
+                    doc.fillColor(textLight).fontSize(11).font('Helvetica-Oblique').text('The applicant chose to upload a resume file directly. Please refer to the attached document for their full professional profile.', marginX, doc.y, { width: contentWidth });
                 }
             }
 
-            // Footer
-            doc.moveDown(3);
-            doc.fontSize(8).fillColor('#9CA3AF').text(`Generated automatically by St. Bernadine School of Allied Health - Internal HR System. Date: ${new Date().toLocaleDateString()}`, { align: 'center', width: contentWidth });
+            // Global Footer for all pages
+            const pages = doc.bufferedPageRange();
+            for (let i = 0; i < pages.count; i++) {
+                doc.switchToPage(i);
+                doc.rect(0, doc.page.height - 40, doc.page.width, 40).fill(bgLight);
+                doc.fillColor('#9CA3AF').fontSize(8).font('Helvetica')
+                    .text(`Generated automatically by St. Bernadine School of Allied Health - Internal HR System. Date: ${new Date().toLocaleDateString()}`,
+                        0, doc.page.height - 24, { align: 'center', width: doc.page.width });
+            }
 
             doc.end();
         } catch (error) {
