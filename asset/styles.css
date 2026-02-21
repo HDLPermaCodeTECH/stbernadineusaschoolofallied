@@ -3155,13 +3155,7 @@ footer {
     }
 
     .services-hero-image .slide {
-        display: none;
-        opacity: 1;
         background-position: center;
-    }
-
-    .services-hero-image .slide.active {
-        display: block;
     }
 
     .hero-stats-row {
