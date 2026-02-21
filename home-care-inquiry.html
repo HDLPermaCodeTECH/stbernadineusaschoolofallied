@@ -385,7 +385,7 @@
             // Override the careType standard array logic
             jsonData.careType = careTypes.join(', ');
 
-            fetch('https://stbernadineschoolofallied-backend.onrender.com/request-care', {
+            fetch('/request-care', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -534,7 +534,8 @@
                         <div
                             style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
                             <h4 style="font-size: 1rem; color: var(--text-dark); margin-bottom: 15px;">Most Recent Role
-                                <span style="color: #e11d48;">*</span></h4>
+                                <span style="color: #e11d48;">*</span>
+                            </h4>
                             <div class="grid grid-2" style="gap: 20px; margin-bottom: 15px;">
                                 <div><input type="text" id="job1Title" name="Job1Title" placeholder="Job Title"
                                         style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
@@ -890,10 +891,9 @@
 
             try {
                 // Determine API URL based on environment (local vs production)
-                // Use the existing render link if deployed, or relative if hosted together
                 const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                     ? 'http://localhost:3000/apply-job'
-                    : 'https://hdlpermacodetech.onrender.com/apply-job';
+                    : '/apply-job';
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
