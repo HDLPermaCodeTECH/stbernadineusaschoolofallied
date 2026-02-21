@@ -5524,3 +5524,57 @@ body:not(.js-loaded) .reveal-scale {
         right: 20px;
     }
 }
+
+/* Custom Responsive Grid Layouts for Home Page Sections */
+.career-grid {
+    align-items: center;
+    gap: 60px;
+}
+
+.homecare-grid {
+    align-items: center;
+    gap: 100px;
+}
+
+.career-image-wrapper {
+    padding-left: 20px;
+}
+
+.homecare-image-wrapper {
+    position: relative;
+    width: 115%;
+    transform: translateX(-5%);
+}
+
+.homecare-content-wrapper {
+    padding-left: 20px;
+}
+
+/* Mobile Resets for Custom Grids */
+@media (max-width: 1024px) {
+
+    .career-grid,
+    .homecare-grid {
+        gap: 40px;
+    }
+
+    .homecare-image-wrapper {
+        width: 100%;
+        transform: none;
+        order: -1;
+        /* Depending on structure, reset specific orders if necessary */
+    }
+
+    .homecare-content-wrapper,
+    .career-image-wrapper {
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .career-grid,
+    .homecare-grid {
+        gap: 30px;
+    }
+}
