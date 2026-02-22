@@ -1381,8 +1381,11 @@ app.post('/apply-job', upload.fields([{ name: 'resume', maxCount: 1 }, { name: '
             pdfData.photoPath = files['applicantPhoto'][0].path;
         }
 
-        // Generate Application Summary PDF
-        const pdfBuffer = await generateJobApplicationPDF(pdfData);
+        // Generate Application Summary PDF conditionally
+        let pdfBuffer = null;
+        if (AppMethod === 'manual') {
+            pdfBuffer = await generateJobApplicationPDF(pdfData);
+        }
 
         // Admin Notification Email
         const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
@@ -1413,7 +1416,7 @@ app.post('/apply-job', upload.fields([{ name: 'resume', maxCount: 1 }, { name: '
                     </div>
                     <p>Attached to this email, you will find:</p>
                     <ol>
-                        <li>A PDF summary of their application details</li>
+                        ${AppMethod === 'manual' ? `<li>A PDF summary of their application details</li>` : ''}
                         ${files['resume'] ? `<li>The Applicant's uploaded Resume (${files['resume'][0].originalname})</li>` : ''}
                         ${files['applicantPhoto'] ? `<li>The Applicant's uploaded professional photo</li>` : ''}
                     </ol>
@@ -1423,13 +1426,15 @@ app.post('/apply-job', upload.fields([{ name: 'resume', maxCount: 1 }, { name: '
             </html>
         `;
 
-        const attachments = [
-            {
+        const attachments = [];
+
+        if (pdfBuffer) {
+            attachments.push({
                 filename: `APP_SUMMARY_${firstName}_${lastName}.pdf`,
                 content: pdfBuffer,
                 contentType: 'application/pdf'
-            }
-        ];
+            });
+        }
 
         if (files['resume']) {
             attachments.push({
