@@ -250,7 +250,7 @@
     </footer>
     <script src="asset/script.js?v=10.29"></script> <!-- Intl Tel Input JS -->
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
-    <script>        // Initialize Intl Tel Input        const input = document.querySelector("#contactNumber");        if (input) {            window.intlTelInput(input, {                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",                initialCountry: "us",                preferredCountries: ["us", "ph"],                separateDialCode: true            });        }    </script>
+    <script>        /* Initialize Intl Tel Input */        const input = document.querySelector("#contactNumber");        if (input) {            window.intlTelInput(input, {                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",                initialCountry: "us",                preferredCountries: ["us", "ph"],                separateDialCode: true            });        }    </script>
     <script>        document.getElementById('contact-form').addEventListener('submit', async function (e) {
             e.preventDefault(); const btn = this.querySelector('button[type="submit"]'); const originalText = btn.innerText; btn.innerText = 'Sending...'; btn.disabled = true; const formData = {
                 name: this.querySelector('input[type="text"]').value, email: this.querySelector('input[type="email"]').value, contact_number: this.querySelector('input[name="contact_number"]').value, subject: this.querySelectorAll('input[type="text"]')[1].value, /* 2nd text input is subject */ message: this.querySelector('textarea').value
