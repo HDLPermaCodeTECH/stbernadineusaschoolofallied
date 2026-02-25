@@ -421,13 +421,13 @@
                     style="width: 100%; max-width: 300px;">Make a Payment</a> </div>
             <form id="application-form" action="/send-email" method="POST" enctype="multipart/form-data">
                 <!-- FormSubmit Configuration -->
-                <input type="hidden" name="_subject" value="New Student Application | St. Bernadine School of Allied Health">
+                <input type="hidden" name="_subject"
+                    value="New Student Application | St. Bernadine School of Allied Health">
                 <input type="hidden" name="_template" value="box">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_autoresponse"
                     value="Thank you for applying to St. Bernadine School of Allied Health. We have received your application and will review it shortly.">
-                <!-- Signature Hidden Input -->
-                <input type="hidden" name="signature" id="signatureInput">
+
                 <!-- File Upload -->
                 <div class="form-group">
                     <label>Upload Form and Requirements</label>
@@ -528,18 +528,6 @@
                             required>
                     </div>
                 </div>
-                <!-- Family Background -->
-                <div class="form-section-title">Family Background</div>
-                <div class="grid-2-form">
-                    <div class="form-group">
-                        <label>Mother's Maiden Name <span class="required">*</span></label>
-                        <input type="text" id="motherName" name="motherName" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Father's Complete Name <span class="required">*</span></label>
-                        <input type="text" id="fatherName" name="fatherName" class="form-control" required>
-                    </div>
-                </div>
                 <!-- Emergency Contact -->
                 <div class="form-section-title">Emergency Contact</div>
                 <div class="grid-2-form">
@@ -558,9 +546,9 @@
                     <select id="referrer" name="referrer" class="form-control"
                         onchange="this.value === 'Others' ? document.getElementById('referrerOther').style.display = 'block' : document.getElementById('referrerOther').style.display = 'none'">
                         <option value="">Select an option</option>
-                        <option value="FB">FB</option>
-                        <option value="IG">IG</option>
-                        <option value="in">in</option>
+                        <option value="FB">Facebook</option>
+                        <option value="IG">Instagram</option>
+                        <option value="in">LinkedIn</option>
                         <option value="Referred by a Friend">Referred by a Friend</option>
                         <option value="Others">Others</option>
                     </select>
@@ -629,15 +617,7 @@
                     are true and complete to the best of my knowledge. If this application leads to approval, I
                     understand that false or misleading information in my application or interview may result in my
                     release. </p>
-                <div class="form-group">
-                    <label>Signature <span class="required">*</span></label>
-                    <div class="signature-pad-wrapper">
-                        <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-                        <div class="signature-actions">
-                            <span class="clear-sig" id="clear-signature">Clear Signature</span>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="form-group">
                     <label>Full Name <span class="required">*</span></label>
                     <input type="text" id="signatureName" name="signature_name" class="form-control"
@@ -720,8 +700,7 @@
     <script src="asset/script.js?v=10.29"></script>
     <!-- Intl Tel Input JS -->
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
-    <!-- Signature Pad JS -->
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
     <script>
         // Init Phone Input
         const input = document.querySelector("#phone");
@@ -737,25 +716,7 @@
             preferredCountries: ["us", "ph", "ca", "gb"],
             separateDialCode: true,
         });
-        // Init Signature Pad
-        const canvas = document.getElementById('signature-pad');
-        const signaturePad = new SignaturePad(canvas, {
-            backgroundColor: 'rgba(255, 255, 255, 0)',
-            penColor: 'rgb(0, 0, 0)'
-        });
-        // Resize canvas correctly
-        function resizeCanvas() {
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext("2d").scale(ratio, ratio);
-            signaturePad.clear(); // Clear otherwise content will be scaled incorrectly
-        }
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
-        document.getElementById('clear-signature').addEventListener('click', function () {
-            signaturePad.clear();
-        });
+
         // --- File Upload Logic ---
         const fileInput = document.getElementById('fileUpload');
         const fileWrapper = document.querySelector('.file-upload-wrapper');
@@ -1153,15 +1114,7 @@
                     alert("Please enter a valid main contact number.");
                     return;
                 }
-                // Validate Signature
-                if (signaturePad && signaturePad.isEmpty()) {
-                    alert("Please provide your signature.");
-                    return;
-                } else if (signaturePad) {
-                    // Convert signature to data URL and set to hidden input
-                    const signatureData = signaturePad.toDataURL();
-                    document.getElementById('signatureInput').value = signatureData;
-                }
+
             } catch (err) {
                 console.error("Validation Error:", err);
                 // Proceed to submit anyway if validation logic fails to avoid blocking the user
@@ -1219,16 +1172,7 @@
             document.getElementById('school').value = 'Test University';
             document.getElementById('course').value = 'BS Nursing';
             document.getElementById('yearGrad').value = '2018';
-            // Signature
-            document.getElementById('signatureName').value = 'Hebreydill Llagas';
-            document.getElementById('applicationDate').valueAsDate = new Date();
-            // Draw on Signature Pad
-            const canvas = document.getElementById('signature-pad');
-            const signaturePad = new SignaturePad(canvas);
-            signaturePad.penColor = "black";
-            signaturePad.fromData([
-                { color: "black", points: [{ x: 50, y: 100 }, { x: 100, y: 100 }, { x: 150, y: 50 }, { x: 200, y: 100 }] }
-            ]);
+
             // Handle Country/State/City (Simplification for test)
             // We manually set values to bypass the fetch logic for speed testing
             document.getElementById('country').innerHTML = '<option value="United States" selected>United States</option>';

@@ -191,7 +191,7 @@ const SECON_COLOR = '#555555';
 const BORDER_COLOR = '#CBD5E1';
 const BG_COLOR = '#F8FAFC';
 
-const generatePDF = (data, signatureBuffer) => {
+const generatePDF = (data) => {
     return new Promise((resolve, reject) => {
         const doc = new PDFDocument({ margin: 40, size: 'A4', bufferPages: true });
         let buffers = [];
@@ -320,16 +320,9 @@ const generatePDF = (data, signatureBuffer) => {
             55, y + 35, { width: 485, align: 'justify' }
         );
 
-        if (signatureBuffer) {
-            doc.image(signatureBuffer, 55, y + 80, { height: 40 });
-            doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 105).lineTo(250, y + 105).stroke();
-            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(10).text(`${data.firstName} ${data.lastName}`, 55, y + 112);
-            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant Signature', 55, y + 124);
-        } else {
-            doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 105).lineTo(250, y + 105).stroke();
-            doc.fillColor('#000000').font('Helvetica-Bold').fontSize(12).text(`${data.firstName} ${data.lastName}`, 55, y + 112);
-            doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant E-Signature', 55, y + 124);
-        }
+        doc.lineWidth(1).strokeColor('#000000').moveTo(55, y + 105).lineTo(250, y + 105).stroke();
+        doc.fillColor('#000000').font('Helvetica-Bold').fontSize(12).text(data.signature_name || `${data.firstName} ${data.lastName}`, 55, y + 112);
+        doc.fillColor(SECON_COLOR).font('Helvetica').fontSize(8).text('Applicant E-Signature', 55, y + 124);
 
         doc.lineWidth(1).strokeColor('#000000').moveTo(350, y + 105).lineTo(500, y + 105).stroke();
         doc.fillColor('#000000').font('Helvetica').fontSize(12).text(`${new Date().toLocaleDateString()}`, 350, y + 90);
@@ -387,12 +380,7 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
         let attachments = [];
 
         // Generate PDF
-        let signatureBuffer = null;
-        if (req.body.signature) {
-            const base64Data = req.body.signature.replace(/^data:image\/png;base64,/, "");
-            signatureBuffer = Buffer.from(base64Data, 'base64');
-        }
-        const pdfBuffer = await generatePDF(data, signatureBuffer);
+        const pdfBuffer = await generatePDF(data);
         attachments.push({
             filename: `Application_${data.firstName}_${data.lastName}.pdf`,
             content: pdfBuffer,

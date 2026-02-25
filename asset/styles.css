@@ -4040,6 +4040,8 @@ body:not(.js-loaded) .reveal-scale {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 5;
 }
 
 .service-content h3 {
@@ -4064,6 +4066,8 @@ body:not(.js-loaded) .reveal-scale {
     gap: 8px;
     transition: var(--transition);
     font-size: 0.95rem;
+    position: relative;
+    z-index: 10;
 }
 
 .service-link:hover {
@@ -4333,6 +4337,8 @@ body:not(.js-loaded) .reveal-scale {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    position: relative;
+    z-index: 5;
 }
 
 .service-content h3 {
@@ -4356,6 +4362,8 @@ body:not(.js-loaded) .reveal-scale {
     font-weight: 600;
     text-decoration: none;
     transition: var(--transition);
+    position: relative;
+    z-index: 10;
 }
 
 .service-link i {
