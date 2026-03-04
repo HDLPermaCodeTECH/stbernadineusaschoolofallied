@@ -840,7 +840,7 @@ app.post('/send-contact', async (req, res) => {
         `;
 
         // Define CC and BCC
-        const ccEmail = "school@stbernadineusa.com";
+        const ccEmail = "placement@stbernadineusa.com";
         const bccEmail = null;
 
         // Send to stbernadines@gmail.com without PDF, with CC/BCC
