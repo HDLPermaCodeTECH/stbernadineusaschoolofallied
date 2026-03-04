@@ -841,10 +841,12 @@ app.post('/send-contact', async (req, res) => {
 
         // Define CC and BCC
         const ccEmail = "placement@stbernadineusa.com";
-        const bccEmail = null;
 
-        // Send to stbernadines@gmail.com without PDF, with CC/BCC
-        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
+        // Send to main admin
+        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, null, null);
+
+        // Send separate copy to placement to guarantee delivery
+        await sendEmail(ccEmail, `[Inquiry] ${subject} - ${name} (CC Copy)`, htmlContent, null, email, null, null);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
