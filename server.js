@@ -67,7 +67,7 @@ if (process.env.GEMINI_API_KEY) {
 *   **Mission:** To serve people and strengthen healthcare services globally.
 *   **History:** Founded in 1986. Originally established to volunteer and help the community.
 *   **Location:** 591 Summit Ave Suite 410, Jersey City, NJ 07306.
-*   **Contact:** (201) 222-1116 | school@stbernadineschoolofallied.com
+*   **Contact:** (201) 222-1116 | school@stbernadineusa.com
 
 **Leadership & Team:**
 *   **Founder & CEO:** Bernadine "Belen" Samin, R.N.
@@ -210,8 +210,8 @@ const generatePDF = (data) => {
 
         doc.font('Helvetica').fontSize(9).fillColor('#888888').text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 0, 45, { align: 'right', width: 555 });
         doc.text('Phone: +1 (201) 222-1116', 0, 58, { align: 'right', width: 555 });
-        doc.text('school@stbernadineschoolofallied.com', 0, 71, { align: 'right', width: 555 });
-        doc.text('www.stbernadineschoolofallied.com', 0, 84, { align: 'right', width: 555 });
+        doc.text('school@stbernadineusa.com', 0, 71, { align: 'right', width: 555 });
+        doc.text('www.stbernadineusaservices.com', 0, 84, { align: 'right', width: 555 });
 
         doc.moveDown(4);
 
@@ -616,7 +616,7 @@ const generateInquiryPDF = (data) => {
         doc.font('Helvetica-Bold').fontSize(18).text('ST. BERNADINE', 150, 50);
         doc.fontSize(12).text('SCHOOL OF ALLIED HEALTH', 150, 75);
         doc.font('Helvetica').fontSize(10).text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 150, 95);
-        doc.text('Phone: +1 (201) 222-1116 | Email: school@stbernadineschoolofallied.com', 150, 110);
+        doc.text('Phone: +1 (201) 222-1116 | Email: school@stbernadineusa.com', 150, 110);
         doc.moveDown(3);
 
         // -- TITLE --
@@ -674,8 +674,8 @@ const generateCareRequestPDF = (data) => {
 
         doc.font('Helvetica').fontSize(9).fillColor('#888888').text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 0, 45, { align: 'right', width: 555 });
         doc.text('Phone: +1 (201) 222-1116', 0, 58, { align: 'right', width: 555 });
-        doc.text('school@stbernadineschoolofallied.com', 0, 71, { align: 'right', width: 555 });
-        doc.text('www.stbernadineschoolofallied.com', 0, 84, { align: 'right', width: 555 });
+        doc.text('school@stbernadineusa.com', 0, 71, { align: 'right', width: 555 });
+        doc.text('www.stbernadineusaservices.com', 0, 84, { align: 'right', width: 555 });
 
         // --- TITLE ---
         doc.moveDown(4);
