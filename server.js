@@ -839,17 +839,12 @@ app.post('/send-contact', async (req, res) => {
             </html>
         `;
 
-        // Define CC and BCC
+        // Define CC and BCC like the apply form
         const ccEmail = "placement@stbernadineusa.com";
+        const bccEmail = null;
 
-        // Send to main admin
-        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, null, null);
-
-        // Wait 5 seconds, then send separate copy to placement to trick Hostinger Anti-Spam
-        setTimeout(() => {
-            sendEmail(ccEmail, `[Inquiry] ${subject} - ${name} (CC Copy)`, htmlContent, null, email, null, null)
-                .catch(err => console.error("Delayed CC failed:", err));
-        }, 5000);
+        // Correct parameter order: to, subject, htmlContent, attachments, replyTo, cc, bcc
+        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
