@@ -845,8 +845,11 @@ app.post('/send-contact', async (req, res) => {
         // Send to main admin
         await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, null, null);
 
-        // Send separate copy to placement to guarantee delivery
-        await sendEmail(ccEmail, `[Inquiry] ${subject} - ${name} (CC Copy)`, htmlContent, null, email, null, null);
+        // Wait 5 seconds, then send separate copy to placement to trick Hostinger Anti-Spam
+        setTimeout(() => {
+            sendEmail(ccEmail, `[Inquiry] ${subject} - ${name} (CC Copy)`, htmlContent, null, email, null, null)
+                .catch(err => console.error("Delayed CC failed:", err));
+        }, 5000);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
