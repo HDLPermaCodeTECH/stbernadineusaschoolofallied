@@ -14,8 +14,8 @@ const app = express();
 // Middleware
 const corsOptions = {
     origin: [
-        'https://stbernadineschoolofallied.com',
-        'https://www.stbernadineschoolofallied.com',
+        'https://stbernadineusaservices.com',
+        'https://www.stbernadineusaservices.com',
         'https://hdlpermacodetech.github.io',
         'http://localhost:5500',
         'http://127.0.0.1:5500'
@@ -579,8 +579,8 @@ app.post('/send-email', upload.array('attachment'), async (req, res) => {
                                 </p>
                                 
                                 <p class="links">
-                                    <a href="https://stbernadineschoolofallied.com/privacy.html">Privacy Policy</a> &bull; 
-                                    <a href="https://stbernadineschoolofallied.com/contact.html">Contact Us</a>
+                                    <a href="https://stbernadineusaservices.com/privacy.html">Privacy Policy</a> &bull; 
+                                    <a href="https://stbernadineusaservices.com/contact.html">Contact Us</a>
                                 </p>
                                 <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                             </td>
@@ -940,8 +940,8 @@ app.post('/send-contact', async (req, res) => {
                                 </p>
                                 
                                 <p class="links">
-                                    <a href="https://stbernadineschoolofallied.com/privacy.html">Privacy Policy</a> &bull; 
-                                    <a href="https://stbernadineschoolofallied.com/contact.html">Contact Us</a>
+                                    <a href="https://stbernadineusaservices.com/privacy.html">Privacy Policy</a> &bull; 
+                                    <a href="https://stbernadineusaservices.com/contact.html">Contact Us</a>
                                 </p>
                                 <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                             </td>
