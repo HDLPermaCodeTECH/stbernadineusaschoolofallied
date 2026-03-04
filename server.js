@@ -15,7 +15,7 @@ const app = express();
 const corsOptions = {
     origin: [
         'https://stbernadineusaservices.com',
-        'https://www.stbernadineusaservices.com',
+        'https://stbernadineusaservices.com',
         'https://hdlpermacodetech.github.io',
         'http://localhost:5500',
         'http://127.0.0.1:5500'

@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.stbernadineusaservices.com/sitemap.xml
+Sitemap: https://stbernadineusaservices.com/sitemap.xml
 
 
