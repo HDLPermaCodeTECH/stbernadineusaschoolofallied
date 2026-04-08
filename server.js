@@ -215,10 +215,11 @@ if (process.env.GEMINI_API_KEY) {
     *   If the user speaks **Spanish**, reply in **Spanish**.
     *   If the user speaks **Korean**, reply in **Korean**.
     *   **Rule:** Always mirror the user's language.
-*   **IMPORTANT:** Do NOT use markdown formatting like **bold**, *italics*, or *** in your output. Use plain text only.
+*   **IMPORTANT:** Do NOT use markdown formatting like **bold** (double asterisks) or [links]. 
+*   **INSTEAD:** Use HTML tags for formatting: <b>bold</b>, <br> for line breaks, and <a href='URL'>links</a>.
 *   Ensure the response is well-spaced and not cluttered. Use line breaks to separate ideas.
 *   If a question is about the school, be an expert.
-*   If a question is general (e.g., "Who won WWII?"), answer it accurately and helpfully.` }]
+*   If a question is general (e.g., "Tell me about history" or "How to cook?"), answer it accurately and helpfully using your own vast intelligence.` }]
             }
         });
         console.log("Gemini API configured (Key trimmed).");

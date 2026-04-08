@@ -430,82 +430,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 3. Fallback: Direct Gemini API (For general/unknown queries)
+        // 3. Fallback: Secure Backend AI (For general/unknown queries)
+        // Uses the server-side Gemini configuration to protect API keys and handle general knowledge
         try {
-            // Split Key to avoid GitHub Auto-Revoke
-            const partA = 'AIzaSyCuoC-xZpAAXx';
-            const partB = 'SxyQ3JGokm-Jw7Lzz-vuE';
-            const API_KEY = partA + partB;
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`;
-
-            // Helper: Retry Fetch with Exponential Backoff
-            async function fetchWithRetry(url, options, retries = 3, backoff = 2000) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.status === 429 && retries > 0) {
-                        console.warn(`Rate limit hit. Retrying in ${backoff / 1000}s...`);
-                        await new Promise(r => setTimeout(r, backoff));
-                        return fetchWithRetry(url, options, retries - 1, backoff * 2);
-                    }
-                    return response;
-                } catch (e) {
-                    if (retries > 0) {
-                        await new Promise(r => setTimeout(r, backoff));
-                        return fetchWithRetry(url, options, retries - 1, backoff * 2);
-                    }
-                    throw e;
-                }
-            }
-
-            // Construct Knowledge Base Context
-            const knowledgeContext = Object.values(schoolKnowledge)
-                .map(item => item.response.replace(/<[^>]*>?/gm, '')) // Strip HTML for token efficiency
-                .join('\n\n');
-
-            const response = await fetchWithRetry(API_URL, {
+            const response = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: `You are St. Bernadine AI, a helpful assistant for St. Bernadine School of Allied Health in Jersey City.
-
-INSTRUCTIONS:
-1. If the user asks about the school (programs, tuition, location, etc.) AND the answer is in the SCHOOL INFORMATION below, USE it.
-2. If the user asks about the school AND the answer is NOT in the SCHOOL INFORMATION, you MUST say: "I apologize, but I don't have that specific information yet. Please contact the school directly at (201) 222-1116." DO NOT GUESS.
-3. If the user asks about GENERAL topics (World History, Science, Math, Life, etc.) that are NOT about the school, ANSWER it using your own vast knowledge.
-
-CRITICAL: NEVER use the old domain 'stbernadineusa.com'. ALWAYS use 'stbernadineschoolofallied.com'.
-
-SCHOOL INFORMATION:
-${knowledgeContext}
-
-Keep answers concise, friendly, and professional.
-IMPORTANT: Do NOT use Markdown (like **bold** or [link](url)).
-INSTEAD, use HTML tags for formatting: <b>bold</b>, <i>italics</i>, <br> for line breaks, and <a href='URL'>links</a>.
-User Question: ${input}`
-                        }]
-                    }]
-                })
+                body: JSON.stringify({ message: input })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                if (data.candidates && data.candidates.length > 0) {
-                    return data.candidates[0].content.parts[0].text;
-                }
+                return data.response;
             } else {
-                console.warn("Gemini API Error:", response.status);
+                console.warn("AI Server Error:", response.status);
                 if (response.status === 429) {
-                    return "I'm thinking too fast! 🧠💨<br>Please wait <strong>5-10 seconds</strong> and try again. (Server Busy)";
-                } else {
-                    addMessage(`System Error: ${response.status} - ${response.statusText}`, 'bot');
+                    return "I'm thinking too fast! 🧠💨<br>Please wait <strong>5-10 seconds</strong> and try again. (Rate Limited)";
+                } else if (response.status === 503) {
+                    return "My AI brain is still warming up. Please wait a moment and try again.";
                 }
+                return `System Error: ${response.status} - Please contact support if this persists.`;
             }
         } catch (e) {
-            console.log("Gemini API unreachable.", e);
-            // Final Fallback if API completely fails
-            return "I'm having trouble connecting to my brain right now (High Traffic).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
+            console.error("AI Server unreachable.", e);
+            // Final Fallback if the whole backend connection fails
+            return "I'm having trouble connecting to my brain right now (Server Offline).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
         }
 
         return "I'm not sure about that. Please try asking about our **Programs**, **Tuition**, or **Location**.";
