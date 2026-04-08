@@ -1,22 +1,22 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
 
-    # 1. Redirect /index.html to the root directory (/)
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/ [NC]
-    RewriteRule ^index\.html$ / [R=301,L]
+# 1. Redirect /index.html to the root directory (/)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.html\ HTTP/ [NC]
+RewriteRule ^index\.html$ / [R=301,L]
 
-    # 2. Externally redirect direct .html requests to the extensionless version (301)
-    # The 'REDIRECT_STATUS ^$' condition ensures this only triggers on the initial direct request,
-    # preventing an infinite loop when the internal rewrite (step 3) processes the request.
-    RewriteCond %{ENV:REDIRECT_STATUS} ^$
-    RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+# 2. Externally redirect direct .html requests to the extensionless version (301)
+# Using THE_REQUEST ensures we only trigger this on the initial client request,
+# avoiding infinite loops during the internal rewrite phase.
+RewriteCond %{THE_REQUEST} \s/+(.+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
 
-    # 3. Internally rewrite extensionless requests to append .html
-    # Proceed only if the requested path is not an existing directory
-    RewriteCond %{REQUEST_FILENAME} !-d
-    # Proceed only if the requested path is not an existing file (like .css, .js, .pdf, images)
-    RewriteCond %{REQUEST_FILENAME} !-f
-    # Proceed only if appending .html results in an actual file that exists on the server
-    RewriteCond %{REQUEST_FILENAME}.html -f
-    RewriteRule ^(.*)$ $1.html [L]
-</IfModule>
+# 3. Internally rewrite extensionless requests to append .html
+# Proceed only if the requested path is not an existing directory
+RewriteCond %{REQUEST_FILENAME} !-d
+# Proceed only if the requested path is not an existing file
+RewriteCond %{REQUEST_FILENAME} !-f
+# Proceed only if appending .html results in an actual file that exists on the server
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ /$1.html [L]
