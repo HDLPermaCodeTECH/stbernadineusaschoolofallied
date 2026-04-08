@@ -11,12 +11,20 @@
         "@google/generative-ai": "^0.24.1",
         "axios": "^1.13.5",
         "body-parser": "^1.20.2",
+        "compression": "^1.8.1",
         "cors": "^2.8.5",
         "dotenv": "^17.3.1",
         "express": "^4.18.2",
+        "express-rate-limit": "^8.3.2",
+        "express-validator": "^7.3.2",
         "form-data": "^4.0.5",
+        "helmet": "^8.1.0",
+        "hpp": "^0.2.3",
         "multer": "^2.0.2",
         "nodemailer": "^6.10.1",
         "pdfkit": "^0.17.2"
+    },
+    "devDependencies": {
+        "javascript-obfuscator": "^5.4.1"
     }
 }

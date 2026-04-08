@@ -1,5 +1,31 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- FRONTEND SECURITY LAYER ---
+    // 1. Disable Right-Click
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    // 2. Disable Common Inspect Shortcuts
+    document.addEventListener('keydown', (e) => {
+        // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+        if (
+            e.keyCode === 123 || 
+            (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
+            (e.ctrlKey && e.keyCode === 85) || 
+            (e.ctrlKey && e.keyCode === 83)
+        ) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 3. Disable Text Selection (Optional - Best Effort)
+    document.addEventListener('selectstart', (e) => e.preventDefault());
+
+    // 4. Console Security Warning
+    console.log("%cSTOP!", "color: red; font-size: 50px; font-weight: bold; text-shadow: 2px 2px black;");
+    console.log("%cThis is a browser feature intended for developers. Attempting to copy or replicate this site without permission is strictly prohibited.", "color: #055923; font-size: 18px; font-weight: bold;");
+    console.log("%cSt. Bernadine School of Allied Health - Official Security layer active.", "color: #555; font-size: 12px;");
+
     // Flag body as JS-loaded for safe animations
     document.body.classList.add('js-loaded');
 

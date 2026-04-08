@@ -59,3 +59,23 @@ I have created a zip file named `st-bernadine-deploy.zip` in your project folder
 ### Troubleshooting
 *   **500 Error?** Check the **Logs** tab in the Node.js Setup page.
 *   **"App Not Started"?** Make sure the "Application Startup File" is exactly `server.js`.
+
+---
+
+### SECURITY & MAINTENANCE
+
+1.  **File Permissions**:
+    *   For maximum security, ensure your directories are set to `755` and files to `644`.
+    *   In Hostinger File Manager, you can right-click a folder/file and select **Permissions**.
+
+2.  **Protecting .env**:
+    *   Although the `.htaccess` now blocks web access to `.env`, always ensure that this file is *not* in a publicly accessible `public_html` folder if possible (Hostinger's Node.js usually places it one level above or handles it via their environment manager).
+
+3.  **Updating Assets**:
+    *   If you make changes to `script.js` or `styles.css`, you should:
+        1.  Run `node tools/obfuscate.js` to update the protected version.
+        2.  Run `npx clean-css-cli -o asset/styles.min.css asset/styles.css` to update the minified CSS.
+        3.  Run the PowerShell script `tools/apply_security_assets.ps1` if you added new HTML files.
+
+4.  **SSL/HTTPS**:
+    *   Ensure your SSL certificate is active in Hostinger. The `.htaccess` will automatically force all users to use the secure `https://` version of your site.

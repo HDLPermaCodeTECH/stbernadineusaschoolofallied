@@ -7,6 +7,11 @@ const cors = require('cors');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const compression = require('compression');
+const hpp = require('hpp');
+const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
 const app = express();
@@ -24,19 +29,54 @@ app.use((req, res, next) => {
 });
 
 // Middleware
+// Security Middleware
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://hdlpermacodetech.github.io", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://kit.fontawesome.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ka-f.fontawesome.com"],
+            imgSrc: ["'self'", "data:", "https:", "https://img.icons8.com"],
+            connectSrc: ["'self'", "https://generativelanguage.googleapis.com", "http://localhost:3000"],
+            frameSrc: ["'self'", "https://www.google.com"],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: [],
+        },
+    },
+})); // Set security-related HTTP headers
+app.use(hpp()); // Prevent HTTP Parameter Pollution
+app.use(compression()); // Compress all responses
+
 const corsOptions = {
     origin: [
         'https://stbernadineusaservices.com',
         'https://stbernadineusaservices.com',
         'https://hdlpermacodetech.github.io',
         'http://localhost:5500',
-        'http://127.0.0.1:5500'
+        'http://127.0.0.1:5500',
+        'http://localhost:3000'
     ],
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
+
+// Global Rate Limiting
+const generalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: "Too many requests from this IP, please try again after 15 minutes"
+});
+app.use('/chat', generalLimiter);
+
+const formLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5, // limit each IP to 5 form submissions per hour
+    message: "Too many submissions from this IP, please try again after an hour"
+});
+app.use(['/send-email', '/send-contact', '/request-care', '/apply-job'], formLimiter);
 
 
 // Configure Multer for file uploads
@@ -52,12 +92,43 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type. Only PDF, JPG, and PNG are allowed.'), false);
+        }
+    }
+});
+
+// Block access to sensitive files in the root directory (Security Layer)
+app.use((req, res, next) => {
+    const sensitiveFiles = ['.env', '.git', '.htaccess', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/'];
+    if (sensitiveFiles.some(file => req.path.includes(file))) {
+        return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
+    }
+    next();
+});
 
 // Serve static files seamlessly matching extensionless URLs to .html files
 app.use(express.static(__dirname, {
     extensions: ['html']
 }));
+
+// Validation Helper
+const validate = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: "Validation failed", details: errors.array() });
+    }
+    next();
+};
 
 // --- GEMINI AI CONFIGURATION ---
 // --- GEMINI AI CONFIGURATION ---
@@ -158,7 +229,10 @@ if (process.env.GEMINI_API_KEY) {
     console.log("WARNING: GEMINI_API_KEY not found in .env. Chatbot will use local fallback.");
 }
 
-app.post('/chat', async (req, res) => {
+app.post('/chat', [
+    body('message').trim().notEmpty().withMessage('Message is required').escape(),
+    validate
+], async (req, res) => {
     try {
         if (!chatModel) {
             return res.status(503).json({ error: "Gemini API not configured" });
@@ -387,7 +461,16 @@ const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc
     }
 };
 
-app.post('/send-email', upload.array('attachment'), async (req, res) => {
+app.post('/send-email', 
+    upload.array('attachment'),
+    [
+        body('firstName').trim().notEmpty().escape(),
+        body('lastName').trim().notEmpty().escape(),
+        body('email').isEmail().normalizeEmail(),
+        body('Program').notEmpty().escape(),
+        validate
+    ],
+    async (req, res) => {
     try {
         console.log("Received form submission:", req.body);
         const data = req.body;
@@ -763,7 +846,13 @@ const generateCareRequestPDF = (data) => {
     });
 };
 
-app.post('/send-contact', async (req, res) => {
+app.post('/send-contact', [
+    body('name').trim().notEmpty().escape(),
+    body('email').isEmail().normalizeEmail(),
+    body('subject').trim().notEmpty().escape(),
+    body('message').trim().notEmpty().escape(),
+    validate
+], async (req, res) => {
     try {
         const { name, email, contact_number, subject, message } = req.body;
         console.log("Received contact Inquiry:", req.body);
@@ -975,7 +1064,13 @@ app.post('/send-contact', async (req, res) => {
     }
 });
 
-app.post('/request-care', async (req, res) => {
+app.post('/request-care', [
+    body('firstName').trim().notEmpty().escape(),
+    body('lastName').trim().notEmpty().escape(),
+    body('contactEmail').isEmail().normalizeEmail(),
+    body('careType').notEmpty().escape(),
+    validate
+], async (req, res) => {
     try {
         const {
             firstName, lastName, contactPhone, contactEmail,
@@ -1358,7 +1453,17 @@ const generateJobApplicationPDF = (data) => {
 };
 
 // --- POST ENDPOINT: APPLY FOR A JOB ---
-app.post('/apply-job', upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'applicantPhoto', maxCount: 1 }]), async (req, res) => {
+app.post('/apply-job', 
+    upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'applicantPhoto', maxCount: 1 }]), 
+    [
+        body('firstName').trim().notEmpty().escape(),
+        body('lastName').trim().notEmpty().escape(),
+        body('contactEmail').isEmail().normalizeEmail(),
+        body('position').notEmpty().escape(),
+        body('startDate').notEmpty().escape(),
+        validate
+    ],
+    async (req, res) => {
     try {
         const { firstName, lastName, contactPhone, contactEmail, address, position, startDate, coverLetter, AppMethod, SignatureData } = req.body;
 
@@ -1516,6 +1621,19 @@ if (!fs.existsSync('uploads')) {
 // Health Check
 app.get('/health', (req, res) => {
     res.status(200).send('OK');
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error("ERROR:", err.message);
+    const status = err.status || 500;
+    // Hide stack traces and internal details in production
+    const response = {
+        error: process.env.NODE_ENV === 'production' 
+            ? 'An internal server error occurred. Please try again later.' 
+            : err.message
+    };
+    res.status(status).json(response);
 });
 
 // Start Server
