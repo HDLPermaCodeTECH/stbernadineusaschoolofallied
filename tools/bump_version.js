@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const rootDir = '.'; // Running from project root
-const newVersion = '10.29';
+const newVersion = '10.32';
 
 // List of HTML files to scan (manually curated to avoid node_modules)
 const files = [
@@ -49,10 +49,15 @@ files.forEach(file => {
         let originalContent = content;
 
         // Regex to replace version query strings
-        // Matches: asset/styles.css?v=ANYTHING
-        content = content.replace(/asset\/styles\.css\?v=[0-9.]+/g, `asset/styles.css?v=${newVersion}`);
-        // Matches: asset/script.js?v=ANYTHING
-        content = content.replace(/asset\/script\.js\?v=[0-9.]+/g, `asset/script.js?v=${newVersion}`);
+        // Matches: asset/styles.css?v=ANYTHING or asset/styles.min.css?v=ANYTHING
+        content = content.replace(/asset\/styles(\.min)?\.css\?v=[0-9.]+/g, (match, p1) => {
+            return `asset/styles${p1 || ''}.css?v=${newVersion}`;
+        });
+
+        // Matches: asset/script.js?v=ANYTHING or asset/script.obfuscated.js?v=ANYTHING
+        content = content.replace(/asset\/script(\.obfuscated)?\.js\?v=[0-9.]+/g, (match, p1) => {
+            return `asset/script${p1 || ''}.js?v=${newVersion}`;
+        });
 
         // Also catch favicon versions just in case
         content = content.replace(/favicon\.png\?v=[0-9]+/g, `favicon.png?v=21`);
@@ -60,7 +65,9 @@ files.forEach(file => {
 
         // Catch direct reference without query string (add it)
         content = content.replace(/asset\/styles\.css"/g, `asset/styles.css?v=${newVersion}"`);
+        content = content.replace(/asset\/styles\.min\.css"/g, `asset/styles.min.css?v=${newVersion}"`);
         content = content.replace(/asset\/script\.js"/g, `asset/script.js?v=${newVersion}"`);
+        content = content.replace(/asset\/script\.obfuscated\.js"/g, `asset/script.obfuscated.js?v=${newVersion}"`);
 
         // Clean up double queries if they happened (e.g. ?v=10.5?v=10.5)
         content = content.replace(/\?v=[0-9.]+\?v=[0-9.]+/g, `?v=${newVersion}`);

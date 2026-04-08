@@ -231,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const topics = [
             { label: '📝 Apply Now', query: 'application' },
+            { label: '🏥 Request Care', query: 'request care' },
             { label: '📚 Programs', query: 'programs' },
             { label: '💰 Tuition', query: 'tuition' },
             { label: '🎓 Student Life', query: 'student_life' },
@@ -384,6 +385,12 @@ document.addEventListener('DOMContentLoaded', () => {
         partners: {
             keywords: ['partner', 'affiliate', 'accredit', 'approve', 'board', 'recognition'],
             response: "We are accredited and approved by:<br>✅ NJ Department of Education<br>✅ NJ Board of Nursing<br>✅ NJ Department of Health<br>✅ American Heart Association (AHA)<br>✅ AMCA (American Medical Certification Association)"
+        },
+
+        // --- Care Services ---
+        request_care: {
+            keywords: ['request care', 'home care', 'need caregiver', 'nursing care', 'health aide services', 'private duty'],
+            response: "We provide 24/7 Professional Home Care Services tailored to your needs.<br><br><strong>Our Services:</strong><br>- Companion Care<br>- Personal Care Assistance<br>- Skilled Nursing Care<br>- Respite Care<br><br>👉 <a href='request-care.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Submit a Care Request</strong></a>"
         },
 
         // --- General ---
