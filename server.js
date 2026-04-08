@@ -11,6 +11,18 @@ require('dotenv').config();
 
 const app = express();
 
+// Redirect .html to extensionless URLs for SEO
+app.use((req, res, next) => {
+    if (req.path === '/index.html') {
+        return res.redirect(301, '/' + req.url.substring(req.path.length));
+    }
+    if (req.path.endsWith('.html')) {
+        const cleanPath = req.path.slice(0, -5);
+        return res.redirect(301, cleanPath + req.url.substring(req.path.length));
+    }
+    next();
+});
+
 // Middleware
 const corsOptions = {
     origin: [
@@ -42,8 +54,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Serve static files
-app.use(express.static(__dirname));
+// Serve static files seamlessly matching extensionless URLs to .html files
+app.use(express.static(__dirname, {
+    extensions: ['html']
+}));
 
 // --- GEMINI AI CONFIGURATION ---
 // --- GEMINI AI CONFIGURATION ---
