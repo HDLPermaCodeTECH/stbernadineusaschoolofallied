@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Check for Greetings locally (faster/cheaper)
         if (lowerInput.match(/\b(hi|hello|hey|greetings|good morning|good afternoon)\b/)) {
-            return "Hello! I can help you with <strong>Program Details</strong> (CNA, HHA, etc.), <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Tuition</strong></a>, <strong>Visa Sponsorship</strong>, or tell you about our <strong>Founder</strong>. What would you like to know?";
+            return "Hello! I can help you with <strong>Professional Services</strong> (<a href='placement.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Global Placement</strong></a> & <strong>Home Care</strong>) or our <strong>Allied Health Programs</strong> (CNA, HHA, etc.). What would you like to know?";
         }
 
         // 2. PRIORITY: Check Local Knowledge Base First (Instant & Accurate)
