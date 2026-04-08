@@ -21,14 +21,13 @@ try {
         controlFlowFlatteningThreshold: 0.75,
         deadCodeInjection: true,
         deadCodeInjectionThreshold: 0.4,
-        debugProtection: true,
-        debugProtectionInterval: 2000,
+        debugProtection: false, // Disabled to prevent hangs in DevTools
         disableConsoleOutput: false,
         identifierNamesGenerator: 'hexadecimal',
         log: false,
         numbersToExpressions: true,
         renameGlobals: false,
-        selfDefending: true,
+        selfDefending: false, // Disabled for better compatibility
         simplify: true,
         splitStrings: true,
         splitStringsChunkLength: 10,
