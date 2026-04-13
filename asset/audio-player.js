@@ -4,69 +4,92 @@
  */
 
 (function() {
+    // Audio Settings
     const audioSrc = 'asset/audio/st._bernadines_anthem.mp3';
     const targetVolume = 0.3; // Volume set to 30%
-    const fadeDuration = 2000; // 2 seconds for fade in
+    const fadeDuration = 2; // 2 seconds for fade in (Web Audio uses seconds)
     const pauseBetweenLoops = 3500; // 3.5 seconds pause between loops
     
     // Create audio element
     const anthem = new Audio(audioSrc);
     anthem.loop = false; // Disable native loop to handle custom pause
-    anthem.volume = 0; // Start at 0 for fade in
+    anthem.crossOrigin = "anonymous"; // Needed for Web Audio API if audio is on different domain (good practice)
+    
+    // Web Audio API setup
+    let audioCtx = null;
+    let gainNode = null;
+    let source = null;
+    let isInitialized = false;
+
+    /**
+     * Initializes the Web Audio context on user interaction
+     */
+    const initAudio = () => {
+        if (isInitialized) return;
+        
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            gainNode = audioCtx.createGain();
+            source = audioCtx.createMediaElementSource(anthem);
+            
+            source.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            // Start gain at 0 for fade in
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            isInitialized = true;
+        } catch (e) {
+            console.error("Web Audio API not supported", e);
+        }
+    };
     
     let isFadingOut = false;
 
     /**
-     * Smoothly increases volume to target
+     * Smoothly increases volume to target using Web Audio API
      */
-    const fadeIn = (element, target, duration) => {
-        if (isFadingOut) return;
-        let currentVol = element.volume;
-        const interval = 50;
-        const steps = duration / interval;
-        const stepSize = (target - currentVol) / steps;
+    const fadeIn = (target, duration) => {
+        if (!isInitialized || isFadingOut) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
         
-        const fadeTimer = setInterval(() => {
-            currentVol += stepSize;
-            if (currentVol >= target) {
-                element.volume = target;
-                clearInterval(fadeTimer);
-            } else {
-                element.volume = Math.max(0, Math.min(target, currentVol));
-            }
-        }, interval);
+        const now = audioCtx.currentTime;
+        gainNode.gain.cancelScheduledValues(now);
+        gainNode.gain.linearRampToValueAtTime(target, now + duration);
     };
 
     /**
-     * Smoothly decreases volume to 0
+     * Smoothly decreases volume to 0 using Web Audio API
      */
-    const fadeOut = (element, duration, callback) => {
-        isFadingOut = true;
-        let currentVol = element.volume;
-        const interval = 50;
-        const steps = duration / interval;
-        const stepSize = currentVol / steps;
+    const fadeOut = (duration, callback) => {
+        if (!isInitialized) {
+            if (callback) callback();
+            return;
+        }
         
-        const fadeTimer = setInterval(() => {
-            currentVol -= stepSize;
-            if (currentVol <= 0) {
-                element.volume = 0;
-                clearInterval(fadeTimer);
-                if (callback) callback();
-                isFadingOut = false;
-            } else {
-                element.volume = Math.max(0, currentVol);
-            }
-        }, interval);
+        isFadingOut = true;
+        const now = audioCtx.currentTime;
+        gainNode.gain.cancelScheduledValues(now);
+        gainNode.gain.linearRampToValueAtTime(0, now + duration);
+        
+        setTimeout(() => {
+            if (callback) callback();
+            isFadingOut = false;
+        }, duration * 1000);
     };
 
     const tryPlay = () => {
+        initAudio();
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
         anthem.play().then(() => {
-            fadeIn(anthem, targetVolume, fadeDuration);
+            fadeIn(targetVolume, fadeDuration);
         }).catch(err => {
             const startOnInteraction = () => {
+                initAudio();
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                
                 anthem.play().then(() => {
-                    fadeIn(anthem, targetVolume, fadeDuration);
+                    fadeIn(targetVolume, fadeDuration);
                 });
                 ['click', 'scroll', 'touchstart'].forEach(ev => 
                     document.removeEventListener(ev, startOnInteraction)
@@ -82,8 +105,9 @@
     anthem.addEventListener('ended', function() {
         setTimeout(() => {
             this.currentTime = 0;
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             this.play().then(() => {
-                fadeIn(this, targetVolume, fadeDuration);
+                fadeIn(targetVolume, fadeDuration);
             });
         }, pauseBetweenLoops);
     });
@@ -91,8 +115,8 @@
     // Professional Loop Transition (Fade out near end)
     anthem.addEventListener('timeupdate', function() {
         const buffer = 2; // Start fade out 2 seconds before end
-        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended) {
-            fadeOut(this, buffer * 1000);
+        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended && isInitialized) {
+            fadeOut(buffer);
         }
     });
 
@@ -107,7 +131,7 @@
         if (isInternal && !isSamePage && !link.target && !e.ctrlKey && !e.shiftKey) {
             e.preventDefault();
             const destination = link.href;
-            fadeOut(anthem, 800, () => {
+            fadeOut(0.8, () => {
                 window.location.href = destination;
             });
         }
