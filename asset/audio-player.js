@@ -7,11 +7,11 @@
     const audioSrc = 'asset/audio/st._bernadines_anthem.mp3';
     const targetVolume = 0.3; // Volume set to 30%
     const fadeDuration = 2000; // 2 seconds for fade in
-    const fadeOutDuration = 1000; // 1 second for fade out
+    const pauseBetweenLoops = 3500; // 3.5 seconds pause between loops
     
     // Create audio element
     const anthem = new Audio(audioSrc);
-    anthem.loop = true;
+    anthem.loop = false; // Disable native loop to handle custom pause
     anthem.volume = 0; // Start at 0 for fade in
     
     let isFadingOut = false;
@@ -78,15 +78,21 @@
         });
     };
 
-    // Professional Loop Transition (Fade out near end, fade in at start)
+    // Handle end of audio with a 3.5s pause
+    anthem.addEventListener('ended', function() {
+        setTimeout(() => {
+            this.currentTime = 0;
+            this.play().then(() => {
+                fadeIn(this, targetVolume, fadeDuration);
+            });
+        }, pauseBetweenLoops);
+    });
+
+    // Professional Loop Transition (Fade out near end)
     anthem.addEventListener('timeupdate', function() {
         const buffer = 2; // Start fade out 2 seconds before end
-        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut) {
+        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended) {
             fadeOut(this, buffer * 1000);
-        }
-        // When it loops back to start
-        if (this.currentTime < 1 && this.volume < targetVolume && !isFadingOut) {
-            fadeIn(this, targetVolume, fadeDuration);
         }
     });
 
@@ -95,9 +101,8 @@
         const link = e.target.closest('a');
         if (!link || !link.href) return;
         
-        // Check if it's an internal link
         const isInternal = link.href.startsWith(window.location.origin) || link.href.startsWith('/') || !link.href.includes('://');
-        const isSamePage = link.getAttribute('href').startsWith('#');
+        const isSamePage = link.getAttribute('href') && link.getAttribute('href').startsWith('#');
 
         if (isInternal && !isSamePage && !link.target && !e.ctrlKey && !e.shiftKey) {
             e.preventDefault();
