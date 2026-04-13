@@ -5,17 +5,16 @@
 
 (function() {
     // Audio Settings
-    // Use an absolute-ish path for reliable loading across all page depths
-    const audioSrc = window.location.origin + '/asset/audio/st._bernadines_anthem.mp3';
+    // Relative path is most stable for subdirectory hosting (GitHub Pages / Hostinger)
+    const audioSrc = 'asset/audio/st._bernadines_anthem.mp3';
     const targetVolume = 0.3; 
     const fadeDuration = 2; 
     const pauseBetweenLoops = 3500; 
     
     // Audio element setup
-    const anthem = new Audio();
-    anthem.src = audioSrc;
+    const anthem = new Audio(audioSrc);
     anthem.loop = false;
-    anthem.preload = 'auto'; // Hint to browser to start loading
+    anthem.preload = 'auto';
     
     // Web Audio API state
     let audioCtx = null;
@@ -137,37 +136,33 @@
     };
 
     const tryPlay = () => {
-        // First, check if audio is already playing to avoid overlapping
+        // Prevent overlapping instances
         if (!anthem.paused) return;
 
-        // Try standard play (will fail on mobile without gesture)
+        // Start playback
         anthem.play().then(() => {
-            initAudio(); // Initialize graph if play succeeds (PC normally)
+            // If play succeeds, initialize the volume cap (PC behavior)
+            initAudio();
             fadeIn(targetVolume, fadeDuration);
         }).catch(() => {
-            // GESTURE REQUIRED: Add heavy-duty interaction listeners
-            console.log("Gesture required for audio. Waiting for interaction...");
-            
-            const startOnInteraction = () => {
-                console.log("Interaction detected. Starting audio...");
-                
-                // 1. Initialize Graph FIRST inside the click stack
+            // MOBILE/AUTOPLAY BLOCK: Wait for any user interaction
+            const forceStart = () => {
+                // Initialize Web Audio graph for 30% volume limit
                 initAudio();
                 
-                // 2. Play the anthem
+                // Play audio
                 anthem.play().then(() => {
                     fadeIn(targetVolume, fadeDuration);
-                    console.log("Playback started successfully.");
-                }).catch(e => console.error("Final playback attempt failed:", e));
+                }).catch(e => console.warn("Playback failed on interaction:", e));
 
-                // 3. Remove listeners
+                // Clean up all possible listeners
                 ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
-                    document.removeEventListener(ev, startOnInteraction)
+                    document.removeEventListener(ev, forceStart)
                 );
             };
 
             ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
-                document.addEventListener(ev, startOnInteraction, { passive: true })
+                document.addEventListener(ev, forceStart, { passive: true })
             );
         });
     };
