@@ -32,17 +32,19 @@
         if (isInitialized && gainNode) return true;
         
         try {
-            console.log("Initializing Lazy Web Audio...");
+            console.log("Initializing Web Audio Processing...");
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Resume immediately if suspended (common on Safari)
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
 
+            // IMPORTANT: Ensure the audio element has full volume source signal 
+            // before routing it through the gain node (for mobile compatibility).
+            anthem.volume = 1.0;
+
             gainNode = audioCtx.createGain();
             
-            // Create source only once
             if (!source) {
                 source = audioCtx.createMediaElementSource(anthem);
             }
@@ -50,15 +52,14 @@
             source.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             
-            // Start at 0
+            // Set volume to 0 initially for the fade in
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
             
             isInitialized = true;
             useWebAudio = true;
-            console.log("Web Audio Graph connected and ready.");
             return true;
         } catch (e) {
-            console.warn("Lazy Init Failed. Using Standard Audio Fallback.", e);
+            console.warn("Web Audio Routing Failed. Falling back to standard hardware output.", e);
             useWebAudio = false;
             isInitialized = true; 
             return false;
@@ -136,26 +137,24 @@
     };
 
     const tryPlay = () => {
-        // Prevent overlapping instances
         if (!anthem.paused) return;
 
-        // Start playback
         anthem.play().then(() => {
-            // If play succeeds, initialize the volume cap (PC behavior)
-            initAudio();
+            initAudio(); 
             fadeIn(targetVolume, fadeDuration);
         }).catch(() => {
-            // MOBILE/AUTOPLAY BLOCK: Wait for any user interaction
             const forceStart = () => {
-                // Initialize Web Audio graph for 30% volume limit
-                initAudio();
-                
-                // Play audio
+                // 1. Play BEFORE connecting (Safari Mobile fix)
                 anthem.play().then(() => {
+                    // 2. Connect the volume cap AFTER the stream is active
+                    initAudio();
                     fadeIn(targetVolume, fadeDuration);
-                }).catch(e => console.warn("Playback failed on interaction:", e));
+                }).catch(e => {
+                    // Final fallback: keep playing even if volume cap fails
+                    console.warn("Playback stream active, volume routing failed.", e);
+                    anthem.volume = targetVolume;
+                });
 
-                // Clean up all possible listeners
                 ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
                     document.removeEventListener(ev, forceStart)
                 );
