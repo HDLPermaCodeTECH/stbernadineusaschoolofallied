@@ -4,164 +4,76 @@
  */
 
 (function() {
-    // Audio Settings
-    // Relative path is most stable for subdirectory hosting (GitHub Pages / Hostinger)
     const audioSrc = 'asset/audio/st._bernadines_anthem.mp3';
-    const targetVolume = 0.3; 
-    const fadeDuration = 2; 
-    const pauseBetweenLoops = 3500; 
+    const targetVolume = 0.3; // Volume set to 30%
+    const fadeDuration = 2000; // 2 seconds for fade in
+    const pauseBetweenLoops = 3500; // 3.5 seconds pause between loops
     
-    // Audio element setup
+    // Create audio element
     const anthem = new Audio(audioSrc);
-    anthem.loop = false;
-    anthem.preload = 'auto';
-    
-    // Web Audio API state
-    let audioCtx = null;
-    let gainNode = null;
-    let source = null;
-    let isInitialized = false;
-    let useWebAudio = true; 
-    let isFadingOut = false;
-
-    /**
-     * Initializes the Web Audio graph. 
-     * IMPORTANT: Must be called within a user interaction context for mobile.
-     */
-    const initAudio = () => {
-        if (isInitialized && gainNode) return true;
-        
-        try {
-            console.log("Initializing Web Audio Processing...");
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            // IMPORTANT: Ensure the audio element has full volume source signal 
-            // before routing it through the gain node (for mobile compatibility).
-            anthem.volume = 1.0;
-
-            gainNode = audioCtx.createGain();
-            
-            if (!source) {
-                source = audioCtx.createMediaElementSource(anthem);
-            }
-            
-            source.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
-            // Set volume to 0 initially for the fade in
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            
-            isInitialized = true;
-            useWebAudio = true;
-            return true;
-        } catch (e) {
-            console.warn("Web Audio Routing Failed. Falling back to standard hardware output.", e);
-            useWebAudio = false;
-            isInitialized = true; 
-            return false;
-        }
-    };
+    anthem.loop = false; // Disable native loop to handle custom pause
+    anthem.volume = 0; // Start at 0 for fade in
     
     let isFadingOut = false;
 
     /**
      * Smoothly increases volume to target
      */
-    const fadeIn = (target, duration) => {
+    const fadeIn = (element, target, duration) => {
         if (isFadingOut) return;
+        let currentVol = element.volume;
+        const interval = 50;
+        const steps = duration / interval;
+        const stepSize = (target - currentVol) / steps;
         
-        if (useWebAudio && gainNode) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const now = audioCtx.currentTime;
-            gainNode.gain.cancelScheduledValues(now);
-            gainNode.gain.setValueAtTime(gainNode.gain.value, now);
-            gainNode.gain.linearRampToValueAtTime(target, now + duration);
-        } else {
-            // Standard Fallback Fade In
-            let currentVol = anthem.volume;
-            const interval = 50;
-            const steps = (duration * 1000) / interval;
-            const stepSize = (target - currentVol) / steps;
-            
-            const fadeTimer = setInterval(() => {
-                currentVol += stepSize;
-                if (currentVol >= target) {
-                    anthem.volume = target;
-                    clearInterval(fadeTimer);
-                } else {
-                    anthem.volume = Math.max(0, Math.min(target, currentVol));
-                }
-            }, interval);
-        }
+        const fadeTimer = setInterval(() => {
+            currentVol += stepSize;
+            if (currentVol >= target) {
+                element.volume = target;
+                clearInterval(fadeTimer);
+            } else {
+                element.volume = Math.max(0, Math.min(target, currentVol));
+            }
+        }, interval);
     };
 
     /**
      * Smoothly decreases volume to 0
      */
-    const fadeOut = (duration, callback) => {
+    const fadeOut = (element, duration, callback) => {
         isFadingOut = true;
-
-        if (useWebAudio && gainNode) {
-            const now = audioCtx.currentTime;
-            gainNode.gain.cancelScheduledValues(now);
-            gainNode.gain.setValueAtTime(gainNode.gain.value, now);
-            gainNode.gain.linearRampToValueAtTime(0, now + duration);
-            
-            setTimeout(() => {
+        let currentVol = element.volume;
+        const interval = 50;
+        const steps = duration / interval;
+        const stepSize = currentVol / steps;
+        
+        const fadeTimer = setInterval(() => {
+            currentVol -= stepSize;
+            if (currentVol <= 0) {
+                element.volume = 0;
+                clearInterval(fadeTimer);
                 if (callback) callback();
                 isFadingOut = false;
-            }, duration * 1000);
-        } else {
-            // Standard Fallback Fade Out
-            let currentVol = anthem.volume;
-            const interval = 50;
-            const steps = (duration * 1000) / interval;
-            const stepSize = currentVol / steps;
-            
-            const fadeTimer = setInterval(() => {
-                currentVol -= stepSize;
-                if (currentVol <= 0) {
-                    anthem.volume = 0;
-                    clearInterval(fadeTimer);
-                    if (callback) callback();
-                    isFadingOut = false;
-                } else {
-                    anthem.volume = Math.max(0, currentVol);
-                }
-            }, interval);
-        }
+            } else {
+                element.volume = Math.max(0, currentVol);
+            }
+        }, interval);
     };
 
     const tryPlay = () => {
-        if (!anthem.paused) return;
-
         anthem.play().then(() => {
-            initAudio(); 
-            fadeIn(targetVolume, fadeDuration);
-        }).catch(() => {
-            const forceStart = () => {
-                // 1. Play BEFORE connecting (Safari Mobile fix)
+            fadeIn(anthem, targetVolume, fadeDuration);
+        }).catch(err => {
+            const startOnInteraction = () => {
                 anthem.play().then(() => {
-                    // 2. Connect the volume cap AFTER the stream is active
-                    initAudio();
-                    fadeIn(targetVolume, fadeDuration);
-                }).catch(e => {
-                    // Final fallback: keep playing even if volume cap fails
-                    console.warn("Playback stream active, volume routing failed.", e);
-                    anthem.volume = targetVolume;
+                    fadeIn(anthem, targetVolume, fadeDuration);
                 });
-
-                ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
-                    document.removeEventListener(ev, forceStart)
+                ['click', 'scroll', 'touchstart'].forEach(ev => 
+                    document.removeEventListener(ev, startOnInteraction)
                 );
             };
-
-            ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
-                document.addEventListener(ev, forceStart, { passive: true })
+            ['click', 'scroll', 'touchstart'].forEach(ev => 
+                document.addEventListener(ev, startOnInteraction)
             );
         });
     };
@@ -170,9 +82,8 @@
     anthem.addEventListener('ended', function() {
         setTimeout(() => {
             this.currentTime = 0;
-            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             this.play().then(() => {
-                fadeIn(targetVolume, fadeDuration);
+                fadeIn(this, targetVolume, fadeDuration);
             });
         }, pauseBetweenLoops);
     });
@@ -180,8 +91,8 @@
     // Professional Loop Transition (Fade out near end)
     anthem.addEventListener('timeupdate', function() {
         const buffer = 2; // Start fade out 2 seconds before end
-        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended && isInitialized) {
-            fadeOut(buffer);
+        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended) {
+            fadeOut(this, buffer * 1000);
         }
     });
 
@@ -196,7 +107,7 @@
         if (isInternal && !isSamePage && !link.target && !e.ctrlKey && !e.shiftKey) {
             e.preventDefault();
             const destination = link.href;
-            fadeOut(0.8, () => {
+            fadeOut(anthem, 800, () => {
                 window.location.href = destination;
             });
         }
