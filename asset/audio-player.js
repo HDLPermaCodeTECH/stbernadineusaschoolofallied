@@ -5,48 +5,64 @@
 
 (function() {
     // Audio Settings
-    const audioSrc = 'asset/audio/st._bernadines_anthem.mp3';
-    const targetVolume = 0.3; // Volume set to 30%
-    const fadeDuration = 2; // 2 seconds for fade in (Web Audio uses seconds)
-    const pauseBetweenLoops = 3500; // 3.5 seconds pause between loops
+    // Use an absolute-ish path for reliable loading across all page depths
+    const audioSrc = window.location.origin + '/asset/audio/st._bernadines_anthem.mp3';
+    const targetVolume = 0.3; 
+    const fadeDuration = 2; 
+    const pauseBetweenLoops = 3500; 
     
     // Audio element setup
-    const anthem = new Audio(audioSrc);
+    const anthem = new Audio();
+    anthem.src = audioSrc;
     anthem.loop = false;
-    // Removed crossOrigin = "anonymous" to prevent CORS mutes on mobile
+    anthem.preload = 'auto'; // Hint to browser to start loading
     
-    // Web Audio API setup
+    // Web Audio API state
     let audioCtx = null;
     let gainNode = null;
     let source = null;
     let isInitialized = false;
-    let useWebAudio = true; // Flag for fallback
+    let useWebAudio = true; 
+    let isFadingOut = false;
 
     /**
-     * Initializes the Web Audio context on user interaction
+     * Initializes the Web Audio graph. 
+     * IMPORTANT: Must be called within a user interaction context for mobile.
      */
     const initAudio = () => {
-        if (isInitialized) return;
+        if (isInitialized && gainNode) return true;
         
         try {
+            console.log("Initializing Lazy Web Audio...");
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            // Resume immediately if suspended (common on Safari)
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
 
             gainNode = audioCtx.createGain();
-            source = audioCtx.createMediaElementSource(anthem);
+            
+            // Create source only once
+            if (!source) {
+                source = audioCtx.createMediaElementSource(anthem);
+            }
             
             source.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             
-            // Explicitly set initial value before any ramps
+            // Start at 0
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            
             isInitialized = true;
-            console.log("Web Audio API initialized successfully.");
+            useWebAudio = true;
+            console.log("Web Audio Graph connected and ready.");
+            return true;
         } catch (e) {
-            console.warn("Web Audio API failed or not supported. Falling back to standard audio.", e);
+            console.warn("Lazy Init Failed. Using Standard Audio Fallback.", e);
             useWebAudio = false;
-            isInitialized = true; // Mark as initialized so we don't keep trying
-            anthem.volume = 0; // Standard fallback starting point
+            isInitialized = true; 
+            return false;
         }
     };
     
@@ -121,25 +137,37 @@
     };
 
     const tryPlay = () => {
-        initAudio();
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        // First, check if audio is already playing to avoid overlapping
+        if (!anthem.paused) return;
 
+        // Try standard play (will fail on mobile without gesture)
         anthem.play().then(() => {
+            initAudio(); // Initialize graph if play succeeds (PC normally)
             fadeIn(targetVolume, fadeDuration);
-        }).catch(err => {
+        }).catch(() => {
+            // GESTURE REQUIRED: Add heavy-duty interaction listeners
+            console.log("Gesture required for audio. Waiting for interaction...");
+            
             const startOnInteraction = () => {
-                initAudio();
-                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                console.log("Interaction detected. Starting audio...");
                 
+                // 1. Initialize Graph FIRST inside the click stack
+                initAudio();
+                
+                // 2. Play the anthem
                 anthem.play().then(() => {
                     fadeIn(targetVolume, fadeDuration);
-                });
-                ['click', 'scroll', 'touchstart'].forEach(ev => 
+                    console.log("Playback started successfully.");
+                }).catch(e => console.error("Final playback attempt failed:", e));
+
+                // 3. Remove listeners
+                ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
                     document.removeEventListener(ev, startOnInteraction)
                 );
             };
-            ['click', 'scroll', 'touchstart'].forEach(ev => 
-                document.addEventListener(ev, startOnInteraction)
+
+            ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
+                document.addEventListener(ev, startOnInteraction, { passive: true })
             );
         });
     };
