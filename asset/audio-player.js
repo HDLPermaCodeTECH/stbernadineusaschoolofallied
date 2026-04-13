@@ -5,30 +5,34 @@
 
 (function() {
     const audioSrc = 'asset/audio/st._bernadines_anthem.mp3';
-    const targetVolume = 0.5;
+    const targetVolume = 0.3; // Volume set to 30%
     const fadeDuration = 2000; // 2 seconds for fade in
-    const fadeOutDuration = 1000; // 1 second for fade out on navigation
+    const fadeOutDuration = 1000; // 1 second for fade out
     
     // Create audio element
     const anthem = new Audio(audioSrc);
     anthem.loop = true;
     anthem.volume = 0; // Start at 0 for fade in
     
+    let isFadingOut = false;
+
     /**
      * Smoothly increases volume to target
      */
     const fadeIn = (element, target, duration) => {
-        let currentVolume = 0;
-        const interval = 50; // Update every 50ms
-        const step = target / (duration / interval);
+        if (isFadingOut) return;
+        let currentVol = element.volume;
+        const interval = 50;
+        const steps = duration / interval;
+        const stepSize = (target - currentVol) / steps;
         
         const fadeTimer = setInterval(() => {
-            currentVolume += step;
-            if (currentVolume >= target) {
+            currentVol += stepSize;
+            if (currentVol >= target) {
                 element.volume = target;
                 clearInterval(fadeTimer);
             } else {
-                element.volume = currentVolume;
+                element.volume = Math.max(0, Math.min(target, currentVol));
             }
         }, interval);
     };
@@ -37,18 +41,21 @@
      * Smoothly decreases volume to 0
      */
     const fadeOut = (element, duration, callback) => {
-        let currentVolume = element.volume;
+        isFadingOut = true;
+        let currentVol = element.volume;
         const interval = 50;
-        const step = currentVolume / (duration / interval);
+        const steps = duration / interval;
+        const stepSize = currentVol / steps;
         
         const fadeTimer = setInterval(() => {
-            currentVolume -= step;
-            if (currentVolume <= 0) {
+            currentVol -= stepSize;
+            if (currentVol <= 0) {
                 element.volume = 0;
                 clearInterval(fadeTimer);
                 if (callback) callback();
+                isFadingOut = false;
             } else {
-                element.volume = currentVolume;
+                element.volume = Math.max(0, currentVol);
             }
         }, interval);
     };
@@ -57,29 +64,45 @@
         anthem.play().then(() => {
             fadeIn(anthem, targetVolume, fadeDuration);
         }).catch(err => {
-            // Autoplay blocked - wait for user interaction
             const startOnInteraction = () => {
                 anthem.play().then(() => {
                     fadeIn(anthem, targetVolume, fadeDuration);
                 });
-                document.removeEventListener('click', startOnInteraction);
-                document.removeEventListener('scroll', startOnInteraction);
-                document.removeEventListener('touchstart', startOnInteraction);
+                ['click', 'scroll', 'touchstart'].forEach(ev => 
+                    document.removeEventListener(ev, startOnInteraction)
+                );
             };
-            
-            document.addEventListener('click', startOnInteraction);
-            document.addEventListener('scroll', startOnInteraction);
-            document.addEventListener('touchstart', startOnInteraction);
+            ['click', 'scroll', 'touchstart'].forEach(ev => 
+                document.addEventListener(ev, startOnInteraction)
+            );
         });
     };
+
+    // Professional Loop Transition (Fade out near end, fade in at start)
+    anthem.addEventListener('timeupdate', function() {
+        const buffer = 2; // Start fade out 2 seconds before end
+        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut) {
+            fadeOut(this, buffer * 1000);
+        }
+        // When it loops back to start
+        if (this.currentTime < 1 && this.volume < targetVolume && !isFadingOut) {
+            fadeIn(this, targetVolume, fadeDuration);
+        }
+    });
 
     // Handle smooth Fade Out on page navigation
     document.addEventListener('click', (e) => {
         const link = e.target.closest('a');
-        if (link && link.href && link.href.includes(window.location.origin) && !link.target && !e.ctrlKey && !e.shiftKey) {
+        if (!link || !link.href) return;
+        
+        // Check if it's an internal link
+        const isInternal = link.href.startsWith(window.location.origin) || link.href.startsWith('/') || !link.href.includes('://');
+        const isSamePage = link.getAttribute('href').startsWith('#');
+
+        if (isInternal && !isSamePage && !link.target && !e.ctrlKey && !e.shiftKey) {
             e.preventDefault();
             const destination = link.href;
-            fadeOut(anthem, fadeOutDuration, () => {
+            fadeOut(anthem, 800, () => {
                 window.location.href = destination;
             });
         }
