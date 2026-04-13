@@ -4,76 +4,148 @@
  */
 
 (function() {
+    // Audio Settings
+    // Relative path for compatibility with all domains and subdirectories
     const audioSrc = 'asset/audio/st._bernadines_anthem.mp3';
-    const targetVolume = 0.3; // Volume set to 30%
-    const fadeDuration = 2000; // 2 seconds for fade in
-    const pauseBetweenLoops = 3500; // 3.5 seconds pause between loops
-    
+    const targetVolume = 0.3; 
+    const fadeDuration = 2; // seconds for Web Audio, converts for fallback
+    const pauseBetweenLoops = 3500; 
+
     // Create audio element
     const anthem = new Audio(audioSrc);
-    anthem.loop = false; // Disable native loop to handle custom pause
-    anthem.volume = 0; // Start at 0 for fade in
-    
+    anthem.loop = false;
+    anthem.preload = 'auto';
+
+    // Professional Audio State
+    let audioCtx = null;
+    let gainNode = null;
+    let source = null;
+    let isInitialized = false;
+    let useWebAudio = false; 
     let isFadingOut = false;
+
+    /**
+     * Tries to initialize the professional volume system (Web Audio)
+     * Must be called within a user interaction context.
+     */
+    const initWebAudio = () => {
+        if (isInitialized) return useWebAudio;
+        
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            gainNode = audioCtx.createGain();
+            source = audioCtx.createMediaElementSource(anthem);
+            
+            source.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            // Start at 0 for fade in
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            
+            isInitialized = true;
+            useWebAudio = true;
+            return true;
+        } catch (e) {
+            console.warn("Professional audio blocked. Using standard playback fallback.", e);
+            isInitialized = true;
+            useWebAudio = false;
+            return false;
+        }
+    };
 
     /**
      * Smoothly increases volume to target
      */
-    const fadeIn = (element, target, duration) => {
+    const fadeIn = (target, durationSec) => {
         if (isFadingOut) return;
-        let currentVol = element.volume;
-        const interval = 50;
-        const steps = duration / interval;
-        const stepSize = (target - currentVol) / steps;
-        
-        const fadeTimer = setInterval(() => {
-            currentVol += stepSize;
-            if (currentVol >= target) {
-                element.volume = target;
-                clearInterval(fadeTimer);
-            } else {
-                element.volume = Math.max(0, Math.min(target, currentVol));
-            }
-        }, interval);
+
+        if (useWebAudio && gainNode) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const now = audioCtx.currentTime;
+            gainNode.gain.cancelScheduledValues(now);
+            gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+            gainNode.gain.linearRampToValueAtTime(target, now + durationSec);
+        } else {
+            // Standard Fallback Fade
+            let currentVol = anthem.volume;
+            const interval = 50;
+            const steps = (durationSec * 1000) / interval;
+            const stepSize = (target - currentVol) / steps;
+            
+            const fadeTimer = setInterval(() => {
+                currentVol += stepSize;
+                if (currentVol >= target) {
+                    anthem.volume = target;
+                    clearInterval(fadeTimer);
+                } else {
+                    anthem.volume = Math.max(0, Math.min(target, currentVol));
+                }
+            }, interval);
+        }
     };
 
     /**
      * Smoothly decreases volume to 0
      */
-    const fadeOut = (element, duration, callback) => {
+    const fadeOut = (durationSec, callback) => {
         isFadingOut = true;
-        let currentVol = element.volume;
-        const interval = 50;
-        const steps = duration / interval;
-        const stepSize = currentVol / steps;
-        
-        const fadeTimer = setInterval(() => {
-            currentVol -= stepSize;
-            if (currentVol <= 0) {
-                element.volume = 0;
-                clearInterval(fadeTimer);
+
+        if (useWebAudio && gainNode) {
+            const now = audioCtx.currentTime;
+            gainNode.gain.cancelScheduledValues(now);
+            gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + durationSec);
+            
+            setTimeout(() => {
                 if (callback) callback();
                 isFadingOut = false;
-            } else {
-                element.volume = Math.max(0, currentVol);
-            }
-        }, interval);
+            }, durationSec * 1000);
+        } else {
+            // Standard Fallback Fade
+            let currentVol = anthem.volume;
+            const interval = 50;
+            const steps = (durationSec * 1000) / interval;
+            const stepSize = currentVol / steps;
+            
+            const fadeTimer = setInterval(() => {
+                currentVol -= stepSize;
+                if (currentVol <= 0) {
+                    anthem.volume = 0;
+                    clearInterval(fadeTimer);
+                    if (callback) callback();
+                    isFadingOut = false;
+                } else {
+                    anthem.volume = Math.max(0, currentVol);
+                }
+            }, interval);
+        }
     };
 
     const tryPlay = () => {
+        if (!anthem.paused) return;
+
         anthem.play().then(() => {
-            fadeIn(anthem, targetVolume, fadeDuration);
-        }).catch(err => {
-            const startOnInteraction = () => {
+            // Success (usually PC)
+            fadeIn(targetVolume, fadeDuration);
+        }).catch(() => {
+            // Interaction required (Mobile)
+            const handleInteraction = () => {
+                // Initialize professional system on first touch
+                initWebAudio();
+                
                 anthem.play().then(() => {
-                    fadeIn(anthem, targetVolume, fadeDuration);
+                    fadeIn(targetVolume, fadeDuration);
                 });
-                ['click', 'scroll', 'touchstart'].forEach(ev => 
-                    document.removeEventListener(ev, startOnInteraction)
+
+                ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
+                    document.removeEventListener(ev, handleInteraction)
                 );
             };
-            ['click', 'scroll', 'touchstart'].forEach(ev => 
-                document.addEventListener(ev, startOnInteraction)
+
+            ['click', 'scroll', 'touchstart', 'mousedown', 'keydown'].forEach(ev => 
+                document.addEventListener(ev, handleInteraction, { passive: true })
             );
         });
     };
@@ -83,7 +155,7 @@
         setTimeout(() => {
             this.currentTime = 0;
             this.play().then(() => {
-                fadeIn(this, targetVolume, fadeDuration);
+                fadeIn(targetVolume, fadeDuration);
             });
         }, pauseBetweenLoops);
     });
@@ -92,7 +164,7 @@
     anthem.addEventListener('timeupdate', function() {
         const buffer = 2; // Start fade out 2 seconds before end
         if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended) {
-            fadeOut(this, buffer * 1000);
+            fadeOut(buffer);
         }
     });
 
@@ -105,15 +177,15 @@
         const isSamePage = link.getAttribute('href') && link.getAttribute('href').startsWith('#');
 
         if (isInternal && !isSamePage && !link.target && !e.ctrlKey && !e.shiftKey) {
-            e.preventDefault();
             const destination = link.href;
-            fadeOut(anthem, 800, () => {
+            e.preventDefault();
+            fadeOut(0.8, () => {
                 window.location.href = destination;
             });
         }
     });
 
-    // Attempt playback when the page is ready
+    // Launch based on page state
     if (document.readyState === 'complete') {
         tryPlay();
     } else {
