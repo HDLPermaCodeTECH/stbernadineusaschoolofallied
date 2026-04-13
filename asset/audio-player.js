@@ -10,16 +10,17 @@
     const fadeDuration = 2; // 2 seconds for fade in (Web Audio uses seconds)
     const pauseBetweenLoops = 3500; // 3.5 seconds pause between loops
     
-    // Create audio element
+    // Audio element setup
     const anthem = new Audio(audioSrc);
-    anthem.loop = false; // Disable native loop to handle custom pause
-    anthem.crossOrigin = "anonymous"; // Needed for Web Audio API if audio is on different domain (good practice)
+    anthem.loop = false;
+    // Removed crossOrigin = "anonymous" to prevent CORS mutes on mobile
     
     // Web Audio API setup
     let audioCtx = null;
     let gainNode = null;
     let source = null;
     let isInitialized = false;
+    let useWebAudio = true; // Flag for fallback
 
     /**
      * Initializes the Web Audio context on user interaction
@@ -29,52 +30,94 @@
         
         try {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
             gainNode = audioCtx.createGain();
             source = audioCtx.createMediaElementSource(anthem);
             
             source.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             
-            // Start gain at 0 for fade in
+            // Explicitly set initial value before any ramps
             gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
             isInitialized = true;
+            console.log("Web Audio API initialized successfully.");
         } catch (e) {
-            console.error("Web Audio API not supported", e);
+            console.warn("Web Audio API failed or not supported. Falling back to standard audio.", e);
+            useWebAudio = false;
+            isInitialized = true; // Mark as initialized so we don't keep trying
+            anthem.volume = 0; // Standard fallback starting point
         }
     };
     
     let isFadingOut = false;
 
     /**
-     * Smoothly increases volume to target using Web Audio API
+     * Smoothly increases volume to target
      */
     const fadeIn = (target, duration) => {
-        if (!isInitialized || isFadingOut) return;
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (isFadingOut) return;
         
-        const now = audioCtx.currentTime;
-        gainNode.gain.cancelScheduledValues(now);
-        gainNode.gain.linearRampToValueAtTime(target, now + duration);
+        if (useWebAudio && gainNode) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const now = audioCtx.currentTime;
+            gainNode.gain.cancelScheduledValues(now);
+            gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+            gainNode.gain.linearRampToValueAtTime(target, now + duration);
+        } else {
+            // Standard Fallback Fade In
+            let currentVol = anthem.volume;
+            const interval = 50;
+            const steps = (duration * 1000) / interval;
+            const stepSize = (target - currentVol) / steps;
+            
+            const fadeTimer = setInterval(() => {
+                currentVol += stepSize;
+                if (currentVol >= target) {
+                    anthem.volume = target;
+                    clearInterval(fadeTimer);
+                } else {
+                    anthem.volume = Math.max(0, Math.min(target, currentVol));
+                }
+            }, interval);
+        }
     };
 
     /**
-     * Smoothly decreases volume to 0 using Web Audio API
+     * Smoothly decreases volume to 0
      */
     const fadeOut = (duration, callback) => {
-        if (!isInitialized) {
-            if (callback) callback();
-            return;
-        }
-        
         isFadingOut = true;
-        const now = audioCtx.currentTime;
-        gainNode.gain.cancelScheduledValues(now);
-        gainNode.gain.linearRampToValueAtTime(0, now + duration);
-        
-        setTimeout(() => {
-            if (callback) callback();
-            isFadingOut = false;
-        }, duration * 1000);
+
+        if (useWebAudio && gainNode) {
+            const now = audioCtx.currentTime;
+            gainNode.gain.cancelScheduledValues(now);
+            gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + duration);
+            
+            setTimeout(() => {
+                if (callback) callback();
+                isFadingOut = false;
+            }, duration * 1000);
+        } else {
+            // Standard Fallback Fade Out
+            let currentVol = anthem.volume;
+            const interval = 50;
+            const steps = (duration * 1000) / interval;
+            const stepSize = currentVol / steps;
+            
+            const fadeTimer = setInterval(() => {
+                currentVol -= stepSize;
+                if (currentVol <= 0) {
+                    anthem.volume = 0;
+                    clearInterval(fadeTimer);
+                    if (callback) callback();
+                    isFadingOut = false;
+                } else {
+                    anthem.volume = Math.max(0, currentVol);
+                }
+            }, interval);
+        }
     };
 
     const tryPlay = () => {
