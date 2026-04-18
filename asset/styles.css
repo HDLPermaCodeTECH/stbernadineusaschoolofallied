@@ -1126,10 +1126,17 @@ footer {
         padding-right: 15px !important;
     }
     
+    .slide {
+        background-position: center 25% !important; /* Adjust focus to better show models' faces */
+    }
+    
     .hero-content {
         padding-left: 0;
         padding-right: 0;
-        margin-left: 0 !important;
+        margin-left: auto !important; /* Center the box */
+        margin-right: auto !important; /* Center the box */
+        align-items: center !important; /* Center items */
+        text-align: center !important; /* Center text */
     }
     
     .hero h1 {
@@ -1139,7 +1146,8 @@ footer {
 
     .typing-container {
         height: 14rem; /* Adjusted for mobile wrapping */
-        align-items: flex-start;
+        align-items: center; /* Center vertically in fixed height */
+        justify-content: center; /* Center horizontally */
         padding-top: 10px;
     }
     
@@ -1151,10 +1159,12 @@ footer {
         flex-direction: column;
         width: 100%;
         gap: 15px;
+        align-items: center;
     }
     
     .hero-btns .btn {
         width: 100%;
+        max-width: 300px; /* Prevent overly stretched buttons when centered */
         text-align: center;
     }
 }
