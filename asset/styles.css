@@ -1076,6 +1076,8 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start; /* Ensure items start from the left */
+    text-align: left; /* Force left alignment for all text in this container */
 }
 
 .hero h1 {
