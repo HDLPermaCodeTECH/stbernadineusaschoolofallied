@@ -991,6 +991,7 @@ footer {
     min-height: 100svh;
     display: flex;
     align-items: center;
+    justify-content: flex-start !important; /* Force content to the left side */
     padding: 100px 0 60px;
     color: var(--white);
     overflow: hidden;
