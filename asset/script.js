@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // But link.href returns full URL. valid for comparison if we just want filename.
 
             // Simpler: Just check if the href *ends with* the current filename
-            // This avoids issues with relative paths like ./about.html vs about.html
+            // This avoids issues with relative paths like ./about-us/ vs about-us/
 
             // Special handling for home page
             if ((currentFile === 'index.html' || currentFile === '') && (href === 'index.html' || href === './' || href === '/' || href.endsWith('index.html'))) {
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         founder: {
             keywords: [], // Fallback to AI for natural conversation
-            response: "Our Founder, <strong>Bernadine 'Belen' Samin, R.N.</strong>, has over 40 years of nursing experience (ER, ICU, Neonatal).<br><br>From humble beginnings in the Philippines, she built St. Bernadine to share opportunities with others. <a href='about.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Read her full story</a>."
+            response: "Our Founder, <strong>Bernadine 'Belen' Samin, R.N.</strong>, has over 40 years of nursing experience (ER, ICU, Neonatal).<br><br>From humble beginnings in the Philippines, she built St. Bernadine to share opportunities with others. <a href='about-us/' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Read her full story</a>."
         },
         leadership: {
             keywords: [], // Fallback to AI for natural conversation

@@ -6,7 +6,7 @@ const newVersion = '10.32';
 
 // List of HTML files to scan (manually curated to avoid node_modules)
 const files = [
-    'about.html',
+    'about-us/',
     'agency-news.html',
     'apply.html',
     'blog.html',

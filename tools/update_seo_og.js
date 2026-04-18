@@ -9,7 +9,7 @@ const siteName = 'St. Bernadine School of Allied Health';
 // List of HTML files to process
 const files = [
     'index.html',
-    'about.html',
+    'about-us/',
     'cna-program.html',
     'ch-hha-program.html',
     'pct-program.html',

@@ -44,6 +44,10 @@ Redirect 301 /services.html /school-of-allied-health-services/
 Redirect 301 /services /school-of-allied-health-services/
 Redirect 301 /school-of-allied-health-services.html /school-of-allied-health-services/
 
+# 301 Redirect for renamed about page
+Redirect 301 /about.html /about-us/
+Redirect 301 /about /about-us/
+
 # 1. Force HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
