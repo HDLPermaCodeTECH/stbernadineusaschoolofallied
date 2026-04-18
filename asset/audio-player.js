@@ -79,22 +79,18 @@
         });
     };
 
-    // Handle end of audio with a 3.5s pause
-    anthem.addEventListener('ended', function() {
-        setTimeout(() => {
-            this.currentTime = 0;
-            this.play().then(() => {
-                fadeIn(this, targetVolume, fadeDuration);
-            });
-        }, pauseBetweenLoops);
-    });
-
-    // Professional Loop Transition (Fade out near end)
+    // Professional End Of Track (Fade out near end, no loop)
     anthem.addEventListener('timeupdate', function() {
-        const buffer = 2; // Start fade out 2 seconds before end
+        const buffer = 3.5; // Start fade out 3.5 seconds before end
         if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended) {
             fadeOut(this, buffer * 1000);
         }
+    });
+
+    // Handle end of audio
+    anthem.addEventListener('ended', function() {
+        console.log('Audio finished playing');
+        this.volume = 0;
     });
 
     // Handle smooth Fade Out on page navigation

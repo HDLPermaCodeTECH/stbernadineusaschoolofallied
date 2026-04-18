@@ -33,7 +33,7 @@ const files = [
     'privacy.html',
     'promo-video.html',
     'referral.html',
-    'school-of-allied-health-services.html',
+    'school-of-allied-health-services/',
     'student-life.html',
     'terms.html',
     'tuition-schedule.html',

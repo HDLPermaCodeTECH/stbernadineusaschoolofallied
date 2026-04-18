@@ -22,7 +22,7 @@ const files = [
     'newborn-care-program.html',
     'clinical-skills.html',
     'continuing-education.html',
-    'school-of-allied-health-services.html',
+    'school-of-allied-health-services/',
     'home-care.html',
     'placement.html',
     'agency-news.html',

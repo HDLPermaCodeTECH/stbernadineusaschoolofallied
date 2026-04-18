@@ -15,7 +15,7 @@ const programsToRemove = [
     'continuing-education.html'
 ];
 
-const moreLink = '<li><a href="school-of-allied-health-services.html#certification-programs">More <i class="fa-solid fa-arrow-right"></i></a></li>';
+const moreLink = '<li><a href="school-of-allied-health-services/#certification-programs">More <i class="fa-solid fa-arrow-right"></i></a></li>';
 
 const files = fs.readdirSync('.').filter(f => f.endsWith('.html'));
 let count = 0;
@@ -44,7 +44,7 @@ files.forEach(file => {
         });
 
         // 3. Ensure "More" link exists exactly once
-        if (!newListContent.includes('school-of-allied-health-services.html#certification-programs')) {
+        if (!newListContent.includes('school-of-allied-health-services/#certification-programs')) {
             newListContent = newListContent.trimEnd() + '\n                        ' + moreLink + '\n                    ';
             modified = true;
         }
