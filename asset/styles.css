@@ -991,7 +991,6 @@ footer {
     min-height: 100svh;
     display: flex;
     align-items: center;
-    justify-content: flex-start !important; /* Force content to the left side */
     padding: 100px 0 60px;
     color: var(--white);
     overflow: hidden;
@@ -1079,7 +1078,7 @@ footer {
     justify-content: center;
     align-items: flex-start !important; /* Force items to start from the left */
     text-align: left !important; /* Force text to the left */
-    margin-left: 0 !important; /* Force container box to the left of the .container */
+    margin-left: 0 !important; /* Anchor box to the left edge of the container */
     margin-right: auto !important;
 }
 
