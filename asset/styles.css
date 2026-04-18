@@ -1081,8 +1081,10 @@ footer {
 }
 
 .typing-container {
-    min-height: 4.5rem; /* Ensure stability when deleting */
+    position: relative;
     display: inline-block;
+    width: 100%;
+    margin-bottom: 24px;
 }
 
 
@@ -1093,8 +1095,11 @@ footer {
 
 @media (max-width: 768px) {
     .typing-container {
-        min-height: 3rem;
-    }
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 24px;
+}
 }
 
 .hero p {
@@ -5678,5 +5683,22 @@ body:not(.js-loaded) .reveal-scale {
         width: 45px;
         height: 45px;
     }
+}
+
+
+.ghost-text {
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+    display: block;
+    width: 100%;
+}
+
+#typewriter-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: block;
 }
 
