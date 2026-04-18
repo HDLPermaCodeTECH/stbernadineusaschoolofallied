@@ -5687,6 +5687,7 @@ body:not(.js-loaded) .reveal-scale {
 @media (max-width: 768px) {
     .logo-track {
         /* Mobile adjustment for new padding marquee logic */
+        animation-duration: 35s; /* Speed up on mobile tablet */
     }
 
     .logo-track img {
@@ -5703,6 +5704,7 @@ body:not(.js-loaded) .reveal-scale {
 @media (max-width: 480px) {
     .logo-track {
         /* Use padding instead of gap */
+        animation-duration: 25s; /* Speed up even more on small phones */
     }
 
     .logo-track img {
