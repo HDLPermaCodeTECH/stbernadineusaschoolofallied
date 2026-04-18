@@ -1085,22 +1085,29 @@ footer {
 }
 
 .typing-container {
+    position: relative;
     display: block;
     width: 100%;
     margin-bottom: 24px;
-    min-height: 11rem; /* Increased buffer for rigidity */
 }
 
+#typewriter-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+}
 
-
-
-    50% { opacity: 0; }
+.ghost-text {
+    visibility: hidden;
+    pointer-events: none;
+    display: block;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
-    .typing-container {
-        min-height: 8rem; /* Increased buffer for tablet/mobile */
-    }
+    /* Stability handled by ghost-text */
 }
 
 .hero p {
