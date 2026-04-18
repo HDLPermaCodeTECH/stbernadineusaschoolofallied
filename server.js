@@ -50,8 +50,8 @@ app.use(compression()); // Compress all responses
 
 const corsOptions = {
     origin: [
-        'https://stbernadineusaservices.com',
-        'https://stbernadineusaservices.com',
+        'https://stbernadineusa.com',
+        'https://stbernadineusa.com',
         'https://hdlpermacodetech.github.io',
         'http://localhost:5500',
         'http://127.0.0.1:5500',
@@ -308,7 +308,7 @@ const generatePDF = (data) => {
         doc.font('Helvetica').fontSize(9).fillColor('#888888').text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 0, 45, { align: 'right', width: 555 });
         doc.text('Phone: +1 (201) 222-1116', 0, 58, { align: 'right', width: 555 });
         doc.text('school@stbernadineusa.com', 0, 71, { align: 'right', width: 555 });
-        doc.text('www.stbernadineusaservices.com', 0, 84, { align: 'right', width: 555 });
+        doc.text('www.stbernadineusa.com', 0, 84, { align: 'right', width: 555 });
 
         doc.moveDown(4);
 
@@ -685,8 +685,8 @@ app.post('/send-email',
                                 </p>
                                 
                                 <p class="links">
-                                    <a href="https://stbernadineusaservices.com/privacy.html">Privacy Policy</a> &bull; 
-                                    <a href="https://stbernadineusaservices.com/contact.html">Contact Us</a>
+                                    <a href="https://stbernadineusa.com/privacy.html">Privacy Policy</a> &bull; 
+                                    <a href="https://stbernadineusa.com/contact.html">Contact Us</a>
                                 </p>
                                 <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                             </td>
@@ -781,7 +781,7 @@ const generateCareRequestPDF = (data) => {
         doc.font('Helvetica').fontSize(9).fillColor('#888888').text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 0, 45, { align: 'right', width: 555 });
         doc.text('Phone: +1 (201) 222-1116', 0, 58, { align: 'right', width: 555 });
         doc.text('school@stbernadineusa.com', 0, 71, { align: 'right', width: 555 });
-        doc.text('www.stbernadineusaservices.com', 0, 84, { align: 'right', width: 555 });
+        doc.text('www.stbernadineusa.com', 0, 84, { align: 'right', width: 555 });
 
         // --- TITLE ---
         doc.moveDown(4);
@@ -1052,8 +1052,8 @@ app.post('/send-contact', [
                                 </p>
                                 
                                 <p class="links">
-                                    <a href="https://stbernadineusaservices.com/privacy.html">Privacy Policy</a> &bull; 
-                                    <a href="https://stbernadineusaservices.com/contact.html">Contact Us</a>
+                                    <a href="https://stbernadineusa.com/privacy.html">Privacy Policy</a> &bull; 
+                                    <a href="https://stbernadineusa.com/contact.html">Contact Us</a>
                                 </p>
                                 <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
                             </td>
