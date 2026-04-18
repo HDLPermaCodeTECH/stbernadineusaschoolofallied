@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="chat-messages" id="chat-messages">
                 <div class="message bot">
-                    Hello! I'm the St. Bernadine AI. I can answer <strong>ANY</strong> question—whether it's about the school, general topics (history, science, developer, etc.).
+                    Welcome to St. Bernadine! I am the AI Assistant. How can I help you today?
                 </div>
             </div>
             <div class="chat-input local-theme-input">
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator();
-                addMessage("Hello! I'm the St. Bernadine AI. I can answer <strong>ANY</strong> question—whether it's about the school, general topics (history, science, developer, etc.).", 'bot');
+                addMessage("Welcome to St. Bernadine! I am the AI Assistant. How can I help you today?", 'bot');
                 showSuggestions(); // Restored per user request
             }, 800);
         }, 300);
