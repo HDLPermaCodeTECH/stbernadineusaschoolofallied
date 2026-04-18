@@ -1,4 +1,4 @@
-﻿
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- FRONTEND SECURITY LAYER ---
     // 1. Disable Right-Click
@@ -230,15 +230,15 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestionsDiv.classList.add('chat-suggestions');
 
         const topics = [
-            { label: 'ðŸ“ Apply Now', query: 'application' },
-            { label: 'ðŸ¥ Request Care', query: 'request care' },
-            { label: 'ðŸ“š Programs', query: 'programs' },
-            { label: 'ðŸ’° Tuition', query: 'tuition' },
-            { label: 'ðŸŽ“ Student Life', query: 'student_life' },
-            { label: 'ðŸŒ Visa Sponsorship', query: 'visa' },
-            { label: 'ðŸ‘©â€âš•ï¸ Founder', query: 'founder' },
-            { label: 'ðŸ“ Location', query: 'location' },
-            { label: 'ðŸ¤ Referral', query: 'referral' }
+            { label: '📝 Apply Now', query: 'application' },
+            { label: '🏥 Request Care', query: 'request care' },
+            { label: '📚 Programs', query: 'programs' },
+            { label: '💰 Tuition', query: 'tuition' },
+            { label: '🎓 Student Life', query: 'student_life' },
+            { label: '🌐 Visa Sponsorship', query: 'visa' },
+            { label: '👩‍⚕️ Founder', query: 'founder' },
+            { label: '📍 Location', query: 'location' },
+            { label: '🤝 Referral', query: 'referral' }
         ];
 
         topics.forEach(topic => {
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Programs ---
         programs_list: {
             keywords: ['programs', 'courses', 'classes', 'list', 'offer', 'training', 'certification'],
-            response: "We offer flexible schedules (Day, Evening, & Weekend). Click for details:<br><br>ðŸ“š <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA</a> (Day & Evening)<br>ðŸ  <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA</a> (Weekdays & Weekends)<br>ðŸ’Š <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CMA</a> (56 Hours)<br>ðŸ¥ <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>PCT</a> (5 Months)<br>ðŸ©º <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant</a> (5 Months)<br>ðŸ©¸ <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>EKG & Phlebotomy</a> (Day & Weekend)<br>â¤ï¸ <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CPR & BLS</a> (1 Day)<br>ðŸ‘¶ <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care</a> (Weekend Workshop)"
+            response: "We offer flexible schedules (Day, Evening, & Weekend). Click for details:<br><br>📚 <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA</a> (Day & Evening)<br>ðŸ  <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA</a> (Weekdays & Weekends)<br>💊 <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CMA</a> (56 Hours)<br>ðŸ¥ <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>PCT</a> (5 Months)<br>🥼 <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant</a> (5 Months)<br>🩸 <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>EKG & Phlebotomy</a> (Day & Weekend)<br>â¤ï¸ <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CPR & BLS</a> (1 Day)<br>👶 <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care</a> (Weekend Workshop)"
         },
         cna: {
             keywords: ['cna', 'certified nurse aide', 'nursing assistant', 'nurse aide', '90 hours'],
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         forms: {
             keywords: ['form', 'download', 'pdf', 'application', 'catalog', 'physical form'],
-            response: "You can download important documents from our Forms page:<br><br>ðŸ“„ <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Enrollment Application</a><br><br>ðŸ©º <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Physical Form</a><br><br>ðŸ“– <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Course Catalog</a>"
+            response: "You can download important documents from our Forms page:<br><br>ðŸ“„ <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Enrollment Application</a><br><br>🥼 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Physical Form</a><br><br>ðŸ“– <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Course Catalog</a>"
         },
 
         // --- Placement & Global Services ---
@@ -408,11 +408,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         application: {
             keywords: ['application', 'apply', 'register', 'enroll', 'sign up', 'start', 'join'],
-            response: "Ready to start? ðŸŽ“<br><br>ðŸ’¼ <a href='apply-job.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Job Application</strong></a><br>ðŸ“ <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Enrollment Application</strong></a><br>ðŸ©º <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Medical Physical Form</strong></a><br>ðŸ“š <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Course Catalog</strong></a><br><br>It only takes a few minutes!"
+            response: "Ready to start? ðŸŽ“<br><br>ðŸ’¼ <a href='apply-job.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Job Application</strong></a><br>ðŸ“ <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Enrollment Application</strong></a><br>🥼 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Medical Physical Form</strong></a><br>📚 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Course Catalog</strong></a><br><br>It only takes a few minutes!"
         },
         student_life: {
             keywords: ['student', 'life', 'career', 'advice', 'skills', 'news', 'blog', 'events'],
-            response: "Explore our Student Resources:<br><br>ðŸŽ“ <a href='student-life.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Student Life</a><br>ðŸ’¼ <a href='career-advice.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Career Advice</a><br>ðŸ©º <a href='clinical-skills.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Clinical Skills</a><br>ðŸ“° <a href='agency-news.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Agency News</a>"
+            response: "Explore our Student Resources:<br><br>ðŸŽ“ <a href='student-life.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Student Life</a><br>ðŸ’¼ <a href='career-advice.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Career Advice</a><br>🥼 <a href='clinical-skills.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Clinical Skills</a><br>ðŸ“° <a href='agency-news.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Agency News</a>"
         },
         developer: {
             keywords: ['developer', 'creator', 'troy', 'hebrey', 'who made', 'who built'],
@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.warn("AI Server Error:", response.status);
                 if (response.status === 429) {
-                    return "I'm thinking too fast! ðŸ§ ðŸ’¨<br>Please wait <strong>5-10 seconds</strong> and try again. (Rate Limited)";
+                    return "I'm thinking too fast! 🧠💨<br>Please wait <strong>5-10 seconds</strong> and try again. (Rate Limited)";
                 } else if (response.status === 503) {
                     return "My AI brain is still warming up. Please wait a moment and try again.";
                 }
