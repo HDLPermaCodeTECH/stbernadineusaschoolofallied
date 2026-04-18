@@ -1081,10 +1081,12 @@ footer {
 }
 
 .typing-container {
-    position: relative;
-    display: inline-block;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     width: 100%;
     margin-bottom: 24px;
+    position: relative;
 }
 
 
@@ -1095,10 +1097,12 @@ footer {
 
 @media (max-width: 768px) {
     .typing-container {
-    position: relative;
-    display: inline-block;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     width: 100%;
     margin-bottom: 24px;
+    position: relative;
 }
 }
 
@@ -5686,22 +5690,30 @@ body:not(.js-loaded) .reveal-scale {
 }
 
 
+
+
+
+
+
+
+.ghost-text, #typewriter-text {
+    grid-area: 1 / 1;
+    display: block;
+    width: 100%;
+    text-align: left;
+    white-space: normal;
+}
+
 .ghost-text {
     visibility: hidden;
     opacity: 0;
     color: transparent;
     pointer-events: none;
     user-select: none;
-    display: block;
-    width: 100%;
 }
 
 #typewriter-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: block;
+    position: relative;
+    z-index: 2;
 }
-
 
