@@ -1081,12 +1081,10 @@ footer {
 }
 
 .typing-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+    display: block;
     width: 100%;
     margin-bottom: 24px;
-    position: relative;
+    min-height: 9.2rem;
 }
 
 
@@ -1097,13 +1095,8 @@ footer {
 
 @media (max-width: 768px) {
     .typing-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
-    width: 100%;
-    margin-bottom: 24px;
-    position: relative;
-}
+        min-height: 6.5rem;
+    }
 }
 
 .hero p {
@@ -5696,24 +5689,10 @@ body:not(.js-loaded) .reveal-scale {
 
 
 
-.ghost-text, #typewriter-text {
-    grid-area: 1 / 1;
-    display: block;
-    width: 100%;
-    text-align: left;
-    white-space: normal;
-}
 
-.ghost-text {
-    visibility: hidden;
-    opacity: 0;
-    color: transparent;
-    pointer-events: none;
-    user-select: none;
-}
 
-#typewriter-text {
-    position: relative;
-    z-index: 2;
-}
+
+
+
+
 

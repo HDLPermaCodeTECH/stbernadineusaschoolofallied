@@ -604,9 +604,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const typewriterElement = document.getElementById('typewriter-text');
     if (typewriterElement) {
         const phrases = [
+            "Global Career Placement & Consulting",
             "Turning the American Dream into Reality",
             "Professional Home Care Services",
-            "Global Career Placement & Consulting",
             "Allied Health Training & Job Hiring"
         ];
         let phraseIndex = 0;
@@ -639,6 +639,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(type, typingSpeed);
         }
 
-        setTimeout(type, 1000); // Initial delay
+        setTimeout(type, 500); // Initial delay
     }
 });
