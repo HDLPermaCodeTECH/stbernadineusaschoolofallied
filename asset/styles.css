@@ -1072,9 +1072,11 @@ footer {
 /* Siguraduhin na ang container ng hero ay eksaktong kapantay ng sa header */
 #home .container, 
 .hero .container {
+    width: 100% !important; /* Force to take full container width */
+    max-width: 1320px !important; /* Match Bootstrap default for Large screens */
     margin-left: auto !important;
     margin-right: auto !important;
-    display: block !important; /* Ensure it stays a block for proper alignment */
+    display: block !important; /* Prevent flex item shrinking */
 }
 
 .hero-content {
