@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -6,7 +6,7 @@ const transporter = nodemailer.createTransport({
     port: process.env.EMAIL_PORT || 465,
     secure: true,
     auth: {
-        user: process.env.EMAIL_USER || "hdlpermacodetech@stbernadineschoolofallied.com",
+        user: process.env.EMAIL_USER || "hdlpermacodetech@stbernadineusa.com",
         pass: process.env.EMAIL_PASS || "Nitro19960422!"
     }
 });

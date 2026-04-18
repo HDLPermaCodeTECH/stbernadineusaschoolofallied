@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const path = require('path');
 
@@ -26,8 +26,8 @@ const generatePDF = (data, signatureBuffer) => {
 
         doc.font('Helvetica').fontSize(9).fillColor('#888888').text('591 Summit Ave Suite 410, Jersey City, NJ 07306', 0, 45, { align: 'right', width: 555 });
         doc.text('Phone: +1 (201) 222-1116', 0, 58, { align: 'right', width: 555 });
-        doc.text('school@stbernadineschoolofallied.com', 0, 71, { align: 'right', width: 555 });
-        doc.text('www.stbernadineschoolofallied.com', 0, 84, { align: 'right', width: 555 });
+        doc.text('school@stbernadineusa.com', 0, 71, { align: 'right', width: 555 });
+        doc.text('www.stbernadineusa.com', 0, 84, { align: 'right', width: 555 });
 
         doc.moveDown(4);
 

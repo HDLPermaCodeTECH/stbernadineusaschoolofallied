@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Background Audio Player (St. Bernadine Anthem)
  * St. Bernadine Official Website
  */

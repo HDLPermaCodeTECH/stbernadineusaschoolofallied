@@ -1,4 +1,4 @@
-
+﻿
 document.addEventListener('DOMContentLoaded', () => {
     // --- FRONTEND SECURITY LAYER ---
     // 1. Disable Right-Click
@@ -230,15 +230,15 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestionsDiv.classList.add('chat-suggestions');
 
         const topics = [
-            { label: '📝 Apply Now', query: 'application' },
-            { label: '🏥 Request Care', query: 'request care' },
-            { label: '📚 Programs', query: 'programs' },
-            { label: '💰 Tuition', query: 'tuition' },
-            { label: '🎓 Student Life', query: 'student_life' },
-            { label: '🌏 Visa Sponsorship', query: 'visa' },
-            { label: '👩‍⚕️ Founder', query: 'founder' },
-            { label: '📍 Location', query: 'location' },
-            { label: '🤝 Referral', query: 'referral' }
+            { label: 'ðŸ“ Apply Now', query: 'application' },
+            { label: 'ðŸ¥ Request Care', query: 'request care' },
+            { label: 'ðŸ“š Programs', query: 'programs' },
+            { label: 'ðŸ’° Tuition', query: 'tuition' },
+            { label: 'ðŸŽ“ Student Life', query: 'student_life' },
+            { label: 'ðŸŒ Visa Sponsorship', query: 'visa' },
+            { label: 'ðŸ‘©â€âš•ï¸ Founder', query: 'founder' },
+            { label: 'ðŸ“ Location', query: 'location' },
+            { label: 'ðŸ¤ Referral', query: 'referral' }
         ];
 
         topics.forEach(topic => {
@@ -292,45 +292,45 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Programs ---
         programs_list: {
             keywords: ['programs', 'courses', 'classes', 'list', 'offer', 'training', 'certification'],
-            response: "We offer flexible schedules (Day, Evening, & Weekend). Click for details:<br><br>📚 <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA</a> (Day & Evening)<br>🏠 <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA</a> (Weekdays & Weekends)<br>💊 <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CMA</a> (56 Hours)<br>🏥 <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>PCT</a> (5 Months)<br>🩺 <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant</a> (5 Months)<br>🩸 <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>EKG & Phlebotomy</a> (Day & Weekend)<br>❤️ <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CPR & BLS</a> (1 Day)<br>👶 <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care</a> (Weekend Workshop)"
+            response: "We offer flexible schedules (Day, Evening, & Weekend). Click for details:<br><br>ðŸ“š <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CNA</a> (Day & Evening)<br>ðŸ  <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CH-HHA</a> (Weekdays & Weekends)<br>ðŸ’Š <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CMA</a> (56 Hours)<br>ðŸ¥ <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>PCT</a> (5 Months)<br>ðŸ©º <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Assistant</a> (5 Months)<br>ðŸ©¸ <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>EKG & Phlebotomy</a> (Day & Weekend)<br>â¤ï¸ <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>CPR & BLS</a> (1 Day)<br>ðŸ‘¶ <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Newborn Care</a> (Weekend Workshop)"
         },
         cna: {
             keywords: ['cna', 'certified nurse aide', 'nursing assistant', 'nurse aide', '90 hours'],
-            response: "Our <strong>Certified Nurse Aide (CNA)</strong> program is a 90-hour course (50 classroom / 40 clinicals).<br><br><strong>Schedule:</strong> Day & Evening classes available.<br><br><strong>Registration Fee:</strong> $500 ($200 non-refundable).<br><br><strong>Outcome:</strong> NJ State Licensure.<br><br>👉 <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CNA Details</strong></a>"
+            response: "Our <strong>Certified Nurse Aide (CNA)</strong> program is a 90-hour course (50 classroom / 40 clinicals).<br><br><strong>Schedule:</strong> Day & Evening classes available.<br><br><strong>Registration Fee:</strong> $500 ($200 non-refundable).<br><br><strong>Outcome:</strong> NJ State Licensure.<br><br>ðŸ‘‰ <a href='cna-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CNA Details</strong></a>"
         },
         hha: {
             keywords: ['hha', 'home health aide', 'homemaker', '76 hours', 'ch-hha'],
-            response: "Our <strong>Certified Homemaker Home Health Aide (CH-HHA)</strong> program is 76 hours (60 classroom / 16 skills).<br><br><strong>Schedule:</strong> Weekdays & Weekends available.<br><br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><br><strong>Outcome:</strong> NJ Board of Nursing Certification.<br><br>👉 <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CH-HHA Details</strong></a>"
+            response: "Our <strong>Certified Homemaker Home Health Aide (CH-HHA)</strong> program is 76 hours (60 classroom / 16 skills).<br><br><strong>Schedule:</strong> Weekdays & Weekends available.<br><br><strong>Registration Fee:</strong> $200 ($200 non-refundable).<br><br><strong>Outcome:</strong> NJ Board of Nursing Certification.<br><br>ðŸ‘‰ <a href='ch-hha-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CH-HHA Details</strong></a>"
         },
         cma: {
             keywords: ['cma', 'certified medication aide', 'medication', 'med aide', '56 hours'],
-            response: "The <strong>Certified Medication Aide (CMA)</strong> course is 56 hours.<br><br><strong>Schedule:</strong> Flexible clinical hours.<br><br><strong>Prerequisite:</strong> Must have CNA or CH-HHA license.<br><br><strong>Registration Fee:</strong> $200.<br><br>👉 <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CMA Details</strong></a>"
+            response: "The <strong>Certified Medication Aide (CMA)</strong> course is 56 hours.<br><br><strong>Schedule:</strong> Flexible clinical hours.<br><br><strong>Prerequisite:</strong> Must have CNA or CH-HHA license.<br><br><strong>Registration Fee:</strong> $200.<br><br>ðŸ‘‰ <a href='cma-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CMA Details</strong></a>"
         },
         pct: {
             keywords: ['pct', 'patient care technician', '220 hours', '5 months'],
-            response: "Our <strong>Patient Care Technician (PCT)</strong> program is 220 hours (5 months).<br><br><strong>Schedule:</strong> Contact for next intake.<br><br><strong>Registration Fee:</strong> $500.<br><br><strong>Outcome:</strong> Advanced clinical skills.<br><br>👉 <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View PCT Details</strong></a>"
+            response: "Our <strong>Patient Care Technician (PCT)</strong> program is 220 hours (5 months).<br><br><strong>Schedule:</strong> Contact for next intake.<br><br><strong>Registration Fee:</strong> $500.<br><br><strong>Outcome:</strong> Advanced clinical skills.<br><br>ðŸ‘‰ <a href='pct-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View PCT Details</strong></a>"
         },
         ma: {
             keywords: ['medical assistant', 'ma program', '620 hours', 'admin', 'clinical assistant'],
-            response: "Our <strong>Certified Medical Assistant</strong> program is 620 hours (5 months).<br><br><strong>Schedule:</strong> Intensive training + Externship.<br><br><strong>Registration Fee:</strong> $500.<br><br><strong>Focus:</strong> Clinical and administrative training.<br><br>👉 <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Medical Assistant Details</strong></a>"
+            response: "Our <strong>Certified Medical Assistant</strong> program is 620 hours (5 months).<br><br><strong>Schedule:</strong> Intensive training + Externship.<br><br><strong>Registration Fee:</strong> $500.<br><br><strong>Focus:</strong> Clinical and administrative training.<br><br>ðŸ‘‰ <a href='medical-assistant-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Medical Assistant Details</strong></a>"
         },
         ekg_phlebotomy: {
             keywords: ['ekg', 'phlebotomy', 'blood draw', 'heart monitor', '140 hours'],
-            response: "The <strong>EKG & Phlebotomy</strong> program is 140 hours.<br><br><strong>Schedule:</strong> Day or Weekend classes.<br><br><strong>Reservation Fee:</strong> $200 (non-refundable).<br><br><strong>Outcome:</strong> Technical Proficiency Certificate.<br><br>👉 <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View EKG/Phlebotomy Details</strong></a>"
+            response: "The <strong>EKG & Phlebotomy</strong> program is 140 hours.<br><br><strong>Schedule:</strong> Day or Weekend classes.<br><br><strong>Reservation Fee:</strong> $200 (non-refundable).<br><br><strong>Outcome:</strong> Technical Proficiency Certificate.<br><br>ðŸ‘‰ <a href='ekg-phlebotomy-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View EKG/Phlebotomy Details</strong></a>"
         },
         cpr: {
             keywords: ['cpr', 'bls', 'basic life support', 'heart, association', 'first aid', 'resuscitation'],
-            response: "We offer <strong>CPR & BLS</strong> certification through the American Heart Association.<br><br><strong>Duration:</strong> 5 hours.<br><br><strong>Schedule:</strong> Weekdays/Weekends (10am - 3pm).<br><br><strong>Fee:</strong> Inclusive of book.<br><br>👉 <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CPR Details</strong></a>"
+            response: "We offer <strong>CPR & BLS</strong> certification through the American Heart Association.<br><br><strong>Duration:</strong> 5 hours.<br><br><strong>Schedule:</strong> Weekdays/Weekends (10am - 3pm).<br><br><strong>Fee:</strong> Inclusive of book.<br><br>ðŸ‘‰ <a href='cpr-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View CPR Details</strong></a>"
         },
         newborn: {
             keywords: ['newborn', 'baby nursing', 'infant care', 'neonatal', '10 hours', 'baby nurse'],
-            response: "Our <strong>Newborn Care Specialist (Baby Nursing)</strong> workshop is 10 hours.<br><br><strong>Schedule:</strong> Weekends (10am - 3pm).<br><br><strong>Registration Fee:</strong> $200 (non-refundable).<br><br>👉 <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Newborn Care Details</strong></a>"
+            response: "Our <strong>Newborn Care Specialist (Baby Nursing)</strong> workshop is 10 hours.<br><br><strong>Schedule:</strong> Weekends (10am - 3pm).<br><br><strong>Registration Fee:</strong> $200 (non-refundable).<br><br>ðŸ‘‰ <a href='newborn-care-program.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Newborn Care Details</strong></a>"
         },
 
         // --- Tuition & Fees ---
         tuition: {
             keywords: ['tuition', 'cost', 'price', 'payment plan', 'fee', 'financial'],
-            response: "We offer <strong>interest-free weekly or bi-weekly payment plans</strong>.<br><br><strong>Registration Fees:</strong><br>- CNA/PCT/MA: $500<br>- CH-HHA/CMA/Newborn: $200<br>- EKG/Phlebotomy/CPR: $200<br><br>Note: Reservation fees are non-refundable but consumable.<br><br>📄 <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Tuition Schedule</strong></a>"
+            response: "We offer <strong>interest-free weekly or bi-weekly payment plans</strong>.<br><br><strong>Registration Fees:</strong><br>- CNA/PCT/MA: $500<br>- CH-HHA/CMA/Newborn: $200<br>- EKG/Phlebotomy/CPR: $200<br><br>Note: Reservation fees are non-refundable but consumable.<br><br>ðŸ“„ <a href='tuition.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>View Tuition Schedule</strong></a>"
         },
         refund_policy: {
             keywords: ['refund', 'money back', 'cancellation', 'withdraw', 'non-refundable'],
@@ -340,17 +340,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Admissions & Forms ---
         requirements: {
             keywords: ['enroll', 'document', 'paperwork', 'prerequisite', 'admission', 'qualify'],
-            response: "General requirements include:<br>- High School Diploma/GED (for most programs)<br>- State ID / Driver's License<br>- Social Security Card<br>- Medical Clearance (PPD/Physical)<br><br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Start Online Application</strong></a><br><br>📄 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Download Forms</strong></a>"
+            response: "General requirements include:<br>- High School Diploma/GED (for most programs)<br>- State ID / Driver's License<br>- Social Security Card<br>- Medical Clearance (PPD/Physical)<br><br>ðŸ“ <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Start Online Application</strong></a><br><br>ðŸ“„ <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Download Forms</strong></a>"
         },
         forms: {
             keywords: ['form', 'download', 'pdf', 'application', 'catalog', 'physical form'],
-            response: "You can download important documents from our Forms page:<br><br>📄 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Enrollment Application</a><br><br>🩺 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Physical Form</a><br><br>📖 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Course Catalog</a>"
+            response: "You can download important documents from our Forms page:<br><br>ðŸ“„ <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Enrollment Application</a><br><br>ðŸ©º <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Medical Physical Form</a><br><br>ðŸ“– <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Course Catalog</a>"
         },
 
         // --- Placement & Global Services ---
         placement_process: {
             keywords: ['placement', 'process', 'steps', 'hiring', 'recruitment', 'screen'],
-            response: "Our <strong>Global Placement Process</strong> has 5 steps:<br>1️⃣ <strong>Document Screening:</strong> Submit resume & credentials.<br>2️⃣ <strong>Legal Review:</strong> Attorney verifies qualifications.<br>3️⃣ <strong>Visa Petition:</strong> Filing with DOL & DHS.<br>4️⃣ <strong>Green Card:</strong> Adjustment of status or consular processing.<br>5️⃣ <strong>Onboarding:</strong> Arrival & orientation.<br><br>We charge <strong>NO Placement Fees</strong> for direct hires!"
+            response: "Our <strong>Global Placement Process</strong> has 5 steps:<br>1ï¸âƒ£ <strong>Document Screening:</strong> Submit resume & credentials.<br>2ï¸âƒ£ <strong>Legal Review:</strong> Attorney verifies qualifications.<br>3ï¸âƒ£ <strong>Visa Petition:</strong> Filing with DOL & DHS.<br>4ï¸âƒ£ <strong>Green Card:</strong> Adjustment of status or consular processing.<br>5ï¸âƒ£ <strong>Onboarding:</strong> Arrival & orientation.<br><br>We charge <strong>NO Placement Fees</strong> for direct hires!"
         },
         visa: {
             keywords: ['visa', 'sponsorship', 'green card', 'eb3', 'immigration', 'global', 'international', 'abroad', 'petition', 'usa'],
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         values: {
             keywords: ['value', 'mission', 'vision', 'motto', 'stand for', 'belief'],
-            response: "Our Core Values guide us:<br>❤️ <strong>Compassion:</strong> Kindness and empathy.<br>🏆 <strong>Excellence:</strong> Highest standards in training.<br>🤝 <strong>Integrity:</strong> Honesty and transparency.<br>🌍 <strong>Global Impact:</strong> Empowering professionals worldwide."
+            response: "Our Core Values guide us:<br>â¤ï¸ <strong>Compassion:</strong> Kindness and empathy.<br>ðŸ† <strong>Excellence:</strong> Highest standards in training.<br>ðŸ¤ <strong>Integrity:</strong> Honesty and transparency.<br>ðŸŒ <strong>Global Impact:</strong> Empowering professionals worldwide."
         },
         founder: {
             keywords: ['founder', 'belen', 'samin', 'owner', 'started'],
@@ -384,13 +384,13 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         partners: {
             keywords: ['partner', 'affiliate', 'accredit', 'approve', 'board', 'recognition'],
-            response: "We are accredited and approved by:<br>✅ NJ Department of Education<br>✅ NJ Board of Nursing<br>✅ NJ Department of Health<br>✅ American Heart Association (AHA)<br>✅ AMCA (American Medical Certification Association)"
+            response: "We are accredited and approved by:<br>âœ… NJ Department of Education<br>âœ… NJ Board of Nursing<br>âœ… NJ Department of Health<br>âœ… American Heart Association (AHA)<br>âœ… AMCA (American Medical Certification Association)"
         },
 
         // --- Care Services ---
         request_care: {
             keywords: ['request care', 'home care', 'need caregiver', 'nursing care', 'health aide services', 'private duty'],
-            response: "We provide 24/7 Professional Home Care Services tailored to your needs.<br><br><strong>Our Services:</strong><br>- Companion Care<br>- Personal Care Assistance<br>- Skilled Nursing Care<br>- Respite Care<br><br>👉 <a href='request-care.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Submit a Care Request</strong></a>"
+            response: "We provide 24/7 Professional Home Care Services tailored to your needs.<br><br><strong>Our Services:</strong><br>- Companion Care<br>- Personal Care Assistance<br>- Skilled Nursing Care<br>- Respite Care<br><br>ðŸ‘‰ <a href='request-care.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Submit a Care Request</strong></a>"
         },
 
         // --- General ---
@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         contact: {
             keywords: ['contact', 'phone', 'call', 'email', 'number'],
-            response: "📞 <strong>Phone:</strong> (201) 222-1116<br><br>📧 <strong>Email:</strong> school@stbernadineschoolofallied.com<br><br>📍 <strong>Visit:</strong> 591 Summit Ave, Jersey City.<br><br>We are here to help!"
+            response: "ðŸ“ž <strong>Phone:</strong> (201) 222-1116<br><br>ðŸ“§ <strong>Email:</strong> school@stbernadineusa.com<br><br>ðŸ“ <strong>Visit:</strong> 591 Summit Ave, Jersey City.<br><br>We are here to help!"
         },
         referral: {
             keywords: ['referral', 'refer', 'recommend', 'friend', 'bonus', 'commission'],
@@ -408,11 +408,11 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         application: {
             keywords: ['application', 'apply', 'register', 'enroll', 'sign up', 'start', 'join'],
-            response: "Ready to start? 🎓<br><br>💼 <a href='apply-job.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Job Application</strong></a><br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Enrollment Application</strong></a><br>🩺 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Medical Physical Form</strong></a><br>📚 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Course Catalog</strong></a><br><br>It only takes a few minutes!"
+            response: "Ready to start? ðŸŽ“<br><br>ðŸ’¼ <a href='apply-job.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Job Application</strong></a><br>ðŸ“ <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Enrollment Application</strong></a><br>ðŸ©º <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Medical Physical Form</strong></a><br>ðŸ“š <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Course Catalog</strong></a><br><br>It only takes a few minutes!"
         },
         student_life: {
             keywords: ['student', 'life', 'career', 'advice', 'skills', 'news', 'blog', 'events'],
-            response: "Explore our Student Resources:<br><br>🎓 <a href='student-life.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Student Life</a><br>💼 <a href='career-advice.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Career Advice</a><br>🩺 <a href='clinical-skills.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Clinical Skills</a><br>📰 <a href='agency-news.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Agency News</a>"
+            response: "Explore our Student Resources:<br><br>ðŸŽ“ <a href='student-life.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Student Life</a><br>ðŸ’¼ <a href='career-advice.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Career Advice</a><br>ðŸ©º <a href='clinical-skills.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Clinical Skills</a><br>ðŸ“° <a href='agency-news.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Agency News</a>"
         },
         developer: {
             keywords: ['developer', 'creator', 'troy', 'hebrey', 'who made', 'who built'],
@@ -452,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.warn("AI Server Error:", response.status);
                 if (response.status === 429) {
-                    return "I'm thinking too fast! 🧠💨<br>Please wait <strong>5-10 seconds</strong> and try again. (Rate Limited)";
+                    return "I'm thinking too fast! ðŸ§ ðŸ’¨<br>Please wait <strong>5-10 seconds</strong> and try again. (Rate Limited)";
                 } else if (response.status === 503) {
                     return "My AI brain is still warming up. Please wait a moment and try again.";
                 }
@@ -563,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div id="cookie-banner" class="cookie-banner">
             <div class="container">
                 <div class="cookie-content">
-                    <p>🍪 We use cookies to improve your experience and analyze site traffic. By continuing, you agree to our use of cookies.</p>
+                    <p>ðŸª We use cookies to improve your experience and analyze site traffic. By continuing, you agree to our use of cookies.</p>
                     <div class="cookie-actions">
                         <button id="accept-cookies" class="btn btn-primary btn-sm">Accept</button>
                         <button id="decline-cookies" class="btn btn-outline btn-sm">Decline</button>

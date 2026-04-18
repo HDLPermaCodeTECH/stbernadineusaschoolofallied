@@ -1,4 +1,4 @@
-fetch('https://www.stbernadineschoolofallied.com/send-contact', {
+﻿fetch('https://www.stbernadineusa.com/send-contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

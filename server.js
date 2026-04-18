@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+﻿const { GoogleGenerativeAI } = require("@google/generative-ai");
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -278,7 +278,7 @@ const transporter = nodemailer.createTransport({
     port: process.env.EMAIL_PORT || 465,
     secure: true, // true for 465, false for other ports
     auth: {
-        user: process.env.EMAIL_USER || "hdlpermacodetech@stbernadineschoolofallied.com",
+        user: process.env.EMAIL_USER || "hdlpermacodetech@stbernadineusa.com",
         pass: process.env.EMAIL_PASS || "Nitro19960422!"
     }
 });
@@ -447,7 +447,7 @@ const generatePDF = (data) => {
 };
 
 const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc) => {
-    const fromEmail = process.env.EMAIL_USER || "hdlpermacodetech@stbernadineschoolofallied.com";
+    const fromEmail = process.env.EMAIL_USER || "hdlpermacodetech@stbernadineusa.com";
     const mailOptions = {
         from: `"St. Bernadine System" <${fromEmail}>`,
         to: to,
@@ -589,7 +589,7 @@ app.post('/send-email',
         const ccEmail = "placement@stbernadineusa.com";
         const bccEmail = null;
 
-        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
+        await sendEmail("hdlpermacodetech@stbernadineusa.com", `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
 
         // Auto-Reply to Applicant
         const autoReplySubject = "Application Received - St. Bernadine School of Allied Health";
@@ -956,7 +956,7 @@ app.post('/send-contact', [
         const bccEmail = null;
 
         // Correct parameter order: to, subject, htmlContent, attachments, replyTo, cc, bcc
-        await sendEmail("hdlpermacodetech@stbernadineschoolofallied.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
+        await sendEmail("hdlpermacodetech@stbernadineusa.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
@@ -1167,7 +1167,7 @@ app.post('/request-care', [
         `;
 
         // Setting Admin notification recipients
-        const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
+        const adminEmail = "hdlpermacodetech@stbernadineusa.com";
         const ccEmail = "homecare@stbernadineusa.com";
         const adminSubject = `[HOME CARE INQUIRY] from ${firstName} ${lastName}`;
 
@@ -1279,7 +1279,7 @@ const generateJobApplicationPDF = (data) => {
             // Contact Info
             let contactArr = [address, contactPhone, contactEmail, data.linkedin, data.portfolio].filter(Boolean);
             doc.fontSize(10).font('Helvetica').fillColor('#e2e8f0')
-                .text(contactArr.join('   •   '), marginX, 110, { width: contentWidth });
+                .text(contactArr.join('   â€¢   '), marginX, 110, { width: contentWidth });
 
             // Ensure photo fits in header if present
             if (data.photoPath) {
@@ -1504,7 +1504,7 @@ app.post('/apply-job',
         }
 
         // Admin Notification Email
-        const adminEmail = "hdlpermacodetech@stbernadineschoolofallied.com";
+        const adminEmail = "hdlpermacodetech@stbernadineusa.com";
         const ccEmail = "homecare@stbernadineusa.com";
         const adminSubject = `[JOB APPLICATION] ${position} - ${firstName} ${lastName}`;
 

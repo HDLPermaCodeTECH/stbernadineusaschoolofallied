@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Back to Top Button Logic
  * St. Bernadine Official Website
  */
