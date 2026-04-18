@@ -1069,6 +1069,14 @@ footer {
     opacity: 1;
 }
 
+/* Siguraduhin na ang container ng hero ay eksaktong kapantay ng sa header */
+#home .container, 
+.hero .container {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block !important; /* Ensure it stays a block for proper alignment */
+}
+
 .hero-content {
     position: relative;
     z-index: 2;
