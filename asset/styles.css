@@ -987,7 +987,11 @@ footer {
 /* Hero Section */
 .hero {
     position: relative;
-    padding: 140px 0;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: 100px 0 60px;
     color: var(--white);
     overflow: hidden;
 }
@@ -3826,8 +3830,11 @@ body:not(.js-loaded) .reveal-scale {
 /* Mobile Slider Fix */
 @media (max-width: 768px) {
     .hero {
-        padding: 80px 0;
-        min-height: auto;
+        padding: 90px 0 60px;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
     }
 
     .hero h1 {
@@ -3843,7 +3850,11 @@ body:not(.js-loaded) .reveal-scale {
 
 @media (max-width: 480px) {
     .hero {
-        padding: 60px 0;
+        padding: 80px 0 50px;
+        min-height: 100vh;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
     }
 
     .hero h1 {
@@ -5681,6 +5692,7 @@ body:not(.js-loaded) .reveal-scale {
         height: 45px;
     }
 }
+
 
 
 
