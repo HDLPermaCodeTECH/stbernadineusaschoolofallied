@@ -599,4 +599,46 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => cookieBanner.remove(), 500);
         });
     }
+
+    // --- Typewriter Effect ---
+    const typewriterElement = document.getElementById('typewriter-text');
+    if (typewriterElement) {
+        const phrases = [
+            "Turning the American Dream into Reality",
+            "Professional Home Care Services",
+            "Global Career Placement & Consulting",
+            "Allied Health Training & Job Hiring"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingSpeed = 100;
+
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                typewriterElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typingSpeed = 50;
+            } else {
+                typewriterElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typingSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typingSpeed = 3000; // Pause at the end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typingSpeed = 500; // Pause before next phrase
+            }
+
+            setTimeout(type, typingSpeed);
+        }
+
+        setTimeout(type, 1000); // Initial delay
+    }
 });

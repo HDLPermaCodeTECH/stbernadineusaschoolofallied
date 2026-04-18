@@ -1080,6 +1080,29 @@ footer {
     font-weight: 700;
 }
 
+.typing-container {
+    min-height: 4.5rem; /* Ensure stability when deleting */
+    display: inline-block;
+}
+
+.typewriter-cursor {
+    display: inline-block;
+    color: #fbbf24; /* Amber color for cursor highlight */
+    margin-left: 2px;
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@media (max-width: 768px) {
+    .typing-container {
+        min-height: 3rem;
+    }
+}
+
 .hero p {
     font-size: 1.2rem;
     margin-bottom: 40px;
