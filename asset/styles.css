@@ -1073,7 +1073,6 @@ footer {
     position: relative;
     z-index: 2;
     max-width: 700px;
-    min-height: 520px; /* Locked height to prevent vertical jumping on all devices */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1089,31 +1088,29 @@ footer {
 }
 
 .typing-container {
-    position: relative;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: start;
     width: 100%;
     margin-bottom: 24px;
+    height: 9.5rem; /* Fixed height for desktop stability */
+    overflow: hidden;
 }
 
 #typewriter-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    position: relative;
     z-index: 2;
+    display: inline-block;
 }
 
-.ghost-text {
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    user-select: none !important;
-    display: block;
-    width: 100%;
-}
+/* Legacy ghost text styles removed */
 
 @media (max-width: 768px) {
-    /* Stability handled by ghost-text */
+    .typing-container {
+        height: 15rem; /* Taller fixed height for mobile wrapping */
+        align-items: flex-start;
+        padding-top: 10px;
+    }
 }
 
 .hero p {
