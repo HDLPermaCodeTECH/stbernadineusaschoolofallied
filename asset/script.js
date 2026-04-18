@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         application: {
             keywords: ['application', 'apply', 'register', 'enroll', 'sign up', 'start', 'join'],
-            response: "Ready to start your career? 🎓<br><br>Click here to fill out the <strong>Online Application</strong>:<br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Apply Now</strong></a><br><br>It only takes a few minutes!"
+            response: "Ready to start? 🎓<br><br><strong>Apply for a Job:</strong><br>💼 <a href='apply-job.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Submit Job Application</strong></a><br><br><strong>Enrollment Application:</strong><br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Apply for School</strong></a><br><br>It only takes a few minutes!"
         },
         student_life: {
             keywords: ['student', 'life', 'career', 'advice', 'skills', 'news', 'blog', 'events'],
