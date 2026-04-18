@@ -1120,10 +1120,42 @@ footer {
 /* Legacy ghost text styles removed */
 
 @media (max-width: 768px) {
+    #home .container, 
+    .hero .container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    .hero-content {
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 0 !important;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem !important; /* Mobile font size fix */
+        line-height: 1.2;
+    }
+
     .typing-container {
-        height: 15rem; /* Taller fixed height for mobile wrapping */
+        height: 14rem; /* Adjusted for mobile wrapping */
         align-items: flex-start;
         padding-top: 10px;
+    }
+    
+    .hero p {
+        font-size: 1.05rem;
+    }
+    
+    .hero-btns {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+    
+    .hero-btns .btn {
+        width: 100%;
+        text-align: center;
     }
 }
 
