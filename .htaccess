@@ -39,6 +39,10 @@ Options -Indexes -MultiViews
 RewriteEngine On
 RewriteBase /
 
+# 301 Redirect for renamed services page
+Redirect 301 /services.html /school-of-allied-health-services.html
+Redirect 301 /services /school-of-allied-health-services
+
 # 1. Force HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
