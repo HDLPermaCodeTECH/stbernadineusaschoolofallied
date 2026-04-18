@@ -5688,6 +5688,8 @@ body:not(.js-loaded) .reveal-scale {
 
 .ghost-text {
     visibility: hidden;
+    opacity: 0;
+    color: transparent;
     pointer-events: none;
     user-select: none;
     display: block;
@@ -5701,4 +5703,5 @@ body:not(.js-loaded) .reveal-scale {
     width: 100%;
     display: block;
 }
+
 
