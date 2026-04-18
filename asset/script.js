@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         application: {
             keywords: ['application', 'apply', 'register', 'enroll', 'sign up', 'start', 'join'],
-            response: "Ready to start? 🎓<br><br><strong>Apply for a Job:</strong><br>💼 <a href='apply-job.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Submit Job Application</strong></a><br><br><strong>Enrollment Application:</strong><br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Apply for School</strong></a><br><br>It only takes a few minutes!"
+            response: "Ready to start? 🎓<br><br>💼 <a href='apply-job.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Job Application</strong></a><br>📝 <a href='apply.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Enrollment Application</strong></a><br>🩺 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Medical Physical Form</strong></a><br>📚 <a href='forms.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'><strong>Course Catalog</strong></a><br><br>It only takes a few minutes!"
         },
         student_life: {
             keywords: ['student', 'life', 'career', 'advice', 'skills', 'news', 'blog', 'events'],
