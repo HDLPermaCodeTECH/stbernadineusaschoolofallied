@@ -1082,7 +1082,7 @@ footer {
 .hero-content {
     position: relative;
     z-index: 2;
-    max-width: 700px;
+    max-width: 950px; /* Increased to accommodate longer phrases in 2 lines */
     display: flex;
     flex-direction: column;
     justify-content: center;
