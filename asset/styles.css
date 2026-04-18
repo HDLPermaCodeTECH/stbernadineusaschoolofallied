@@ -2299,7 +2299,7 @@ footer {
 .logo-track {
     display: flex;
     align-items: center;
-    gap: 80px;
+    /* Use padding on children instead of gap for mathematically perfect infinite translation */
     animation: slideLeft 60s linear infinite;
     width: max-content;
     will-change: transform;
@@ -2310,9 +2310,7 @@ footer {
 .logo-track img {
     height: 80px;
     width: auto;
-
-
-
+    padding: 0 40px; /* Equivalent to 80px gap */
     object-fit: contain;
     flex-shrink: 0;
     filter: grayscale(30%);
@@ -4795,11 +4793,12 @@ body:not(.js-loaded) .reveal-scale {
     }
 
     .logo-track {
-        gap: 40px;
+        /* Mobile adjustment for new padding marquee logic */
     }
 
     .logo-track img {
         height: 60px;
+        padding: 0 20px; /* Equivalent to 40px gap */
     }
 
     .footer-contact {
@@ -5683,11 +5682,12 @@ body:not(.js-loaded) .reveal-scale {
 /* Mobile fixes for Logo Slider to prevent disappearing on small screens */
 @media (max-width: 768px) {
     .logo-track {
-        gap: 40px;
+        /* Mobile adjustment for new padding marquee logic */
     }
 
     .logo-track img {
         height: 60px;
+        padding: 0 20px; /* Equivalent to 40px gap */
     }
 
     .logo-slider::before,
@@ -5698,11 +5698,12 @@ body:not(.js-loaded) .reveal-scale {
 
 @media (max-width: 480px) {
     .logo-track {
-        gap: 30px;
+        /* Use padding instead of gap */
     }
 
     .logo-track img {
         height: 45px;
+        padding: 0 15px;
     }
 
     .logo-slider::before,
