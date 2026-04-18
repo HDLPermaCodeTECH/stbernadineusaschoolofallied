@@ -2305,6 +2305,8 @@ footer {
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    white-space: nowrap; /* Prevent iOS wrapping bugs */
+    -webkit-transform-style: preserve-3d; /* Prevent clipping */
 }
 
 .logo-track img {
@@ -2316,6 +2318,8 @@ footer {
     filter: grayscale(30%);
     opacity: 0.85;
     transition: all 0.3s ease;
+    transform: translateZ(0); /* Force hardware acceleration */
+    -webkit-transform: translateZ(0); /* Prevent disappearing */
 }
 
 .logo-track img:hover {
