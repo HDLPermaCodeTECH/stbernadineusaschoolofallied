@@ -1,6 +1,6 @@
-﻿/* 
+/* 
     Theme: Premium Healthcare
-    St. Bernadine School â€” Professional & Premium Design System
+    St. Bernadine School — Professional & Premium Design System
 */
 
 :root {
@@ -3718,7 +3718,7 @@ select:focus {
 }
 
 /* ========================================
-   NEWSLETTER BAR â€” PREMIUM
+   NEWSLETTER BAR — PREMIUM
    ======================================== */
 .newsletter-bar {
     background: linear-gradient(135deg, #0f172a 0%, #1a2940 40%, #0d3320 80%, #0a1628 100%);
@@ -5757,10 +5757,66 @@ body:not(.js-loaded) .reveal-scale {
     font-size: 20px;
 }
 
+/* Audio Control Button */
+#audio-control {
+    position: fixed;
+    bottom: 95px;
+    right: 25px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--white);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 9999;
+    transition: var(--transition);
+    box-shadow: var(--shadow-lg);
+    outline: none;
+}
+
+#audio-control.playing {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+    animation: pulse-green 2s infinite;
+}
+
+#audio-control:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+#audio-control i {
+    font-size: 20px;
+}
+
+@keyframes pulse-green {
+    0% {
+        box-shadow: 0 0 0 0 rgba(6, 117, 46, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(6, 117, 46, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(6, 117, 46, 0);
+    }
+}
+
 @media (max-width: 768px) {
     #back-to-top {
         bottom: 20px;
         left: 20px;
+        width: 45px;
+        height: 45px;
+    }
+
+    #audio-control {
+        bottom: 85px;
+        right: 20px;
         width: 45px;
         height: 45px;
     }

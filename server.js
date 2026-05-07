@@ -1279,7 +1279,7 @@ const generateJobApplicationPDF = (data) => {
             // Contact Info
             let contactArr = [address, contactPhone, contactEmail, data.linkedin, data.portfolio].filter(Boolean);
             doc.fontSize(10).font('Helvetica').fillColor('#e2e8f0')
-                .text(contactArr.join('   â€¢   '), marginX, 110, { width: contentWidth });
+                .text(contactArr.join('   •   '), marginX, 110, { width: contentWidth });
 
             // Ensure photo fits in header if present
             if (data.photoPath) {

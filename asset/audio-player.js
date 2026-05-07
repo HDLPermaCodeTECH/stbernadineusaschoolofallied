@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Background Audio Player (St. Bernadine Anthem)
  * St. Bernadine Official Website
  */
@@ -61,59 +61,52 @@
         }, interval);
     };
 
-    const tryPlay = () => {
-        anthem.play().then(() => {
-            fadeIn(anthem, targetVolume, fadeDuration);
-        }).catch(err => {
-            const startOnInteraction = () => {
+    // Create audio button element if it doesn't already exist
+    const createAudioButton = () => {
+        if (document.getElementById('audio-control')) return;
+
+        const audioBtn = document.createElement('button');
+        audioBtn.id = 'audio-control';
+        audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+        audioBtn.setAttribute('title', 'Play Anthem');
+        document.body.appendChild(audioBtn);
+
+        let isPlaying = false;
+
+        audioBtn.addEventListener('click', () => {
+            if (!isPlaying) {
+                // Play
+                isPlaying = true;
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+                audioBtn.setAttribute('title', 'Mute Anthem');
+                audioBtn.classList.add('playing');
+                
                 anthem.play().then(() => {
                     fadeIn(anthem, targetVolume, fadeDuration);
+                }).catch(err => {
+                    console.error("Audio playback failed:", err);
+                    isPlaying = false;
+                    audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+                    audioBtn.classList.remove('playing');
                 });
-                ['click', 'scroll', 'touchstart'].forEach(ev => 
-                    document.removeEventListener(ev, startOnInteraction)
-                );
-            };
-            ['click', 'scroll', 'touchstart'].forEach(ev => 
-                document.addEventListener(ev, startOnInteraction)
-            );
+            } else {
+                // Mute/Pause
+                isPlaying = false;
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+                audioBtn.setAttribute('title', 'Play Anthem');
+                audioBtn.classList.remove('playing');
+                
+                fadeOut(anthem, 1000, () => {
+                    anthem.pause();
+                });
+            }
         });
     };
 
-    // Professional End Of Track (Fade out near end, no loop)
-    anthem.addEventListener('timeupdate', function() {
-        const buffer = 3.5; // Start fade out 3.5 seconds before end
-        if (this.duration && (this.duration - this.currentTime) < buffer && !isFadingOut && !this.ended) {
-            fadeOut(this, buffer * 1000);
-        }
-    });
-
-    // Handle end of audio
-    anthem.addEventListener('ended', function() {
-        console.log('Audio finished playing');
-        this.volume = 0;
-    });
-
-    // Handle smooth Fade Out on page navigation
-    document.addEventListener('click', (e) => {
-        const link = e.target.closest('a');
-        if (!link || !link.href) return;
-        
-        const isInternal = link.href.startsWith(window.location.origin) || link.href.startsWith('/') || !link.href.includes('://');
-        const isSamePage = link.getAttribute('href') && link.getAttribute('href').startsWith('#');
-
-        if (isInternal && !isSamePage && !link.target && !e.ctrlKey && !e.shiftKey) {
-            const destination = link.href;
-            e.preventDefault();
-            fadeOut(anthem, 800, () => {
-                window.location.href = destination;
-            });
-        }
-    });
-
-    // Attempt playback when the page is ready
+    // Initialize button on load
     if (document.readyState === 'complete') {
-        tryPlay();
+        createAudioButton();
     } else {
-        window.addEventListener('load', tryPlay);
+        window.addEventListener('load', createAudioButton);
     }
 })();
