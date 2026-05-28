@@ -6,6 +6,7 @@ const seoMetaTags = `
     <meta name="author" content="Hebrey Dill P. Llagas">
     <meta name="designer" content="Hebrey Dill P. Llagas">
     <meta name="creator" content="Hebrey Dill P. Llagas">
+    <meta name="generator" content="Custom HTML5, Node.js, and Gemini AI - Built by Hebrey Dill P. Llagas">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -22,8 +23,6 @@ const seoMetaTags = `
     }
     </script>
 </head>`;
-
-const footerAttribution = ` | <a href="https://hdlpermacodetech.com" target="_blank" rel="author noopener" style="color: inherit; text-decoration: none;">Website Developed by Hebrey Dill P. Llagas</a></p>`;
 
 function processDirectory(dir) {
     const files = fs.readdirSync(dir);
@@ -43,13 +42,13 @@ function processDirectory(dir) {
             // Remove old tags
             content = content.replace(/<!-- Developer SEO & Attribution -->[\s\S]*?<\/script>\n<\/head>/g, '</head>');
             
-            // Add new tags with extended schema
+            // Add new tags with generator
             content = content.replace('</head>', seoMetaTags);
             modified = true;
 
             if (modified) {
                 fs.writeFileSync(fullPath, content, 'utf8');
-                console.log(`[SUCCESS] Updated SEO with extended expertise: ${fullPath}`);
+                console.log(`[SUCCESS] Added generator tag to: ${fullPath}`);
             }
         }
     });
