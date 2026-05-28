@@ -1,4 +1,4 @@
-﻿const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -168,9 +168,6 @@ if (process.env.GEMINI_API_KEY) {
 *   **Co-Founder, CEO & Administrator:** Louie Samin.
     *   *Role:* Oversees corporate functions, strategic implementation, and global procurement.
     *   *Background:* B.S. Finance/Economics from UC Berkeley. 40 years experience in global operations.
-*   **Director:** Jocelyn Ortillo-Samin, RN, MA, CCRN, CEN, CSN.
-    *   *Role:* Director of St. Bernadine Placement & Consulting Services.
-    *   *Background:* MA in Executive Nurse Administration (Columbia Univ). 40 years nursing experience (Cardiac ICU, ER). Worked with Special ED students.
 *   **Faculty Members:**
     *   Nenita Pawid, RN (40+ years exp).
     *   Felicia Miller (40+ years healthcare, 20+ teaching).

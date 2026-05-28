@@ -360,10 +360,6 @@ document.addEventListener('DOMContentLoaded', () => {
             keywords: ['leadership', 'louie', 'administrator', 'co-founder'],
             response: "<strong>Louie Samin</strong> is our Co-Founder and Administrator.<br><br>With a B.S. in Finance/Economics from UC Berkeley and 40+ years of global operations experience, he oversees corporate functions and international student placement."
         },
-        director: {
-            keywords: ['director', 'jocelyn', 'ortillo'],
-            response: "<strong>Jocelyn Ortillo-Samin, RN, MA</strong> is our Director.<br><br>With 40+ years of nursing experience (ER, ICU, School Nursing) and an MA in Executive Nurse Administration from Columbia University, she leads our Placement & Consulting Services."
-        },
         faculty: {
             keywords: ['faculty', 'teachers', 'instructors', 'staff', 'professors'],
             response: "Our expert faculty includes:<br>- <strong>Nenita Pawid, RN:</strong> 40+ years exp.<br>- <strong>Felicia Miller:</strong> 40+ years exp.<br>- <strong>Cecilia Domingo, RN:</strong> 40+ years exp.<br>- <strong>Aurea Cielito G. Batchar, RN:</strong> 33 years exp.<br><br>They bring decades of real-world clinical experience to the classroom."
