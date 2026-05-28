@@ -1,0 +1,11 @@
+/* TEAM */
+Web Developer: Hebrey Dill P. Llagas (Troy)
+Role: Lead Full-Stack Web Developer, UI/UX Designer & AI Specialist
+Expertise: Custom Websites, Financial Support Systems, POS SaaS (Point of Sale Software as a Service), Custom Web Applications
+Portfolio: https://hdlpermacodetech.com
+Contact: school@stbernadineusa.com
+
+/* SITE */
+Website: https://www.stbernadineusa.com/
+Language: English
+Technology: HTML5, CSS3, JavaScript, Node.js, Gemini AI

@@ -66,36 +66,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Active Navigation Highlight ---
     function highlightActiveLink() {
-        // Get the current filename from the URL
-        // Handles: /path/to/index.html -> index.html
-        // Handles: / (root) -> index.html (assumed)
-        let currentFile = window.location.pathname.split('/').pop() || 'index.html';
+        const normalizeUrl = (url) => {
+            let u = url.split('#')[0].split('?')[0];
+            if (u.endsWith('/')) u += 'index.html';
+            return u;
+        };
 
-        // Handle cases where the path ends in a slash (e.g. /folder/) -> assumed index.html
-        if (currentFile.indexOf('.') === -1) {
-            currentFile = 'index.html';
-        }
-
+        const currentUrl = normalizeUrl(window.location.href);
         const navLinks = document.querySelectorAll('.nav-links a');
 
+        // First remove all hardcoded active classes
+        navLinks.forEach(link => link.classList.remove('active'));
+
         navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (!href) return;
-
-            // Get the filename from the link href
-            // We use the link object property to get the absolute path, then extract filename
-            // But link.href returns full URL. valid for comparison if we just want filename.
-
-            // Simpler: Just check if the href *ends with* the current filename
-            // This avoids issues with relative paths like ./about-us/ vs about-us/
-
-            // Special handling for home page
-            if ((currentFile === 'index.html' || currentFile === '') && (href === 'index.html' || href === './' || href === '/' || href.endsWith('index.html'))) {
-                link.classList.add('active');
-                return;
-            }
-
-            if (href.endsWith(currentFile)) {
+            if (!link.href) return;
+            const linkUrl = normalizeUrl(link.href);
+            if (currentUrl === linkUrl) {
                 link.classList.add('active');
             }
         });
@@ -415,8 +401,8 @@ document.addEventListener('DOMContentLoaded', () => {
             response: "Explore our Student Resources:<br><br>🎓 <a href='student-life.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Student Life</a><br>💼 <a href='career-advice.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Career Advice</a><br>🥼 <a href='clinical-skills.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Clinical Skills</a><br>📰 <a href='agency-news.html' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>Agency News</a>"
         },
         developer: {
-            keywords: ['developer', 'creator', 'troy', 'hebrey', 'who made', 'who built'],
-            response: "This website and AI were architected and built by <strong>Hebrey Dill P. Llagas (Troy)</strong>.<br><br><strong>Role:</strong> Lead Developer & AI Specialist.<br><strong>Age:</strong> 29.<br><strong>Expertise:</strong> Full-Stack Development & AI Integration.<br><br>He is highly recommended for premium web projects!"
+            keywords: ['developer', 'creator', 'troy', 'hebrey', 'llagas', 'who made', 'who built', 'designed by'],
+            response: "This website and AI were architected and built by <strong>Hebrey Dill P. Llagas (Troy)</strong>.<br><br><strong>Role:</strong> Lead Full-Stack Web Developer, UI/UX Designer & AI Specialist.<br><strong>Expertise:</strong> He builds high-end websites, Financial Support Systems, POS SaaS (Point of Sale Software as a Service), and various custom web applications.<br><strong>Portfolio:</strong> <a href='https://hdlpermacodetech.com' target='_blank' style='color: var(--primary-color); text-decoration: underline;'>hdlpermacodetech.com</a><br><br>He specializes in creating premium, AI-integrated web apps and is highly recommended for tech projects!"
         }
     };
 
