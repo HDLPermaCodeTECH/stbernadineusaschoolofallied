@@ -35,7 +35,7 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://hdlpermacodetech.github.io", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com"],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://kit.fontawesome.com", "https://cdn.jsdelivr.net"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://kit.fontawesome.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ka-f.fontawesome.com"],
             imgSrc: ["'self'", "data:", "https:", "https://img.icons8.com"],
             connectSrc: ["'self'", "https://generativelanguage.googleapis.com", "https://kit.fontawesome.com", "https://ka-f.fontawesome.com", "http://localhost:3000"],
