@@ -21,7 +21,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="asset/styles.min.css?v=10.32">
+    <link rel="stylesheet" href="asset/styles.min.css?v=20261014-ui1">
     <!-- Intl Tel Input CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
     <style>
@@ -178,30 +178,30 @@
                     style="background: var(--white); border-radius: 12px; box-shadow: var(--shadow-lg); border: 1px solid #E2E8F0;">
                     <h2 style="margin-bottom: 20px;">Send a Message</h2>
                     <form id="contact-form">
-                        <div style="margin-bottom: 20px;"> <label
+                        <div style="margin-bottom: 20px;"> <label for="contact-name"
                                 style="display: block; margin-bottom: 8px; font-weight: 600;">Name</label> <input
-                                type="text"
+                                type="text" id="contact-name" autocomplete="name"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required> </div>
-                        <div style="margin-bottom: 20px;"> <label
+                        <div style="margin-bottom: 20px;"> <label for="contact-email"
                                 style="display: block; margin-bottom: 8px; font-weight: 600;">Email</label> <input
-                                type="email"
+                                type="email" id="contact-email" autocomplete="email"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required> </div>
-                        <div style="margin-bottom: 20px;"> <label
+                        <div style="margin-bottom: 20px;"> <label for="contactNumber"
                                 style="display: block; margin-bottom: 8px; font-weight: 600;">Contact Number</label>
                             <input type="tel" id="contactNumber" name="contact_number"
                                 style="width: 100%; padding-top: 12px; padding-bottom: 12px; padding-right: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required>
                         </div>
-                        <div style="margin-bottom: 20px;"> <label
+                        <div style="margin-bottom: 20px;"> <label for="contact-subject"
                                 style="display: block; margin-bottom: 8px; font-weight: 600;">Subject</label> <input
-                                type="text"
+                                type="text" id="contact-subject"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required> </div>
-                        <div style="margin-bottom: 20px;"> <label
+                        <div style="margin-bottom: 20px;"> <label for="contact-message"
                                 style="display: block; margin-bottom: 8px; font-weight: 600;">Message</label> <textarea
-                                rows="5"
+                                rows="5" id="contact-message"
                                 style="width: 100%; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required></textarea> </div> <button type="submit" class="btn btn-primary"
                             style="width: 100%;">Send Message</button>
@@ -264,7 +264,7 @@
             </div>
         </div>
     </footer>
-    <script src="asset/script.js?v=10.38"></script> <!-- Intl Tel Input JS -->
+    <script src="asset/script.js?v=20261014-ui1"></script> <!-- Intl Tel Input JS -->
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
     <script>        /* Initialize Intl Tel Input */        const input = document.querySelector("#contactNumber");        if (input) {            window.intlTelInput(input, {                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",                initialCountry: "us",                preferredCountries: ["us", "ph"],                separateDialCode: true            });        }    </script>
     <script>        document.getElementById('contact-form').addEventListener('submit', async function (e) {
@@ -279,7 +279,7 @@
                 }); const result = await response.json(); if (response.ok) { alert('Message Sent Successfully! We will contact you soon.'); this.reset(); } else { alert(`Error (${response.status}): ${result.error || result.message || 'Failed to send message.'}`); }
             } catch (error) { console.error('Error:', error); alert(`Network/Server Error: ${error.message}\nPlease try again later or contact us directly.`); } finally { btn.innerText = originalText; btn.disabled = false; }
         });    </script>
-    <script src="asset/back-to-top.js" defer></script>
+    <script src="asset/back-to-top.js?v=20261014-ui1" defer></script>
 </body>
 
 </html>

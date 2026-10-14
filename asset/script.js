@@ -30,11 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('js-loaded');
 
     // --- Mobile Navigation ---
-    // --- Mobile Navigation ---
     const mobileMenuBtn = document.createElement('button');
     mobileMenuBtn.classList.add('mobile-menu-btn');
     mobileMenuBtn.innerHTML = '<span></span><span></span><span></span>';
     mobileMenuBtn.setAttribute('aria-label', 'Toggle navigation');
+    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    mobileMenuBtn.setAttribute('aria-controls', 'primary-navigation');
     document.querySelector('.navbar').appendChild(mobileMenuBtn);
 
     // Create overlay
@@ -43,13 +44,48 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(navOverlay);
 
     const navLinks = document.querySelector('.nav-links');
+    navLinks.id = 'primary-navigation';
+    const mobileViewport = window.matchMedia('(max-width: 1200px)');
 
-    function toggleMobileMenu() {
-        const isOpen = navLinks.classList.toggle('active');
+    function setMobileMenu(isOpen) {
+        navLinks.classList.toggle('active', isOpen);
         navOverlay.classList.toggle('active', isOpen);
         mobileMenuBtn.classList.toggle('active', isOpen);
+        mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
+        document.body.classList.toggle('nav-open', isOpen);
+        navLinks.inert = mobileViewport.matches && !isOpen;
         document.body.style.overflow = isOpen ? 'hidden' : '';
     }
+
+    function toggleMobileMenu() {
+        setMobileMenu(!navLinks.classList.contains('active'));
+    }
+    setMobileMenu(false);
+    mobileViewport.addEventListener('change', () => setMobileMenu(false));
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && navLinks.classList.contains('active')) {
+            setMobileMenu(false);
+            mobileMenuBtn.focus();
+        }
+        if (event.key === 'Tab' && navLinks.classList.contains('active')) {
+            const links = [...navLinks.querySelectorAll('a[href]')];
+            const first = links[0];
+            const last = links[links.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                mobileMenuBtn.focus();
+            } else if (event.shiftKey && document.activeElement === mobileMenuBtn) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === mobileMenuBtn) {
+                event.preventDefault();
+                first.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                mobileMenuBtn.focus();
+            }
+        }
+    });
 
     mobileMenuBtn.addEventListener('click', toggleMobileMenu);
     navOverlay.addEventListener('click', toggleMobileMenu);
@@ -90,12 +126,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AI Chatbot ---
     const chatbotHTML = `
-        <div class="chatbot-container">
+        <div class="chatbot-container" id="chatbot-panel" role="dialog" aria-label="St. Bernadine AI assistant" inert>
             <div class="chat-header">
                 <div class="chat-title">
                     <i class="fa-solid fa-robot"></i> St. Bernadine School of Allied Health AI
                 </div>
-                <button id="close-chat"><i class="fa-solid fa-xmark"></i></button>
+                <button id="close-chat" aria-label="Close chat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
             </div>
             <div class="chat-messages" id="chat-messages">
                 <div class="message bot">
@@ -103,12 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="chat-input local-theme-input">
-                <input type="text" id="user-input" placeholder="Type your question...">
-                <button id="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                <input type="text" id="user-input" placeholder="Type your question..." aria-label="Your question">
+                <button id="send-btn" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg></button>
             </div>
         </div>
-        <button class="chat-toggle-btn">
-            <i class="fa-solid fa-comment-dots"></i>
+        <button class="chat-toggle-btn" aria-label="Open chat" aria-expanded="false" aria-controls="chatbot-panel">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg>
         </button>
     `;
 
@@ -125,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleChat() {
         chatbotContainer.classList.toggle('active');
         const isActive = chatbotContainer.classList.contains('active');
+        chatbotContainer.inert = !isActive;
+        chatToggleBtn.setAttribute('aria-expanded', String(isActive));
+        document.body.classList.toggle('chat-open', isActive);
 
         // Hide toggle button when chat is active to prevent overlap/interaction issues
         if (isActive) {
@@ -133,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             chatToggleBtn.style.opacity = '1';
             chatToggleBtn.style.pointerEvents = 'all';
+            chatToggleBtn.focus();
         }
 
         if (isActive) {
@@ -145,6 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chatToggleBtn.addEventListener('click', toggleChat);
     closeChatBtn.addEventListener('click', toggleChat);
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && chatbotContainer.classList.contains('active')) toggleChat();
+    });
 
     let chatInitialized = false;
 
@@ -455,7 +498,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const slides = document.querySelectorAll('.slide');
     let currentSlide = 0;
 
-    if (slides.length > 0) {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (slides.length > 0 && !reducedMotion) {
         setInterval(() => {
             slides[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
@@ -469,6 +513,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (counters.length > 0) {
         const animateCounter = (counter) => {
             const target = parseFloat(counter.getAttribute('data-target'));
+            if (reducedMotion) {
+                counter.innerText = target;
+                return;
+            }
             const duration = 2000;
             let start = 0;
             const increment = target / (duration / 16);
@@ -557,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check if user has already made a choice
     if (!localStorage.getItem('cookieConsent')) {
+        document.body.classList.add('cookie-pending');
         // Inject banner
         document.body.insertAdjacentHTML('beforeend', cookieBannerHTML);
 
@@ -570,57 +619,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
 
         acceptBtn.addEventListener('click', () => {
+            document.body.classList.remove('cookie-pending');
             localStorage.setItem('cookieConsent', 'accepted');
             cookieBanner.classList.remove('visible');
             setTimeout(() => cookieBanner.remove(), 500);
         });
 
         declineBtn.addEventListener('click', () => {
+            document.body.classList.remove('cookie-pending');
             localStorage.setItem('cookieConsent', 'declined');
             cookieBanner.classList.remove('visible');
             setTimeout(() => cookieBanner.remove(), 500);
         });
     }
 
-    // --- Typewriter Effect ---
+    // Keep the primary headline readable during load and throughout the visit.
     const typewriterElement = document.getElementById('typewriter-text');
     if (typewriterElement) {
-        const phrases = [
-            "Global Career Placement & Consulting",
-            "Turning the American Dream into Reality",
-            "Professional Home Care Services",
-            "Allied Health Training & Job Hiring"
-        ];
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typingSpeed = 100;
-
-        function type() {
-            const currentPhrase = phrases[phraseIndex];
-            
-            if (isDeleting) {
-                typewriterElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-                typingSpeed = 50;
-            } else {
-                typewriterElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-                typingSpeed = 100;
-            }
-
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                isDeleting = true;
-                typingSpeed = 3000; // Pause at the end
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % phrases.length;
-                typingSpeed = 500; // Pause before next phrase
-            }
-
-            setTimeout(type, typingSpeed);
-        }
-
-        setTimeout(type, 500); // Initial delay
+        typewriterElement.textContent = 'Turning the American Dream into Reality';
     }
 });

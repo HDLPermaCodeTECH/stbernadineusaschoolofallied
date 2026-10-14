@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const backToTopBtn = document.createElement('a');
         backToTopBtn.id = 'back-to-top';
         backToTopBtn.href = '#';
-        backToTopBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+        backToTopBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 6-6 6 6M12 6v14"/></svg>';
+        backToTopBtn.setAttribute('aria-label', 'Go to top');
         backToTopBtn.setAttribute('title', 'Go to top');
         
         // Add to body
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
+                behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
             });
         });
     }
