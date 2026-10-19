@@ -147,7 +147,7 @@ app.use((req, res, next) => {
     try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
     catch { return res.status(400).json({ error: 'Invalid request path.' }); }
     const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/'];
-    const serverSource = /^\/(?:server|form_mail|maintenance|delivery_check)\.js$/.test(requestPath);
+    const serverSource = /^\/(?:server|form_mail|maintenance)\.js$/.test(requestPath);
     if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
         return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
     }
@@ -1743,8 +1743,6 @@ if (process.env.NODE_ENV !== 'test') {
         try {
             await getFormTransport().verify();
             console.log('[SMTP_VERIFY]', JSON.stringify({ ok: true, mailbox: process.env.EMAIL_USER, destinations: FORM_INBOXES }));
-            // Five delivery checks explicitly approved by the owner on 19 October 2026.
-            await require('./delivery_check')(getFormTransport(), process.env.EMAIL_USER);
         } catch (error) {
             console.error('[SMTP_VERIFY]', JSON.stringify({ ok: false, ...safeMailError(error) }));
         }
