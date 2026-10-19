@@ -522,8 +522,8 @@
                     <div id="resume-upload-section" style="margin-bottom: 30px; display: block;">
                         <label
                             style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-dark);">Upload
-                            Resume (PDF, DOCX) <span style="color: #e11d48;">*</span></label>
-                        <input type="file" id="resume-file" name="Resume" accept=".pdf,.doc,.docx" required
+                            Resume (PDF, DOC, DOCX) <span style="color: #e11d48;">*</span></label>
+                        <input type="file" id="resume-file" name="resume" accept=".pdf,.doc,.docx" required
                             style="width: 100%; padding: 14px 16px; border: 1px dashed #cbd5e1; border-radius: 8px; font-family: inherit; transition: all 0.3s; background-color: #f8fafc; outline: none; cursor: pointer;"
                             onfocus="this.style.borderColor='var(--primary-color)'; this.style.backgroundColor='#fff'; this.style.boxShadow='0 0 0 3px rgba(6, 117, 46, 0.1)';"
                             onblur="this.style.borderColor='#cbd5e1'; this.style.backgroundColor='#f8fafc'; this.style.boxShadow='none';">
@@ -698,25 +698,7 @@
                                 employees to undergo a comprehensive background check and fingerprinting prior to
                                 employment.</p>
 
-                            <label
-                                style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 15px;">
-                                <input type="checkbox" required name="BackgroundConsent"
-                                    style="margin-top: 4px; transform: scale(1.2);">
-                                <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">I consent to
-                                    a
-                                    background check, including criminal history, license verification, and employment
-                                    references. <span style="color: #e11d48;">*</span></span>
-                            </label>
 
-                            <label
-                                style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 25px;">
-                                <input type="checkbox" required name="Truthfulness"
-                                    style="margin-top: 4px; transform: scale(1.2);">
-                                <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">I certify
-                                    that
-                                    all information provided in this application is true and complete to the best of my
-                                    knowledge. <span style="color: #e11d48;">*</span></span>
-                            </label>
 
                             <!-- Signature Section -->
                             <div style="margin-top: 20px;">
@@ -741,6 +723,29 @@
                         </div>
 
                     </div> <!-- End of Manual Form Section -->
+                    <div style="margin: 30px 0;">
+                        <h3 style="font-size: 1.25rem; margin-bottom: 16px;">Applicant declarations</h3>
+                        <p style="margin-bottom: 20px;">St. Bernadine requires a background check and fingerprinting before employment. Please review and confirm the statements below.</p>
+                        <label
+                                style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 15px;">
+                                <input type="checkbox" required name="BackgroundConsent"
+                                    style="margin-top: 4px; transform: scale(1.2);">
+                                <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">I consent to
+                                    a
+                                    background check, including criminal history, license verification, and employment
+                                    references. <span style="color: #e11d48;">*</span></span>
+                            </label>
+
+                            <label
+                                style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 25px;">
+                                <input type="checkbox" required name="Truthfulness"
+                                    style="margin-top: 4px; transform: scale(1.2);">
+                                <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-dark);">I certify
+                                    that
+                                    all information provided in this application is true and complete to the best of my
+                                    knowledge. <span style="color: #e11d48;">*</span></span>
+                            </label>
+                    </div>
 
                     <div style="margin-bottom: 30px;">
                         <label
@@ -902,7 +907,8 @@
             // Map common fields expected by the backend format if necessary
             // e.g. ensuring contactEmail is mapped from Email
             formData.append('contactEmail', formData.get('Email'));
-            formData.append('contactPhone', formData.get('Phone'));
+            const phoneInput = document.getElementById('contactNumber');
+            formData.append('contactPhone', window.intlTelInputGlobals?.getInstance(phoneInput)?.getNumber() || formData.get('Phone'));
             formData.append('firstName', formData.get('FirstName'));
             formData.append('lastName', formData.get('LastName'));
             formData.append('address', `${formData.get('Address')}, ${formData.get('City')}, ${formData.get('State')} ${formData.get('Zip')}`);
@@ -916,9 +922,7 @@
 
             try {
                 // Determine API URL based on environment (local vs production)
-                const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? 'http://localhost:3000/apply-job'
-                    : '/apply-job';
+                const apiUrl = '/apply-job';
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -928,7 +932,7 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert('Application submitted successfully! Please check your email for a confirmation.');
+                    alert(result.message);
                     this.reset();
                     // Reset to default manual toggle
                     document.querySelector('input[name="AppMethod"][value="upload"]').click();
@@ -1004,7 +1008,7 @@
             </div>
         </div>
     </footer>
-    <script src="asset/script.js?v=20261014-mail1"></script>
+    <script src="asset/script.js?v=20261019-forms1"></script>
     <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
     <script>

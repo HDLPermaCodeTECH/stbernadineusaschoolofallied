@@ -248,6 +248,7 @@
                         style="width: 100%; margin-top: 20px; background-color: #902017; color: white; border: none; font-size: 1.1rem;">Submit
                         Referral</button>
                 </form>
+                <p id="referral-status" role="status" aria-live="polite" tabindex="-1" style="margin-top: 18px;"></p>
             </div>
         </div>
     </section>
@@ -311,7 +312,7 @@
             </div>
         </div>
     </footer>
-    <script src="asset/script.js?v=20261014-mail1"></script>
+    <script src="asset/script.js?v=20261019-forms1"></script>
     <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
     <script>
@@ -332,6 +333,8 @@
             e.preventDefault();
             const button = this.querySelector('button[type="submit"]');
             const original = button.textContent;
+            const status = document.getElementById('referral-status');
+            status.textContent = '';
             const data = Object.fromEntries(new FormData(this));
             for (const [id, field] of [['referrerPhone', 'referrer_phone'], ['applicantPhone', 'applicant_phone']]) {
                 const input = document.getElementById(id);
@@ -345,14 +348,17 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
                 });
                 const result = await response.json().catch(() => ({}));
-                if (!response.ok) throw new Error(result.error || 'Unable to send your referral. Please try again later.');
-                alert(result.message);
+                if (!response.ok || typeof result.message !== 'string') throw new Error(result.error || 'Unable to send your referral. Please try again later.');
+                status.textContent = result.message;
+                status.style.color = '#055923';
                 this.reset();
             } catch (error) {
-                alert(error.message || 'Unable to send your referral. Please try again later.');
+                status.textContent = error.message || 'Unable to send your referral. Please try again later.';
+                status.style.color = '#902017';
             } finally {
                 button.disabled = false;
                 button.textContent = original;
+                status.focus();
             }
         });
     </script>

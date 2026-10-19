@@ -86,14 +86,14 @@ const page = `<!doctype html>
               <span class="issue-number" aria-hidden="true">01</span>
               <div>
                 <h3 class="issue-title">Department email routing</h3>
-                <p class="issue-description">Some forms are configured to send to a different inbox than the intended department. We&rsquo;re updating the routing.</p>
+                <p class="issue-description">Department routing updates are installed. We&rsquo;re verifying email notifications before online forms reopen.</p>
               </div>
             </li>
             <li>
               <span class="issue-number" aria-hidden="true">02</span>
               <div>
                 <h3 class="issue-title">Referral submissions</h3>
-                <p class="issue-description">The referral form can display a confirmation without sending the referral. We&rsquo;re correcting the submission process.</p>
+                <p class="issue-description">The referral submission process has been updated. Final submission and delivery checks are in progress.</p>
               </div>
             </li>
           </ol>

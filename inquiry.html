@@ -301,7 +301,7 @@
       </div>
     </div>
   </footer>
-  <script src="asset/script.js?v=20261014-mail1"></script>
+  <script src="asset/script.js?v=20261019-forms1"></script>
   <!-- Intl Tel Input JS -->
   <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
   <script>
@@ -331,8 +331,7 @@
         const formData = {
           name: this.querySelector('input[type="text"]').value,
           email: this.querySelector('input[type="email"]').value,
-          contact_number: this.querySelector('input[name="contact_number"]')
-            .value,
+          contact_number: window.intlTelInputGlobals?.getInstance(document.getElementById('contactNumber'))?.getNumber() || this.querySelector('input[name="contact_number"]').value,
           subject: `Inquiry: ${program}`,
           message: `Program of Interest: ${program}\n\nMessage:\n${messageText}`,
         };
@@ -346,7 +345,7 @@
           const result = await response.json();
           if (response.ok) {
             alert(
-              "Inquiry Sent Successfully! Our admissions team will contact you soon.",
+              result.message,
             );
             this.reset();
           } else {

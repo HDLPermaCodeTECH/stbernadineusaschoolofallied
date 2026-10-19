@@ -713,7 +713,7 @@
         </div>
     </footer>
     <!-- Chatbot Script -->
-    <script src="asset/script.js?v=20261014-mail1"></script>
+    <script src="asset/script.js?v=20261019-forms1"></script>
     <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
 
@@ -904,13 +904,12 @@
         }
         // Helper: Reset/Disable Fields
         function resetLocationFields() {
-            stateSelect.innerHTML = '<option value="">--- Select State/Province ---</option>';
-            citySelect.innerHTML = '<option value="">--- Select City ---</option>';
-            stateSelect.disabled = true;
-            citySelect.disabled = true;
-            // Ensure they are selects
-            ensureIsSelect(stateSelect, 'state', '--- Select State/Province ---');
-            ensureIsSelect(citySelect, 'city', '--- Select City ---');
+            for (const [id, placeholder] of [['state', '--- Select State/Province ---'], ['city', '--- Select City ---']]) {
+                ensureIsSelect(document.getElementById(id), id, placeholder);
+                const current = document.getElementById(id);
+                current.innerHTML = '<option value="">' + placeholder + '</option>';
+                current.disabled = true;
+            }
         }
         // Helper: Convert Select to Input (Fallback)
         function convertToInput(selectElement, placeholder) {
@@ -919,6 +918,7 @@
             const input = document.createElement('input');
             input.type = 'text';
             input.id = selectElement.id;
+            input.name = selectElement.name || selectElement.id;
             input.className = 'form-control';
             input.placeholder = placeholder + " (Enter Manually)";
             input.required = true;
@@ -931,6 +931,7 @@
             if (current.tagName === 'INPUT') {
                 const select = document.createElement('select');
                 select.id = id;
+                select.name = current.name || id;
                 select.className = 'form-control';
                 select.required = true;
                 select.innerHTML = `<option value="">${placeholderStr}</option>`;
@@ -946,7 +947,7 @@
             stateSelect.innerHTML = '<option value="">Loading PH Data...</option>';
             stateSelect.disabled = true;
             // Using raw github url for PH data
-            return fetch('https://raw.githubusercontent.com/flores-jacob/philippine-regions-provinces-cities-municipalities-barangays/master/philippine_provinces_cities_municipalities_and_barangays_2019v2.json')
+            return fetch('https://raw.githubusercontent.com/flores-jacob/philippine-regions-provinces-cities-municipalities-barangays/master/philippine_provinces_cities_municipalities_and_barangays_2019v2.json', { signal: AbortSignal.timeout(8000) })
                 .then(res => res.json())
                 .then(data => {
                     phData = data;
@@ -1030,6 +1031,7 @@
             document.getElementById('city').disabled = true;
             fetch('https://countriesnow.space/api/v0.1/countries/states', {
                 method: 'POST',
+                signal: AbortSignal.timeout(8000),
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ country: countryName })
             })
@@ -1071,6 +1073,7 @@
             }
             fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
                 method: 'POST',
+                signal: AbortSignal.timeout(8000),
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ country: country, state: state })
             })
@@ -1139,21 +1142,23 @@
             btn.disabled = true;
             // Submit the form using Fetch API for better UX (Alert instead of raw page)
             const formData = new FormData(form);
+            formData.set('phone', iti.getNumber() || input.value);
+            formData.set('emergencyContactPhone', itiEmergency.getNumber() || emergencyInput.value);
             fetch('/send-email', {
                 method: 'POST',
                 body: formData
             })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text().then(text => {
-                            alert('Application Submitted Successfully!');
-                            window.location.reload(); // Refresh to clear form
-                        });
-                    } else {
-                        return response.text().then(text => {
-                            throw new Error(text || 'Submission failed');
-                        });
+                .then(async response => {
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || typeof result.message !== 'string') {
+                        throw new Error(result.error || 'Unable to send your application. Please try again later.');
                     }
+                    alert(result.message);
+                    form.reset();
+                    resetLocationFields();
+                    document.getElementById('applicationDate').valueAsDate = new Date();
+                    btn.innerText = originalText;
+                    btn.disabled = false;
                 })
                 .catch(error => {
                     console.error('Submission Error:', error);

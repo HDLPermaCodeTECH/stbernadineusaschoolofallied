@@ -320,7 +320,7 @@
         </div>
     </footer>
     <!-- Custom JS -->
-    <script src="asset/script.js?v=20261014-mail1"></script>
+    <script src="asset/script.js?v=20261019-forms1"></script>
     <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
     <script>
@@ -366,7 +366,7 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    alert('Care Request Sent Successfully! A Care Coordinator will contact you shortly.');
+                    alert(result.message);
                     this.reset();
                 } else {
                     alert(`Error (${response.status}): ${result.error || result.message || 'Failed to send request.'}`);

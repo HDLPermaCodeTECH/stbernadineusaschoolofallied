@@ -655,7 +655,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ email: input.value, source_page: location.pathname })
                 });
                 const result = await response.json().catch(() => ({}));
-                if (!response.ok) throw new Error(result.error || 'Unable to send your request. Please try again later.');
+                if (!response.ok || typeof result.message !== 'string') throw new Error(result.error || 'Unable to send your request. Please try again later.');
                 status.textContent = result.message;
                 form.reset();
             } catch (error) {

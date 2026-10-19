@@ -15,9 +15,11 @@ const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
 const app = express();
+// Only trust the local reverse proxy, never arbitrary forwarded client headers.
+app.set('trust proxy', 'loopback');
 
-// Temporary site-wide maintenance. Remove this middleware to restore the website.
-app.use(require('./maintenance'));
+// Temporary site-wide maintenance is enabled by default.
+if (process.env.SITE_MAINTENANCE !== 'off') app.use(require('./maintenance'));
 
 // Redirect .html to extensionless URLs for SEO
 app.use((req, res, next) => {
@@ -41,7 +43,7 @@ app.use(helmet({
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://kit.fontawesome.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ka-f.fontawesome.com"],
             imgSrc: ["'self'", "data:", "https:", "https://img.icons8.com"],
-            connectSrc: ["'self'", "https://generativelanguage.googleapis.com", "https://kit.fontawesome.com", "https://ka-f.fontawesome.com", "http://localhost:3000"],
+            connectSrc: ["'self'", "https://generativelanguage.googleapis.com", "https://kit.fontawesome.com", "https://ka-f.fontawesome.com", "https://countriesnow.space", "https://raw.githubusercontent.com", "http://localhost:3000"],
             frameSrc: ["'self'", "https://www.google.com"],
             objectSrc: ["'none'"],
             upgradeInsecureRequests: [],
@@ -53,7 +55,7 @@ app.use(compression()); // Compress all responses
 
 const corsOptions = {
     origin: [
-        'https://stbernadineusa.com',
+        'https://www.stbernadineusa.com',
         'https://stbernadineusa.com',
         'https://hdlpermacodetech.github.io',
         'http://localhost:5500',
@@ -70,17 +72,30 @@ app.use(bodyParser.json());
 const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
-    message: "Too many requests from this IP, please try again after 15 minutes"
+    message: { error: "Too many requests. Please try again after 15 minutes." }
 });
 app.use('/chat', generalLimiter);
 
 const formLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 5, // limit each IP to 5 form submissions per hour
-    message: "Too many submissions from this IP, please try again after an hour"
+    skip: req => req.method !== 'POST',
+    message: { error: "Too many submissions. Please try again after an hour." }
 });
 app.use(['/send-email', '/send-contact', '/send-placement', '/request-care', '/apply-job', '/send-referral', '/subscribe'], formLimiter);
 
+// Delete only files uploaded by this request, including validation and mail failures.
+app.use(['/send-email', '/apply-job'], (req, res, next) => {
+    res.once('finish', () => {
+        const files = Array.isArray(req.files) ? req.files : Object.values(req.files || {}).flat();
+        for (const file of files) {
+            fs.unlink(file.path, error => {
+                if (error && error.code !== 'ENOENT') console.error('[UPLOAD_CLEANUP_FAILED]', JSON.stringify({ code: error.code }));
+            });
+        }
+    });
+    next();
+});
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
@@ -99,6 +114,7 @@ const upload = multer({
     storage: storage,
     limits: {
         fileSize: 5 * 1024 * 1024, // 5MB limit
+        files: 10,
     },
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -110,10 +126,29 @@ const upload = multer({
     }
 });
 
+const jobUpload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024, files: 2 },
+    fileFilter: (req, file, cb) => {
+        const allowed = file.fieldname === 'resume'
+            ? ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+            : ['image/jpeg', 'image/png'];
+        if (allowed.includes(file.mimetype)) return cb(null, true);
+        const message = file.fieldname === 'resume'
+            ? 'Please upload your resume as PDF, DOC or DOCX (up to 5 MB).'
+            : 'Please upload your photo as JPG or PNG (up to 5 MB).';
+        cb(Object.assign(new Error(message), { status: 400, publicMessage: message }));
+    }
+});
+
 // Block access to sensitive files in the root directory (Security Layer)
 app.use((req, res, next) => {
-    const sensitiveFiles = ['.env', '.git', '.htaccess', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/'];
-    if (sensitiveFiles.some(file => req.path.includes(file))) {
+    let requestPath;
+    try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
+    catch { return res.status(400).json({ error: 'Invalid request path.' }); }
+    const sensitiveFiles = ['.env', '.git', '.htaccess', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/'];
+    const serverSource = /^\/(?:server|form_mail|maintenance)\.js$/.test(requestPath);
+    if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
         return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
     }
     next();
@@ -471,18 +506,31 @@ const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc
     }
 };
 
+// An optional confirmation failure must not turn an accepted application into a failure.
+const sendConfirmation = async (...args) => {
+    try { await sendEmail(...args); return true; }
+    catch (error) {
+        console.error('[FORM_CONFIRMATION_FAILED]', JSON.stringify(safeMailError(error)));
+        return false;
+    }
+};
+const confirmationMessage = (message, sent) => sent ? message : `${message} Your confirmation email could not be sent; please do not resubmit.`;
+const formFailure = (res, error) => {
+    console.error('[FORM_SUBMISSION_FAILED]', JSON.stringify(safeMailError(error)));
+    return res.status(503).json({ error: 'We could not send your request. Please try again later or email the appropriate department directly.' });
+};
+
 app.post('/send-email', 
     upload.array('attachment'),
     [
         body('firstName').trim().notEmpty().escape(),
         body('lastName').trim().notEmpty().escape(),
-        body('email').isEmail().normalizeEmail(),
+        body('email').trim().isEmail(),
         body('Program').notEmpty().escape(),
         validate
     ],
     async (req, res) => {
     try {
-        console.log("Received form submission:", req.body);
         const data = req.body;
         let attachments = [];
 
@@ -697,12 +745,11 @@ app.post('/send-email',
             </body>
             </html>
         `;
-        await sendEmail(data.email, autoReplySubject, autoReplyHtml, null, FORM_INBOXES.ENROLLMENT);
-        res.status(200).json({ message: 'Application Submitted Successfully!' });
+        const confirmationSent = await sendConfirmation(data.email, autoReplySubject, autoReplyHtml, null, FORM_INBOXES.ENROLLMENT);
+        res.status(200).json({ message: confirmationMessage('Your application was sent to our enrollment team.', confirmationSent), confirmationSent });
 
     } catch (error) {
-        console.error("Error processing application:", error);
-        res.status(500).json({ error: 'Error: ' + error.message });
+        formFailure(res, error);
     }
 });
 
@@ -858,14 +905,14 @@ const generateCareRequestPDF = (data) => {
 
 app.post(['/send-contact', '/send-placement'], [
     body('name').trim().notEmpty().escape(),
-    body('email').isEmail().normalizeEmail(),
+    body('email').trim().isEmail(),
+    body('contact_number').optional().trim().isLength({ max: 64 }).escape(),
     body('subject').trim().notEmpty().escape(),
     body('message').trim().notEmpty().escape(),
     validate
 ], async (req, res) => {
     try {
         const { name, email, contact_number, subject, message } = req.body;
-        console.log("Received contact Inquiry:", req.body);
 
         // Professional HTML Email Template
         const htmlContent = `
@@ -1065,29 +1112,34 @@ app.post(['/send-contact', '/send-placement'], [
             </html>
         `;
 
-        await sendEmail(email, autoReplySubject, autoReplyHtml, null, req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY);
-        res.status(200).json({ message: 'Message Sent Successfully!' });
+        const confirmationSent = await sendConfirmation(email, autoReplySubject, autoReplyHtml, null, req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY);
+        res.status(200).json({ message: confirmationMessage('Your message was sent to our team.', confirmationSent), confirmationSent });
 
     } catch (error) {
-        console.error("Error processing contact form:", error);
-        res.status(500).json({ error: 'Error: ' + error.message });
+        formFailure(res, error);
     }
 });
 
 app.post('/request-care', [
-    body('firstName').trim().notEmpty().escape(),
-    body('lastName').trim().notEmpty().escape(),
-    body('contactEmail').isEmail().normalizeEmail(),
+    body('firstName').customSanitizer((value, { req }) => value || req.body.patientFirstName).trim().notEmpty().escape(),
+    body('lastName').customSanitizer((value, { req }) => value || req.body.patientLastName).trim().notEmpty().escape(),
+    body('contactEmail').trim().isEmail(),
+    body('contactPhone').trim().notEmpty().isLength({ max: 64 }).escape(),
     body('careType').notEmpty().escape(),
+    body('contactName').optional().trim().isLength({ max: 180 }).escape(),
+    body('relationship').optional().trim().isLength({ max: 180 }).escape(),
+    body('patientAge').optional({ checkFalsy: true }).isInt({ min: 0, max: 130 }).toInt(),
+    body('serviceLocation').optional().trim().isLength({ max: 500 }).escape(),
+    body('startDate').optional().trim().isLength({ max: 100 }).escape(),
+    body('careDetails').optional().trim().isLength({ max: 6000 }).escape(),
     validate
 ], async (req, res) => {
     try {
         const {
             firstName, lastName, contactPhone, contactEmail,
-            careType, startDate, careDetails
+            careType, startDate, careDetails, contactName, relationship, patientAge, serviceLocation
         } = req.body;
 
-        console.log("Received Home Care Request:", req.body);
 
         // Admin HTML Email
         const htmlContent = `
@@ -1132,10 +1184,14 @@ app.post('/request-care', [
                     </tr>
                     <tr>
                         <td class="body">
-                            <h3 style="color:#111827;">Contact Person Details</h3>
+                            <h3 style="color:#111827;">Patient / Client and Contact Details</h3>
                             <div class="info-box" style="border-left-color: #d97706;">
                                 <p class="info-label">Name</p>
                                 <p class="info-value">${firstName} ${lastName}</p>
+                                <p class="info-label">Age / Service Location</p>
+                                <p class="info-value">Age: ${patientAge ?? 'Not provided'}<br>Location: ${serviceLocation || 'Not provided'}</p>
+                                <p class="info-label">Contact Person / Relationship</p>
+                                <p class="info-value">${contactName || firstName + ' ' + lastName}<br>${relationship || 'Not provided'}</p>
                                 <p class="info-label">Contact Details</p>
                                 <p class="info-value">Phone: ${contactPhone}<br>Email: <a href="mailto:${contactEmail}">${contactEmail}</a></p>
                             </div>
@@ -1149,7 +1205,7 @@ app.post('/request-care', [
                                     </div>
                                     <div class="col">
                                         <p class="info-label">Est. Start Date</p>
-                                        <p class="info-value">${startDate}</p>
+                                        <p class="info-value">${startDate || 'Not provided'}</p>
                                     </div>
                                 </div>
                                 <p class="info-label" style="margin-top:10px;">Specific Condition / Requirements</p>
@@ -1235,13 +1291,12 @@ app.post('/request-care', [
             </html>
         `;
 
-        await sendEmail(contactEmail, `We received your Care Inquiry`, autoReplyHtml, null, FORM_INBOXES.CARE, null, null);
+        const confirmationSent = await sendConfirmation(contactEmail, `We received your Care Inquiry`, autoReplyHtml, null, FORM_INBOXES.CARE, null, null);
 
-        res.status(200).json({ message: 'Care Request Submitted Successfully!' });
+        res.status(200).json({ message: confirmationMessage('Your request was sent to our care team.', confirmationSent), confirmationSent });
 
     } catch (error) {
-        console.error("Error processing request care form:", error);
-        res.status(500).json({ error: 'Error: ' + error.message });
+        formFailure(res, error);
     }
 });
 
@@ -1464,13 +1519,15 @@ const generateJobApplicationPDF = (data) => {
 
 // --- POST ENDPOINT: APPLY FOR A JOB ---
 app.post('/apply-job', 
-    upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'applicantPhoto', maxCount: 1 }]), 
+    jobUpload.fields([{ name: 'resume', maxCount: 1 }, { name: 'applicantPhoto', maxCount: 1 }]),
     [
         body('firstName').trim().notEmpty().escape(),
         body('lastName').trim().notEmpty().escape(),
-        body('contactEmail').isEmail().normalizeEmail(),
+        body('contactEmail').trim().isEmail(),
         body('position').notEmpty().escape(),
         body('startDate').notEmpty().escape(),
+        body('BackgroundConsent').equals('on').withMessage('Please confirm the background check declaration.'),
+        body('Truthfulness').equals('on').withMessage('Please confirm your application details are accurate.'),
         validate
     ],
     async (req, res) => {
@@ -1601,36 +1658,22 @@ app.post('/apply-job',
             </html>
         `;
 
-        await sendEmail(contactEmail, `Your Application for ${position} - St. Bernadine`, autoReplyHtml, null, FORM_INBOXES.JOB, null, null);
-
-        // Cleanup: remove uploaded files
-        if (files['resume']) {
-            fs.unlink(files['resume'][0].path, (err) => {
-                if (err) console.error("Failed to delete temp resume file:", err);
-            });
-        }
-        if (files['applicantPhoto']) {
-            fs.unlink(files['applicantPhoto'][0].path, (err) => {
-                if (err) console.error("Failed to delete temp photo file:", err);
-            });
-        }
-
-        res.status(200).json({ message: 'Application submitted successfully!' });
+        const confirmationSent = await sendConfirmation(contactEmail, `Your Application for ${position} - St. Bernadine`, autoReplyHtml, null, FORM_INBOXES.JOB, null, null);
+        res.status(200).json({ message: confirmationMessage('Your application was sent to our recruitment team.', confirmationSent), confirmationSent });
 
     } catch (error) {
-        console.error("Error processing job application form:", error);
-        res.status(500).json({ error: 'Error: ' + error.message });
+        formFailure(res, error);
     }
 });
 
 // Public referral and newsletter requests go to the information inbox.
 app.post('/send-referral', [
     body('referrer_name').trim().isLength({ min: 1, max: 180 }).escape(),
-    body('referrer_email').isEmail().normalizeEmail(),
+    body('referrer_email').trim().isEmail(),
     body('referrer_phone').trim().isLength({ min: 1, max: 64 }).escape(),
     body('applicant_name').trim().isLength({ min: 1, max: 180 }).escape(),
     body('applicant_phone').trim().isLength({ min: 1, max: 64 }).escape(),
-    body('applicant_email').optional({ checkFalsy: true }).isEmail().normalizeEmail(),
+    body('applicant_email').optional({ checkFalsy: true }).trim().isEmail(),
     body('refer_program').isIn(['Placement and Consultancy', 'School of Allied Health Services', 'Home Care Services']),
     validate
 ], async (req, res) => {
@@ -1647,7 +1690,7 @@ app.post('/send-referral', [
 });
 
 app.post('/subscribe', [
-    body('email').isEmail().normalizeEmail(),
+    body('email').trim().isEmail(),
     body('source_page').optional().trim().isLength({ max: 300 }).escape(),
     validate
 ], async (req, res) => {
@@ -1674,12 +1717,13 @@ app.get('/health', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error("ERROR:", err.message);
-    const status = err.status || 500;
+    const uploadError = err instanceof multer.MulterError;
+    const status = uploadError ? (err.code === 'LIMIT_FILE_SIZE' ? 413 : 400) : (err.status || 500);
     // Hide stack traces and internal details in production
     const response = {
-        error: process.env.NODE_ENV === 'production' 
+        error: err.publicMessage || (uploadError ? (err.code === 'LIMIT_FILE_SIZE' ? 'The uploaded file exceeds the 5 MB limit.' : 'The uploaded files do not match this form. Please check your attachments.') : process.env.NODE_ENV === 'production'
             ? 'An internal server error occurred. Please try again later.' 
-            : err.message
+            : err.message)
     };
     res.status(status).json(response);
 });

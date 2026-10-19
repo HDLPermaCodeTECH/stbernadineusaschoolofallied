@@ -389,7 +389,7 @@
         </div>
     </footer>
 
-    <script src="asset/script.js?v=20261014-mail1"></script>
+    <script src="asset/script.js?v=20261019-forms1"></script>
     <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
     <script>
@@ -424,6 +424,8 @@
 
             const formData = new FormData(this);
             const jsonData = Object.fromEntries(formData.entries());
+            const phoneInput = document.getElementById('contactNumber');
+            jsonData.contactPhone = window.intlTelInputGlobals?.getInstance(phoneInput)?.getNumber() || phoneInput.value;
             // Override the careType standard array logic
             jsonData.careType = careTypes.join(', ');
 
@@ -439,7 +441,7 @@
                     throw new Error('Network response was not ok.');
                 })
                 .then(data => {
-                    alert('Thank you for your inquiry. Our care coordination team will contact you shortly to discuss your needs.');
+                    alert(data.message);
                     this.reset();
                 })
                 .catch(error => {
