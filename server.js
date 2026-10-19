@@ -7,6 +7,7 @@ const cors = require('cors');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const { FORM_INBOXES, createFormTransport, safeMailError } = require('./form_mail');
+const { buildAcknowledgement } = require('./email_templates');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
@@ -17,6 +18,12 @@ require('dotenv').config();
 const app = express();
 // Only trust the local reverse proxy, never arbitrary forwarded client headers.
 app.set('trust proxy', 'loopback');
+
+// The official logo remains available to email clients during maintenance.
+app.get('/asset/images/4d-logo.png', (req, res) => {
+    res.set('X-Content-Type-Options', 'nosniff');
+    res.sendFile(path.join(__dirname, 'asset/images/4d-logo.png'), { headers: { 'Cache-Control': 'public, max-age=86400' } });
+});
 
 // Temporary site-wide maintenance is enabled by default.
 if (process.env.SITE_MAINTENANCE !== 'off') app.use(require('./maintenance'));
@@ -147,7 +154,7 @@ app.use((req, res, next) => {
     try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
     catch { return res.status(400).json({ error: 'Invalid request path.' }); }
     const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/'];
-    const serverSource = /^\/(?:server|form_mail|maintenance)\.js$/.test(requestPath);
+    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates)\.js$/.test(requestPath);
     if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
         return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
     }
@@ -477,14 +484,16 @@ const generatePDF = (data) => {
     });
 };
 
-const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc) => {
+const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc, metadata = {}) => {
     const fromEmail = String(process.env.EMAIL_USER || "").trim();
     const mailOptions = {
-        from: `"St. Bernadine System" <${fromEmail}>`,
+        from: `"${metadata.displayName || 'St. Bernadine Website'}" <${fromEmail}>`,
         to: to,
         subject: subject,
         html: htmlContent,
+        headers: { 'Auto-Submitted': metadata.autoSubmitted || 'auto-generated', 'X-Auto-Response-Suppress': 'All' }
     };
+    if (metadata.text) mailOptions.text = metadata.text;
 
     if (attachments) mailOptions.attachments = attachments;
     if (replyTo) mailOptions.replyTo = replyTo;
@@ -507,8 +516,14 @@ const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc
 };
 
 // An optional confirmation failure must not turn an accepted application into a failure.
-const sendConfirmation = async (...args) => {
-    try { await sendEmail(...args); return true; }
+const sendConfirmation = async (to, kind) => {
+    try {
+        const acknowledgement = buildAcknowledgement(kind);
+        await sendEmail(to, acknowledgement.subject, acknowledgement.html, null, acknowledgement.replyTo, null, null, {
+            text: acknowledgement.text, displayName: acknowledgement.displayName, autoSubmitted: 'auto-replied'
+        });
+        return true;
+    }
     catch (error) {
         console.error('[FORM_CONFIRMATION_FAILED]', JSON.stringify(safeMailError(error)));
         return false;
@@ -641,111 +656,7 @@ app.post('/send-email',
         await sendEmail(FORM_INBOXES.ENROLLMENT, `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
 
         // Auto-Reply to Applicant
-        const autoReplySubject = "Application Received - St. Bernadine School of Allied Health";
-        const autoReplyHtml = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Application Received - St. Bernadine</title>
-                <style>
-                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; color: #2d3748; }
-                    .email-wrapper { width: 100%; background-color: #f4f5f7; padding: 40px 0; }
-                    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-                    .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 40px 30px; text-align: center; }
-                    .logo-box { background: rgba(255,255,255,0.95); padding: 12px; border-radius: 12px; display: inline-block; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-                    .logo { width: 110px; height: auto; display: block; }
-                    .header h1 { color: #ffffff; font-size: 26px; font-weight: 700; margin: 0 0 8px 0; letter-spacing: -0.5px; }
-                    .header p { color: #a7f3d0; font-size: 15px; margin: 0; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
-                    .body { padding: 40px 40px 30px; background-color: #ffffff; }
-                    .greeting { font-size: 20px; font-weight: 600; color: #1a202c; margin: 0 0 20px 0; }
-                    .text { font-size: 16px; line-height: 1.6; color: #4a5568; margin: 0 0 24px 0; }
-                    .info-box { background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin: 30px 0; border-left: 4px solid #055923; }
-                    .info-box p { margin: 0; font-size: 16px; color: #2d3748; line-height: 1.5; }
-                    .highlight { color: #055923; font-weight: 700; }
-                    .next-steps { margin-top: 30px; padding-top: 30px; border-top: 1px solid #edf2f7; }
-                    .signature { margin-top: 30px; }
-                    .signature p { margin: 0; color: #4a5568; }
-                    .signature-name { font-weight: 700; color: #1a202c; font-size: 18px; margin-top: 4px !important; }
-                    .footer { background-color: #f8fafc; padding: 32px 40px; text-align: center; border-top: 1px solid #edf2f7; }
-                    .footer-brand { font-weight: 700; color: #2d3748; font-size: 16px; margin: 0 0 8px 0; }
-                    .footer-text { color: #718096; font-size: 13px; margin: 0 0 20px 0; }
-                    .social-links { margin-bottom: 24px; }
-                    .social-links img { width: 24px; height: 24px; margin: 0 8px; filter: grayscale(100%) opacity(60%); transition: all 0.3s ease; }
-                    .address { color: #a0aec0; font-size: 12px; margin: 0 0 16px 0; line-height: 1.5; }
-                    .links { margin: 0; }
-                    .links a { color: #055923; text-decoration: none; font-size: 12px; font-weight: 500; margin: 0 8px; }
-                    .ref { display: none; }
-                    @media (prefers-color-scheme: dark) {
-                        body, .email-wrapper, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
-                        .text, .info-label, .footer-text, .address, .greeting, p, .signature-name { color: #cbd5e1 !important; }
-                        .footer-brand, .highlight, .info-value, .info-value-small, .links a { color: #a7f3d0 !important; }
-                        .info-box, .message-box { background-color: #2d3748 !important; border-color: #4a5568 !important; }
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="email-wrapper">
-                    <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
-                        <tr>
-                            <td class="header">
-                                <div class="logo-box">
-                                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" class="logo">
-                                </div>
-                                <h1>Application Received</h1>
-                                <p>St. Bernadine School of Allied Health</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="body">
-                                <p class="greeting">Hi ${data.firstName},</p>
-                                <p class="text">Thank you for taking the first step towards a rewarding career in healthcare. We are thrilled that you chose St. Bernadine School of Allied Health.</p>
-                                
-                                <div class="info-box">
-                                    <p>We have successfully received your enrollment application for the <span class="highlight">${data.Program}</span> program.</p>
-                                </div>
-                                
-                                <div class="next-steps">
-                                    <p class="text">Our admissions team is currently reviewing your information. We will reach out to you within the upcoming business days using the contact details provided regarding your next steps.</p>
-                                </div>
-                                
-                                <div class="signature">
-                                    <p>Best regards,</p>
-                                    <p class="signature-name">Admissions Team</p>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="footer">
-                                <p class="footer-brand">St. Bernadine School of Allied Health</p>
-                                <p class="footer-text">Excellence in Healthcare Education Since 1986</p>
-                                
-                                <div class="social-links">
-                                    <a href="https://facebook.com"><img src="https://img.icons8.com/ios-filled/50/000000/facebook-new.png" alt="Facebook"></a>
-                                    <a href="https://instagram.com"><img src="https://img.icons8.com/ios-filled/50/000000/instagram-new.png" alt="Instagram"></a>
-                                    <a href="https://linkedin.com"><img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" alt="LinkedIn"></a>
-                                </div>
-                                
-                                <p class="address">
-                                    591 Summit Ave Suite 410<br>
-                                    Jersey City, NJ 07306<br>
-                                    &copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.
-                                </p>
-                                
-                                <p class="links">
-                                    <a href="https://stbernadineusa.com/privacy.html">Privacy Policy</a> &bull; 
-                                    <a href="https://stbernadineusa.com/contact.html">Contact Us</a>
-                                </p>
-                                <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </body>
-            </html>
-        `;
-        const confirmationSent = await sendConfirmation(data.email, autoReplySubject, autoReplyHtml, null, FORM_INBOXES.ENROLLMENT);
+        const confirmationSent = await sendConfirmation(data.email, 'ENROLLMENT');
         res.status(200).json({ message: confirmationMessage('Your application was sent to our enrollment team.', confirmationSent), confirmationSent });
 
     } catch (error) {
@@ -1007,112 +918,8 @@ app.post(['/send-contact', '/send-placement'], [
         await sendEmail(req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY, `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
 
         // Auto-Reply to Inquirer
-        const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
-        const autoReplyHtml = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Message Received - St. Bernadine</title>
-                <style>
-                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; color: #2d3748; }
-                    .email-wrapper { width: 100%; background-color: #f4f5f7; padding: 40px 0; }
-                    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-                    .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 40px 30px; text-align: center; }
-                    .logo-box { background: rgba(255,255,255,0.95); padding: 12px; border-radius: 12px; display: inline-block; margin-bottom: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-                    .logo { width: 110px; height: auto; display: block; }
-                    .header h1 { color: #ffffff; font-size: 26px; font-weight: 700; margin: 0 0 8px 0; letter-spacing: -0.5px; }
-                    .header p { color: #a7f3d0; font-size: 15px; margin: 0; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
-                    .body { padding: 40px 40px 30px; background-color: #ffffff; }
-                    .greeting { font-size: 20px; font-weight: 600; color: #1a202c; margin: 0 0 20px 0; }
-                    .text { font-size: 16px; line-height: 1.6; color: #4a5568; margin: 0 0 24px 0; }
-                    .info-box { background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; margin: 30px 0; border-left: 4px solid #055923; }
-                    .info-box p { margin: 0; font-size: 16px; color: #2d3748; line-height: 1.5; }
-                    .highlight { color: #055923; font-weight: 700; }
-                    .next-steps { margin-top: 30px; padding-top: 30px; border-top: 1px solid #edf2f7; }
-                    .signature { margin-top: 30px; }
-                    .signature p { margin: 0; color: #4a5568; }
-                    .signature-name { font-weight: 700; color: #1a202c; font-size: 18px; margin-top: 4px !important; }
-                    .footer { background-color: #f8fafc; padding: 32px 40px; text-align: center; border-top: 1px solid #edf2f7; }
-                    .footer-brand { font-weight: 700; color: #2d3748; font-size: 16px; margin: 0 0 8px 0; }
-                    .footer-text { color: #718096; font-size: 13px; margin: 0 0 20px 0; }
-                    .social-links { margin-bottom: 24px; }
-                    .social-links img { width: 24px; height: 24px; margin: 0 8px; filter: grayscale(100%) opacity(60%); transition: all 0.3s ease; }
-                    .address { color: #a0aec0; font-size: 12px; margin: 0 0 16px 0; line-height: 1.5; }
-                    .links { margin: 0; }
-                    .links a { color: #055923; text-decoration: none; font-size: 12px; font-weight: 500; margin: 0 8px; }
-                    .ref { display: none; }
-                    @media (prefers-color-scheme: dark) {
-                        body, .email-wrapper, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
-                        .text, .info-label, .footer-text, .address, .greeting, p, .signature-name { color: #cbd5e1 !important; }
-                        .footer-brand, .highlight, .info-value, .info-value-small, .links a { color: #a7f3d0 !important; }
-                        .info-box, .message-box { background-color: #2d3748 !important; border-color: #4a5568 !important; }
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="email-wrapper">
-                    <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
-                        <tr>
-                            <td class="header">
-                                <div class="logo-box">
-                                    <img src="https://hdlpermacodetech.github.io/stbernadineusaschoolofallied/asset/images/4d-logo.png" alt="St. Bernadine Logo" class="logo">
-                                </div>
-                                <h1>Message Received</h1>
-                                <p>St. Bernadine School of Allied Health</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="body">
-                                <p class="greeting">Hi ${name},</p>
-                                <p class="text">Thank you for taking the time to contact St. Bernadine School of Allied Health.</p>
-                                
-                                <div class="info-box">
-                                    <p>We have safely received your inquiry regarding: <br><br><span class="highlight">"${subject}"</span></p>
-                                </div>
-                                
-                                <div class="next-steps">
-                                    <p class="text">Our administrative team is actively reviewing your message. We aim to respond to all inquiries as comprehensively as possible, typically within 24 business hours.</p>
-                                </div>
-                                
-                                <div class="signature">
-                                    <p>Warm regards,</p>
-                                    <p class="signature-name">Administration</p>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="footer">
-                                <p class="footer-brand">St. Bernadine School of Allied Health</p>
-                                <p class="footer-text">Excellence in Healthcare Education Since 1986</p>
-                                
-                                <div class="social-links">
-                                    <a href="https://facebook.com"><img src="https://img.icons8.com/ios-filled/50/000000/facebook-new.png" alt="Facebook"></a>
-                                    <a href="https://instagram.com"><img src="https://img.icons8.com/ios-filled/50/000000/instagram-new.png" alt="Instagram"></a>
-                                    <a href="https://linkedin.com"><img src="https://img.icons8.com/ios-filled/50/000000/linkedin.png" alt="LinkedIn"></a>
-                                </div>
-                                
-                                <p class="address">
-                                    591 Summit Ave Suite 410<br>
-                                    Jersey City, NJ 07306<br>
-                                    &copy; ${new Date().getFullYear()} St. Bernadine School. All rights reserved.
-                                </p>
-                                
-                                <p class="links">
-                                    <a href="https://stbernadineusa.com/privacy.html">Privacy Policy</a> &bull; 
-                                    <a href="https://stbernadineusa.com/contact.html">Contact Us</a>
-                                </p>
-                                <div class="ref" style="display:none;font-size:0px;color:transparent;line-height:0;">Ref: ${Date.now().toString(36).toUpperCase()}</div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </body>
-            </html>
-        `;
 
-        const confirmationSent = await sendConfirmation(email, autoReplySubject, autoReplyHtml, null, req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY);
+        const confirmationSent = await sendConfirmation(email, req.path === '/send-placement' ? 'PLACEMENT' : 'INQUIRY');
         res.status(200).json({ message: confirmationMessage('Your message was sent to our team.', confirmationSent), confirmationSent });
 
     } catch (error) {
@@ -1232,66 +1039,8 @@ app.post('/request-care', [
         await sendEmail(adminEmail, adminSubject, htmlContent, null, contactEmail, ccEmail, null);
 
         // Auto-reply HTML Email to the Inquirer
-        const autoReplyHtml = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Home Care Request Received</title>
-                <style>
-                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f5f7; margin: 0; padding: 0; }
-                    .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-                    .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 30px; text-align: center; color: white; }
-                    .header h1 { margin: 0 0 5px 0; font-size: 24px; }
-                    .body { padding: 40px; color: #374151; line-height: 1.6; }
-                    .highlight-box { background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 25px 0; color: #166534; }
-                    .footer { background-color: #f8fafc; padding: 25px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 13px; color: #64748b; }
-                    @media (prefers-color-scheme: dark) {
-                        body, .email-container, .body, .footer { background-color: #1a202c !important; color: #e2e8f0 !important; }
-                        p, h2, a { color: #cbd5e1 !important; }
-                        strong, .footer p:first-child { color: #a7f3d0 !important; }
-                        .highlight-box { background-color: #2d3748 !important; border-color: #4a5568 !important; color: #e2e8f0 !important; }
-                    }
-                </style>
-            </head>
-            <body>
-                <table class="email-container" cellpadding="0" cellspacing="0" border="0" width="100%">
-                    <tr>
-                        <td class="header">
-                            <h1>Request Received</h1>
-                            <p style="margin:0; color:#a7f3d0;">St. Bernadine Home Care Services</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="body">
-                            <h2 style="margin-top:0; color:#111827;">Hello ${firstName},</h2>
-                            <p>Thank you for reaching out to St. Bernadine School of Allied Health regarding home care services.</p>
-                            
-                            <div class="highlight-box">
-                                <p style="margin:0;"><strong>We have successfully received your inquiry for ${careType}</strong>. Our priority is ensuring the comfort and well-being of your loved ones.</p>
-                            </div>
 
-                            <p>A dedicated Care Coordinator is currently reviewing your inquiry. We will contact you at <strong>${contactPhone}</strong> within the next 24 hours to discuss your needs and answer any questions you may have.</p>
-                            
-                            <p>If you have any immediate concerns, please do not hesitate to drop us a call at <a href="tel:+12012221116" style="color:#055923; text-decoration:none; font-weight:bold;">+1 (201) 222-1116</a>.</p>
-                            
-                            <p style="margin-bottom:0; margin-top:30px;">Warmly,</p>
-                            <p style="margin:0; font-weight:bold; color:#111827;">St. Bernadine Home Care Team</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="footer">
-                            <p style="margin:0 0 10px 0; font-weight:bold; color:#055923;">St. Bernadine School of Allied Health</p>
-                            <p style="margin:0;">591 Summit Ave Suite 410, Jersey City, NJ 07306</p>
-                        </td>
-                    </tr>
-                </table>
-            </body>
-            </html>
-        `;
-
-        const confirmationSent = await sendConfirmation(contactEmail, `We received your Care Inquiry`, autoReplyHtml, null, FORM_INBOXES.CARE, null, null);
+        const confirmationSent = await sendConfirmation(contactEmail, 'CARE');
 
         res.status(200).json({ message: confirmationMessage('Your request was sent to our care team.', confirmationSent), confirmationSent });
 
@@ -1628,37 +1377,8 @@ app.post('/apply-job',
         await sendEmail(adminEmail, adminSubject, adminHtmlContent, attachments, contactEmail, ccEmail, null);
 
         // Auto-reply HTML Email to the Applicant
-        const autoReplyHtml = `
-            <!DOCTYPE html>
-            <html lang="en">
-                <head>
-                    <style>
-                        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: #f4f5f7; padding: 30px; }
-                        .container { background: white; max-width: 600px; margin: auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-                        .header { background: linear-gradient(135deg, #055923 0%, #033f18 100%); padding: 30px; text-align: center; color: white; }
-                        .body { padding: 40px; color: #374151; line-height: 1.6; }
-                        .highlight { font-weight: bold; color: #055923; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h1 style="margin: 0; font-size: 24px;">Application Received</h1>
-                            <p style="margin: 5px 0 0 0; color: #a7f3d0;">St. Bernadine Careers</p>
-                        </div>
-                        <div class="body">
-                            <h2>Hello ${firstName},</h2>
-                            <p>Thank you for expressing interest in joining our team at <strong>St. Bernadine School of Allied Health</strong>. We have successfully received your application for the <span class="highlight">${position}</span> role.</p>
-                            <p>Our Human Resources team is currently reviewing your qualifications to see how they align with our current needs. Should your profile be a strong match, we will contact you directly at <strong>${contactPhone}</strong> or via this email address to schedule an interview.</p>
-                            <p>We appreciate the time you took to apply.</p>
-                            <p style="margin-top: 30px;">Best Regards,<br><strong>Human Resources Team</strong><br>St. Bernadine School of Allied Health</p>
-                        </div>
-                    </div>
-                </body>
-            </html>
-        `;
 
-        const confirmationSent = await sendConfirmation(contactEmail, `Your Application for ${position} - St. Bernadine`, autoReplyHtml, null, FORM_INBOXES.JOB, null, null);
+        const confirmationSent = await sendConfirmation(contactEmail, 'JOB');
         res.status(200).json({ message: confirmationMessage('Your application was sent to our recruitment team.', confirmationSent), confirmationSent });
 
     } catch (error) {
@@ -1683,7 +1403,8 @@ app.post('/send-referral', [
         <h3>Applicant</h3><p>${data.applicant_name}<br>${data.applicant_email || 'Email not provided'}<br>${data.applicant_phone}</p>`;
     try {
         await sendEmail(FORM_INBOXES.REFERRAL, `[REFERRAL] ${data.refer_program}`, html, null, data.referrer_email);
-        res.json({ message: 'Your referral was sent to our team.' });
+        const confirmationSent = await sendConfirmation(data.referrer_email, 'REFERRAL');
+        res.json({ message: confirmationMessage('Your referral was sent to our team.', confirmationSent), confirmationSent });
     } catch (error) {
         res.status(503).json({ error: 'Unable to send your referral. Please call the school office or try again later.' });
     }
@@ -1698,7 +1419,8 @@ app.post('/subscribe', [
         await sendEmail(FORM_INBOXES.SUBSCRIPTION, '[SUBSCRIPTION REQUEST] Website updates',
             `<h2>Website subscription request</h2><p>Email: ${req.body.email}</p><p>Page: ${req.body.source_page || 'Website'}</p>`,
             null, req.body.email);
-        res.json({ message: 'Your subscription request was sent to our team.' });
+        const confirmationSent = await sendConfirmation(req.body.email, 'SUBSCRIPTION');
+        res.json({ message: confirmationMessage('Your subscription request was sent to our team.', confirmationSent), confirmationSent });
     } catch (error) {
         res.status(503).json({ error: 'Unable to send your request. Please try again later.' });
     }

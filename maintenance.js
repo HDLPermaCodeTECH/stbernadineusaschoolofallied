@@ -5,34 +5,36 @@ const page = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#174b39">
+  <meta name="theme-color" content="#06752e">
   <meta name="description" content="St. Bernadine website maintenance and service updates. Contact our teams directly for enrollment, placement, inquiries, care requests, and job applications.">
   <link rel="icon" href="data:,">
   <title>Website Maintenance | St. Bernadine</title>
   <style>
     :root {
       color-scheme: light;
-      --background: #f6f7f3;
+      --background: #f8fafc;
       --surface: #ffffff;
-      --ink: #173d30;
-      --body: #4b5b53;
-      --muted: #65746c;
-      --line: #dce3db;
-      --brand: #174b39;
-      --soft: #edf3ed;
-      --accent: #806030;
+      --ink: #054d1f;
+      --body: #475569;
+      --muted: #64748B;
+      --line: #e2e8f0;
+      --brand: #06752e;
+      --soft: #F0FDF4;
+      --accent: #902017;
     }
     * { box-sizing: border-box; }
     body { margin: 0; min-height: 100vh; min-height: 100dvh; background: var(--background); color: var(--body); font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
     .page { max-width: 1216px; margin: 0 auto; padding: 0 48px; }
     .masthead { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 38px 0 30px; border-bottom: 1px solid var(--line); }
-    .brand-name { margin: 0; color: var(--brand); font: 600 30px/1.1 Georgia, "Times New Roman", serif; letter-spacing: -.7px; }
+    .brand-lockup { display: flex; align-items: center; gap: 18px; }
+    .brand-logo { width: 84px; height: 72px; object-fit: contain; flex-shrink: 0; }
+    .brand-name { margin: 0; color: var(--brand); font: 700 28px/1.2 Poppins, Arial, sans-serif; letter-spacing: -.7px; }
     .brand-description { margin: 9px 0 0; color: var(--body); font-size: 12px; letter-spacing: .015em; }
     .domain { color: var(--muted); font-size: 13px; }
     main { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 72px; align-items: start; padding: 70px 0 66px; }
     .badge { display: inline-flex; align-items: center; gap: 9px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 4px; color: var(--brand); background: var(--soft); font-size: 12px; font-weight: 600; letter-spacing: .035em; }
     .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-    h1 { margin: 24px 0 22px; color: var(--ink); font: 400 clamp(40px, 4.5vw, 60px)/1.08 Georgia, "Times New Roman", serif; letter-spacing: -1.8px; }
+    h1 { margin: 24px 0 22px; color: var(--ink); font: 700 clamp(38px, 4vw, 52px)/1.12 Poppins, Arial, sans-serif; letter-spacing: -1.8px; }
     .intro { max-width: 490px; margin: 0; font-size: 17px; line-height: 1.8; }
     .notice { margin-top: 38px; padding-top: 25px; border-top: 1px solid var(--line); }
     .eyebrow { margin: 0; color: var(--brand); font-size: 11px; line-height: 1.5; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
@@ -43,7 +45,7 @@ const page = `<!doctype html>
     .issue-title { margin: 0 0 4px; color: var(--ink); font-size: 14px; font-weight: 650; }
     .issue-description { margin: 0; font-size: 14px; line-height: 1.75; }
     .contacts { padding: 32px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: 0 12px 40px -24px rgb(23 61 48 / 15%); }
-    .contacts h2 { margin: 10px 0 12px; color: var(--ink); font: 400 29px/1.2 Georgia, "Times New Roman", serif; letter-spacing: -.5px; }
+    .contacts h2 { margin: 10px 0 12px; color: var(--ink); font: 600 26px/1.25 Poppins, Arial, sans-serif; letter-spacing: -.5px; }
     .contact-intro { margin: 0; font-size: 14px; line-height: 1.75; }
     .contact-list { list-style: none; padding: 0; margin: 24px 0 0; }
     .contact-list li + li { border-top: 1px solid var(--line); }
@@ -68,9 +70,10 @@ const page = `<!doctype html>
 <body>
   <div class="page">
     <header class="masthead">
-      <div>
-        <p class="brand-name">St. Bernadine</p>
-        <p class="brand-description">School of Allied Health &amp; Healthcare Services</p>
+      <div class="brand-lockup">
+        <img class="brand-logo" src="/asset/images/4d-logo.png" alt="St. Bernadine logo" width="84" height="72">
+        <div><p class="brand-name">St. Bernadine</p>
+        <p class="brand-description">School of Allied Health &amp; Healthcare Services</p></div>
       </div>
       <span class="domain">stbernadineusa.com</span>
     </header>
@@ -80,20 +83,20 @@ const page = `<!doctype html>
         <h1 id="maintenance-title">We&rsquo;re improving<br>our website.</h1>
         <p class="intro">Our website is temporarily unavailable while we update our online forms. For assistance, please contact the appropriate team directly by email.</p>
         <section class="notice" aria-labelledby="notice-title">
-          <h2 class="eyebrow" id="notice-title">Current service notice</h2>
+          <h2 class="eyebrow" id="notice-title">Service update</h2>
           <ol class="issues">
             <li>
               <span class="issue-number" aria-hidden="true">01</span>
               <div>
                 <h3 class="issue-title">Department email routing</h3>
-                <p class="issue-description">Department routing updates are installed. We&rsquo;re verifying email notifications before online forms reopen.</p>
+                <p class="issue-description">All five department inboxes passed delivery checks. Direct email remains available during maintenance.</p>
               </div>
             </li>
             <li>
               <span class="issue-number" aria-hidden="true">02</span>
               <div>
                 <h3 class="issue-title">Referral submissions</h3>
-                <p class="issue-description">The referral submission process has been updated. Final submission and delivery checks are in progress.</p>
+                <p class="issue-description">The referral submission process and sender confirmation have been updated.</p>
               </div>
             </li>
           </ol>

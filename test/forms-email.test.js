@@ -92,7 +92,19 @@ for (const [route, data, multipart] of routes) {
         assert.equal(admin.cc, undefined);
         assert.equal(admin.bcc, undefined);
         assert.equal(admin.replyTo, 'visitor@example.invalid');
-        if (result.messages.length > 1) assert.equal(result.messages[1].replyTo, expectedRecipients[route]);
+        assert.equal(result.messages.length, 2, 'Every form must acknowledge its sender');
+        const confirmation = result.messages[1];
+        assert.equal(confirmation.to, 'visitor@example.invalid');
+        assert.equal(confirmation.replyTo, expectedRecipients[route]);
+        assert.equal(confirmation.headers['Auto-Submitted'], 'auto-replied');
+        assert.equal(admin.headers['Auto-Submitted'], 'auto-generated');
+        assert.equal(admin.headers['X-Auto-Response-Suppress'], 'All');
+        assert.ok(confirmation.text.includes(expectedRecipients[route]));
+        assert.match(confirmation.html, /What happens next\?/);
+        assert.doesNotMatch(confirmation.html, /<script|<form/i);
+        assert.match(confirmation.html, /src="https:\/\/stbernadineusa.com\/asset\/images\/4d-logo.png"/);
+        assert.match(confirmation.html, /#06752e/);
+        assert.match(confirmation.html, /#902017/);
     });
 }
 test('SMTP authentication rejection never produces a success response', async () => {
@@ -132,7 +144,7 @@ test('Every form fails safely when its department email is not accepted', async 
 test('Confirmation failure preserves the accepted department submission', async () => {
     failConfirmation = true;
     try {
-        for (const [route, data, multipart] of routes.slice(0, 5)) {
+        for (const [route, data, multipart] of routes) {
             const result = await submit(route, data, multipart);
             assert.equal(result.response.status, 200, route);
             assert.equal(result.messages.length, 1, route);
@@ -194,7 +206,7 @@ test('Job declarations must be confirmed before sending an application', async (
 });
 
 test('Source files, encoded source paths and applicant uploads cannot be downloaded', async () => {
-    for (const route of ['/server.js', '/server%2Ejs', '/form_mail.js', '/maintenance.js', '/test/forms-email.test.js', '/uploads/test.pdf', '/.env', '/stbernadine_manual_deploy.zip']) {
+    for (const route of ['/server.js', '/server%2Ejs', '/form_mail.js', '/email_templates.js', '/maintenance.js', '/test/forms-email.test.js', '/uploads/test.pdf', '/.env', '/stbernadine_manual_deploy.zip']) {
         const response = await fetch(base + route);
         assert.equal(response.status, 403, route);
     }
@@ -254,6 +266,13 @@ test('The deployed default keeps pages and form endpoints in HTTP 503 maintenanc
                     assert.equal(response.headers.get('retry-after'), '3600');
                     assert.match(response.headers.get('cache-control'), /no-store/);
                 }
+                const logo = await fetch('http://127.0.0.1:' + server.address().port + '/asset/images/4d-logo.png');
+                assert.equal(logo.status, 200);
+                assert.ok(logo.headers.get('content-type').startsWith('image/png'));
+                const original = require('node:fs').readFileSync('asset/images/4d-logo.png');
+                assert.ok(Buffer.from(await logo.arrayBuffer()).equals(original));
+                const postLogo = await fetch('http://127.0.0.1:' + server.address().port + '/asset/images/4d-logo.png', { method: 'POST' });
+                assert.equal(postLogo.status, 503);
                 console.log('MAINTENANCE_OK');
             } catch(error) { console.error(error.message); process.exitCode=1; }
             finally { server.close(); }
