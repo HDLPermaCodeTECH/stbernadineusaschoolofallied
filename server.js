@@ -26,6 +26,8 @@ app.get('/asset/images/4d-logo.png', (req, res) => {
 });
 
 // Temporary site-wide maintenance is enabled by default.
+// Temporary, expiring owner-authorized sample check; all normal traffic stays in maintenance.
+app.post('/__private-confirmation-samples', express.json({ limit: '2kb' }), require('./sample_confirmations')(getFormTransport, () => process.env.EMAIL_USER));
 if (process.env.SITE_MAINTENANCE !== 'off') app.use(require('./maintenance'));
 
 // Redirect .html to extensionless URLs for SEO
@@ -154,7 +156,7 @@ app.use((req, res, next) => {
     try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
     catch { return res.status(400).json({ error: 'Invalid request path.' }); }
     const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/'];
-    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates)\.js$/.test(requestPath);
+    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates|sample_confirmations)\.js$/.test(requestPath);
     if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
         return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
     }
