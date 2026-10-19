@@ -16,6 +16,9 @@ require('dotenv').config();
 
 const app = express();
 
+// Temporary site-wide maintenance. Remove this middleware to restore the website.
+app.use(require('./maintenance'));
+
 // Redirect .html to extensionless URLs for SEO
 app.use((req, res, next) => {
     if (req.path === '/index.html') {
