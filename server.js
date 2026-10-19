@@ -6,7 +6,7 @@ const path = require('path');
 const cors = require('cors');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-const nodemailer = require('nodemailer');
+const { FORM_INBOXES, createFormTransport, safeMailError } = require('./form_mail');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
@@ -76,7 +76,7 @@ const formLimiter = rateLimit({
     max: 5, // limit each IP to 5 form submissions per hour
     message: "Too many submissions from this IP, please try again after an hour"
 });
-app.use(['/send-email', '/send-contact', '/request-care', '/apply-job'], formLimiter);
+app.use(['/send-email', '/send-contact', '/send-placement', '/request-care', '/apply-job', '/send-referral', '/subscribe'], formLimiter);
 
 
 // Configure Multer for file uploads
@@ -270,15 +270,11 @@ app.post('/chat', [
 });
 
 // --- NODEMAILER EMAIL & PDF CONFIGURATION ---
-const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST || "smtp.hostinger.com",
-    port: process.env.EMAIL_PORT || 465,
-    secure: true, // true for 465, false for other ports
-    auth: {
-        user: process.env.EMAIL_USER || "hdlpermacodetech@stbernadineusa.com",
-        pass: process.env.EMAIL_PASS || "Nitro19960422!"
-    }
-});
+let transporter;
+function getFormTransport() {
+    if (!transporter) transporter = createFormTransport();
+    return transporter;
+}
 
 const PRIMARY_COLOR = '#055923';
 const SECON_COLOR = '#555555';
@@ -444,7 +440,7 @@ const generatePDF = (data) => {
 };
 
 const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc) => {
-    const fromEmail = process.env.EMAIL_USER || "hdlpermacodetech@stbernadineusa.com";
+    const fromEmail = String(process.env.EMAIL_USER || "").trim();
     const mailOptions = {
         from: `"St. Bernadine System" <${fromEmail}>`,
         to: to,
@@ -458,11 +454,16 @@ const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc
     if (bcc) mailOptions.bcc = bcc;
 
     try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+        const info = await getFormTransport().sendMail(mailOptions);
+        if (!info.accepted?.length || info.rejected?.length) {
+            const error = new Error("Email recipient was not accepted.");
+            error.code = "SMTP_RECIPIENT_REJECTED";
+            throw error;
+        }
+        console.log("[FORM_EMAIL_ACCEPTED]", JSON.stringify({ messageId: info.messageId }));
         return info;
     } catch (error) {
-        console.error("Nodemailer Error:", error);
+        console.error("[FORM_EMAIL_FAILED]", JSON.stringify(safeMailError(error)));
         throw error;
     }
 };
@@ -583,10 +584,10 @@ app.post('/send-email',
         `;
 
         // Define CC and BCC
-        const ccEmail = "placement@stbernadineusa.com";
+        const ccEmail = null;
         const bccEmail = null;
 
-        await sendEmail("hdlpermacodetech@stbernadineusa.com", `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
+        await sendEmail(FORM_INBOXES.ENROLLMENT, `New Application: ${data.firstName} ${data.lastName}`, htmlContent, attachments, data.email, ccEmail, bccEmail);
 
         // Auto-Reply to Applicant
         const autoReplySubject = "Application Received - St. Bernadine School of Allied Health";
@@ -693,7 +694,7 @@ app.post('/send-email',
             </body>
             </html>
         `;
-        await sendEmail(data.email, autoReplySubject, autoReplyHtml);
+        await sendEmail(data.email, autoReplySubject, autoReplyHtml, null, FORM_INBOXES.ENROLLMENT);
         res.status(200).json({ message: 'Application Submitted Successfully!' });
 
     } catch (error) {
@@ -852,7 +853,7 @@ const generateCareRequestPDF = (data) => {
     });
 };
 
-app.post('/send-contact', [
+app.post(['/send-contact', '/send-placement'], [
     body('name').trim().notEmpty().escape(),
     body('email').isEmail().normalizeEmail(),
     body('subject').trim().notEmpty().escape(),
@@ -949,11 +950,11 @@ app.post('/send-contact', [
         `;
 
         // Define CC and BCC like the apply form
-        const ccEmail = "placement@stbernadineusa.com";
+        const ccEmail = null;
         const bccEmail = null;
 
         // Correct parameter order: to, subject, htmlContent, attachments, replyTo, cc, bcc
-        await sendEmail("hdlpermacodetech@stbernadineusa.com", `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
+        await sendEmail(req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY, `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
 
         // Auto-Reply to Inquirer
         const autoReplySubject = "We received your message - St. Bernadine School of Allied Health";
@@ -1061,7 +1062,7 @@ app.post('/send-contact', [
             </html>
         `;
 
-        await sendEmail(email, autoReplySubject, autoReplyHtml);
+        await sendEmail(email, autoReplySubject, autoReplyHtml, null, req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY);
         res.status(200).json({ message: 'Message Sent Successfully!' });
 
     } catch (error) {
@@ -1164,8 +1165,8 @@ app.post('/request-care', [
         `;
 
         // Setting Admin notification recipients
-        const adminEmail = "hdlpermacodetech@stbernadineusa.com";
-        const ccEmail = "homecare@stbernadineusa.com";
+        const adminEmail = FORM_INBOXES.CARE;
+        const ccEmail = null;
         const adminSubject = `[HOME CARE INQUIRY] from ${firstName} ${lastName}`;
 
         // Don't generate a PDF for a simple inquiry
@@ -1231,7 +1232,7 @@ app.post('/request-care', [
             </html>
         `;
 
-        await sendEmail(contactEmail, `We received your Care Inquiry`, autoReplyHtml, null, null, null, null);
+        await sendEmail(contactEmail, `We received your Care Inquiry`, autoReplyHtml, null, FORM_INBOXES.CARE, null, null);
 
         res.status(200).json({ message: 'Care Request Submitted Successfully!' });
 
@@ -1501,8 +1502,8 @@ app.post('/apply-job',
         }
 
         // Admin Notification Email
-        const adminEmail = "hdlpermacodetech@stbernadineusa.com";
-        const ccEmail = "homecare@stbernadineusa.com";
+        const adminEmail = FORM_INBOXES.JOB;
+        const ccEmail = null;
         const adminSubject = `[JOB APPLICATION] ${position} - ${firstName} ${lastName}`;
 
         const adminHtmlContent = `
@@ -1597,7 +1598,7 @@ app.post('/apply-job',
             </html>
         `;
 
-        await sendEmail(contactEmail, `Your Application for ${position} - St. Bernadine`, autoReplyHtml, null, null, null, null);
+        await sendEmail(contactEmail, `Your Application for ${position} - St. Bernadine`, autoReplyHtml, null, FORM_INBOXES.JOB, null, null);
 
         // Cleanup: remove uploaded files
         if (files['resume']) {
@@ -1616,6 +1617,44 @@ app.post('/apply-job',
     } catch (error) {
         console.error("Error processing job application form:", error);
         res.status(500).json({ error: 'Error: ' + error.message });
+    }
+});
+
+// Public referral and newsletter requests go to the information inbox.
+app.post('/send-referral', [
+    body('referrer_name').trim().isLength({ min: 1, max: 180 }).escape(),
+    body('referrer_email').isEmail().normalizeEmail(),
+    body('referrer_phone').trim().isLength({ min: 1, max: 64 }).escape(),
+    body('applicant_name').trim().isLength({ min: 1, max: 180 }).escape(),
+    body('applicant_phone').trim().isLength({ min: 1, max: 64 }).escape(),
+    body('applicant_email').optional({ checkFalsy: true }).isEmail().normalizeEmail(),
+    body('refer_program').isIn(['Placement and Consultancy', 'School of Allied Health Services', 'Home Care Services']),
+    validate
+], async (req, res) => {
+    const data = req.body;
+    const html = `<h2>New referral: ${data.refer_program}</h2>
+        <h3>Referrer</h3><p>${data.referrer_name}<br>${data.referrer_email}<br>${data.referrer_phone}</p>
+        <h3>Applicant</h3><p>${data.applicant_name}<br>${data.applicant_email || 'Email not provided'}<br>${data.applicant_phone}</p>`;
+    try {
+        await sendEmail(FORM_INBOXES.REFERRAL, `[REFERRAL] ${data.refer_program}`, html, null, data.referrer_email);
+        res.json({ message: 'Your referral was sent to our team.' });
+    } catch (error) {
+        res.status(503).json({ error: 'Unable to send your referral. Please call the school office or try again later.' });
+    }
+});
+
+app.post('/subscribe', [
+    body('email').isEmail().normalizeEmail(),
+    body('source_page').optional().trim().isLength({ max: 300 }).escape(),
+    validate
+], async (req, res) => {
+    try {
+        await sendEmail(FORM_INBOXES.SUBSCRIPTION, '[SUBSCRIPTION REQUEST] Website updates',
+            `<h2>Website subscription request</h2><p>Email: ${req.body.email}</p><p>Page: ${req.body.source_page || 'Website'}</p>`,
+            null, req.body.email);
+        res.json({ message: 'Your subscription request was sent to our team.' });
+    } catch (error) {
+        res.status(503).json({ error: 'Unable to send your request. Please try again later.' });
     }
 });
 
@@ -1644,8 +1683,16 @@ app.use((err, req, res, next) => {
 
 // Start Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Using Nodemailer SMTP for emails`);
-    console.log(`Gemini Chatbot: ${chatModel ? 'ACTIVE' : 'INACTIVE (Fallback Mode)'} `);
-});
+if (require.main === module) {
+    app.listen(PORT, '0.0.0.0', async () => {
+        console.log(`Server running on port ${PORT}`);
+        console.log(`Gemini Chatbot: ${chatModel ? 'ACTIVE' : 'INACTIVE (Fallback Mode)'}`);
+        try {
+            await getFormTransport().verify();
+            console.log('[SMTP_VERIFY]', JSON.stringify({ ok: true, mailbox: process.env.EMAIL_USER, destinations: FORM_INBOXES }));
+        } catch (error) {
+            console.error('[SMTP_VERIFY]', JSON.stringify({ ok: false, ...safeMailError(error) }));
+        }
+    });
+}
+module.exports = app;

@@ -633,6 +633,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Submit newsletter requests to the school office instead of reloading the page.
+    document.querySelectorAll('.footer-subscribe-form').forEach(form => {
+        const input = form.querySelector('input[type="email"]');
+        const button = form.querySelector('button[type="submit"]');
+        if (!input || !button) return;
+        input.setAttribute('aria-label', 'Email address for school updates');
+        const status = document.createElement('p');
+        status.setAttribute('role', 'status');
+        status.setAttribute('aria-live', 'polite');
+        form.insertAdjacentElement('afterend', status);
+        form.addEventListener('submit', async event => {
+            event.preventDefault();
+            const original = button.textContent;
+            button.disabled = true;
+            button.textContent = 'Sending...';
+            status.textContent = '';
+            try {
+                const response = await fetch('/subscribe', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: input.value, source_page: location.pathname })
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(result.error || 'Unable to send your request. Please try again later.');
+                status.textContent = result.message;
+                form.reset();
+            } catch (error) {
+                status.textContent = error.message || 'Unable to send your request. Please try again later.';
+            } finally {
+                button.disabled = false;
+                button.textContent = original;
+            }
+        });
+    });
+
     // Keep the primary headline readable during load and throughout the visit.
     const typewriterElement = document.getElementById('typewriter-text');
     if (typewriterElement) {
