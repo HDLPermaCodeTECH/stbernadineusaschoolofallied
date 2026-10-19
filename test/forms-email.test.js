@@ -33,6 +33,7 @@ process.env.EMAIL_USER = 'school@stbernadineusa.com';
 process.env.EMAIL_PASS = 'test-only-placeholder';
 process.env.GEMINI_API_KEY = '';
 process.env.SITE_MAINTENANCE = 'off';
+process.env.NODE_ENV = 'test';
 const app = require('../server');
 const { createFormTransport } = require('../form_mail');
 Module._load = originalLoad;

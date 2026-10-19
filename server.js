@@ -1731,15 +1731,21 @@ app.use((err, req, res, next) => {
 // Start Server
 const PORT = process.env.PORT || 3000;
 if (require.main === module) {
-    app.listen(PORT, '0.0.0.0', async () => {
+    app.listen(PORT, '0.0.0.0', () => {
         console.log(`Server running on port ${PORT}`);
         console.log(`Gemini Chatbot: ${chatModel ? 'ACTIVE' : 'INACTIVE (Fallback Mode)'}`);
+    });
+}
+// Hostinger can load the exported app through its own runner instead of node server.js.
+// Verify the connection in both startup modes; this does not send an email.
+if (process.env.NODE_ENV !== 'test') {
+    (async () => {
         try {
             await getFormTransport().verify();
             console.log('[SMTP_VERIFY]', JSON.stringify({ ok: true, mailbox: process.env.EMAIL_USER, destinations: FORM_INBOXES }));
         } catch (error) {
             console.error('[SMTP_VERIFY]', JSON.stringify({ ok: false, ...safeMailError(error) }));
         }
-    });
+    })();
 }
 module.exports = app;
