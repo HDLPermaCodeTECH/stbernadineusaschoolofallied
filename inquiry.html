@@ -71,6 +71,8 @@
       }
     }
     </script>
+    <link rel="stylesheet" href="/asset/form-protection.css?v=20261023-spam1">
+    <script src="/asset/form-protection.js?v=20261023-spam1" defer></script>
 </head>
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#06752e" />
@@ -301,7 +303,7 @@
       </div>
     </div>
   </footer>
-  <script src="asset/script.js?v=20261019-forms1"></script>
+  <script src="asset/script.js?v=20261023-spam1"></script>
   <!-- Intl Tel Input JS -->
   <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
   <script>
@@ -322,6 +324,10 @@
       .getElementById("contact-form")
       .addEventListener("submit", async function (e) {
         e.preventDefault();
+            let protection;
+            try { protection = await window.StbFormProtection.prepare(this); }
+            catch (error) { alert(error.message); return; }
+
         const btn = this.querySelector('button[type="submit"]');
         const originalText = btn.innerText;
         btn.innerText = "Sending...";
@@ -340,7 +346,7 @@
           const response = await fetch("/send-contact", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ ...formData, ...protection }),
           });
           const result = await response.json();
           if (response.ok) {

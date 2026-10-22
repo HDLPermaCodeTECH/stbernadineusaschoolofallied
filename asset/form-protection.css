@@ -1,0 +1,4 @@
+.stb-form-security { flex: 1 0 100%; width: 100%; min-width: 0; margin: 16px 0 8px; }
+.stb-form-notice, .stb-verification-status { margin: 8px 0; font: inherit; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.stb-form-trap { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+.stb-turnstile-widget { max-width: 100%; }

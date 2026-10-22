@@ -193,6 +193,8 @@
       }
     }
     </script>
+    <link rel="stylesheet" href="/asset/form-protection.css?v=20261023-spam1">
+    <script src="/asset/form-protection.js?v=20261023-spam1" defer></script>
 </head>
 
 <body>
@@ -389,7 +391,7 @@
         </div>
     </footer>
 
-    <script src="asset/script.js?v=20261019-forms1"></script>
+    <script src="asset/script.js?v=20261023-spam1"></script>
     <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
     <script>
@@ -405,8 +407,12 @@
         }
     </script>
     <script>
-        document.getElementById('homeCareInquiryForm').addEventListener('submit', function (e) {
+        document.getElementById('homeCareInquiryForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+            let protection;
+            try { protection = await window.StbFormProtection.prepare(this); }
+            catch (error) { alert(error.message); return; }
+
 
             // Validate that at least one care type is selected
             const careTypes = Array.from(document.querySelectorAll('input[name="careType"]:checked')).map(cb => cb.value);
@@ -434,7 +440,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(jsonData)
+                body: JSON.stringify({ ...jsonData, ...protection })
             })
                 .then(response => {
                     if (response.ok) return response.json();

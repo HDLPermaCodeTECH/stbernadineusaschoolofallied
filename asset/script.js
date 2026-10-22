@@ -650,9 +650,10 @@ document.addEventListener('DOMContentLoaded', () => {
             button.textContent = 'Sending...';
             status.textContent = '';
             try {
+                const protection = await window.StbFormProtection.prepare(form);
                 const response = await fetch('/subscribe', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: input.value, source_page: location.pathname })
+                    body: JSON.stringify({ email: input.value, source_page: location.pathname, ...protection })
                 });
                 const result = await response.json().catch(() => ({}));
                 if (!response.ok || typeof result.message !== 'string') throw new Error(result.error || 'Unable to send your request. Please try again later.');

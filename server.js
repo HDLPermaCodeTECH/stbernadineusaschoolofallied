@@ -8,12 +8,14 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const { FORM_INBOXES, createFormTransport, safeMailError } = require('./form_mail');
 const { buildAcknowledgement } = require('./email_templates');
+const { createFormProtection, submissionContext, REVIEW_PREFIX } = require('./spam_protection');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
 const hpp = require('hpp');
 const { body, validationResult } = require('express-validator');
 require('dotenv').config();
+const formProtection = createFormProtection();
 
 const app = express();
 // Only trust the local reverse proxy, never arbitrary forwarded client headers.
@@ -46,12 +48,12 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://hdlpermacodetech.github.io", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://hdlpermacodetech.github.io", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com", "https://challenges.cloudflare.com"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://kit.fontawesome.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ka-f.fontawesome.com"],
             imgSrc: ["'self'", "data:", "https:", "https://img.icons8.com"],
             connectSrc: ["'self'", "https://generativelanguage.googleapis.com", "https://kit.fontawesome.com", "https://ka-f.fontawesome.com", "https://countriesnow.space", "https://raw.githubusercontent.com", "http://localhost:3000"],
-            frameSrc: ["'self'", "https://www.google.com"],
+            frameSrc: ["'self'", "https://www.google.com", "https://challenges.cloudflare.com"],
             objectSrc: ["'none'"],
             upgradeInsecureRequests: [],
         },
@@ -74,6 +76,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
+app.get('/api/form-protection', rateLimit({ windowMs: 60000, max: 90 }), formProtection.config);
 
 // Global Rate Limiting
 const generalLimiter = rateLimit({
@@ -154,7 +157,7 @@ app.use((req, res, next) => {
     try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
     catch { return res.status(400).json({ error: 'Invalid request path.' }); }
     const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/'];
-    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates)\.js$/.test(requestPath);
+    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates|spam_protection)\.js$/.test(requestPath);
     if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
         return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
     }
@@ -489,7 +492,7 @@ const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc
     const mailOptions = {
         from: `"${metadata.displayName || 'St. Bernadine Website'}" <${fromEmail}>`,
         to: to,
-        subject: subject,
+        subject: submissionContext.getStore()?.review ? REVIEW_PREFIX + subject : subject,
         html: htmlContent,
         headers: { 'Auto-Submitted': metadata.autoSubmitted || 'auto-generated', 'X-Auto-Response-Suppress': 'All' }
     };
@@ -517,6 +520,7 @@ const sendEmail = async (to, subject, htmlContent, attachments, replyTo, cc, bcc
 
 // An optional confirmation failure must not turn an accepted application into a failure.
 const sendConfirmation = async (to, kind) => {
+    if (submissionContext.getStore()?.review) return false;
     try {
         const acknowledgement = buildAcknowledgement(kind);
         await sendEmail(to, acknowledgement.subject, acknowledgement.html, null, acknowledgement.replyTo, null, null, {
@@ -529,7 +533,9 @@ const sendConfirmation = async (to, kind) => {
         return false;
     }
 };
-const confirmationMessage = (message, sent) => sent ? message : `${message} Your confirmation email could not be sent; please do not resubmit.`;
+const confirmationMessage = (message, sent) => submissionContext.getStore()?.review
+    ? 'Your message was received for review. Please do not resubmit.'
+    : sent ? message : `${message} Your confirmation email could not be sent; please do not resubmit.`;
 const formFailure = (res, error) => {
     console.error('[FORM_SUBMISSION_FAILED]', JSON.stringify(safeMailError(error)));
     return res.status(503).json({ error: 'We could not send your request. Please try again later or email the appropriate department directly.' });
@@ -537,6 +543,7 @@ const formFailure = (res, error) => {
 
 app.post('/send-email', 
     upload.array('attachment'),
+    formProtection.guard,
     [
         body('firstName').trim().notEmpty().escape(),
         body('lastName').trim().notEmpty().escape(),
@@ -814,7 +821,7 @@ const generateCareRequestPDF = (data) => {
     });
 };
 
-app.post(['/send-contact', '/send-placement'], [
+app.post(['/send-contact', '/send-placement'], formProtection.guard, [
     body('name').trim().notEmpty().escape(),
     body('email').trim().isEmail(),
     body('contact_number').optional().trim().isLength({ max: 64 }).escape(),
@@ -927,7 +934,7 @@ app.post(['/send-contact', '/send-placement'], [
     }
 });
 
-app.post('/request-care', [
+app.post('/request-care', formProtection.guard, [
     body('firstName').customSanitizer((value, { req }) => value || req.body.patientFirstName).trim().notEmpty().escape(),
     body('lastName').customSanitizer((value, { req }) => value || req.body.patientLastName).trim().notEmpty().escape(),
     body('contactEmail').trim().isEmail(),
@@ -1269,6 +1276,7 @@ const generateJobApplicationPDF = (data) => {
 // --- POST ENDPOINT: APPLY FOR A JOB ---
 app.post('/apply-job', 
     jobUpload.fields([{ name: 'resume', maxCount: 1 }, { name: 'applicantPhoto', maxCount: 1 }]),
+    formProtection.guard,
     [
         body('firstName').trim().notEmpty().escape(),
         body('lastName').trim().notEmpty().escape(),
@@ -1387,7 +1395,7 @@ app.post('/apply-job',
 });
 
 // Public referral and newsletter requests go to the information inbox.
-app.post('/send-referral', [
+app.post('/send-referral', formProtection.guard, [
     body('referrer_name').trim().isLength({ min: 1, max: 180 }).escape(),
     body('referrer_email').trim().isEmail(),
     body('referrer_phone').trim().isLength({ min: 1, max: 64 }).escape(),
@@ -1410,7 +1418,7 @@ app.post('/send-referral', [
     }
 });
 
-app.post('/subscribe', [
+app.post('/subscribe', formProtection.guard, [
     body('email').trim().isEmail(),
     body('source_page').optional().trim().isLength({ max: 300 }).escape(),
     validate

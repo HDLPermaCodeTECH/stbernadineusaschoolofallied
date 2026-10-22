@@ -54,6 +54,8 @@
       }
     }
     </script>
+    <link rel="stylesheet" href="/asset/form-protection.css?v=20261023-spam1">
+    <script src="/asset/form-protection.js?v=20261023-spam1" defer></script>
 </head>
 
 <body>
@@ -881,6 +883,10 @@
         // Form Submission Logic
         document.getElementById('jobApplicationForm').addEventListener('submit', async function (e) {
             e.preventDefault();
+            let protection;
+            try { protection = await window.StbFormProtection.prepare(this); }
+            catch (error) { alert(error.message); return; }
+
 
             const method = document.querySelector('input[name="AppMethod"]:checked').value;
 
@@ -903,6 +909,7 @@
             submitBtn.innerHTML = 'Submitting... <i class="fa-solid fa-spinner fa-spin"></i>';
 
             const formData = new FormData(this);
+            for (const [key, value] of Object.entries(protection)) formData.set(key, value);
 
             // Map common fields expected by the backend format if necessary
             // e.g. ensuring contactEmail is mapped from Email
@@ -1008,7 +1015,7 @@
             </div>
         </div>
     </footer>
-    <script src="asset/script.js?v=20261019-forms1"></script>
+    <script src="asset/script.js?v=20261023-spam1"></script>
     <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
     <script>

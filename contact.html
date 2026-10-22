@@ -70,6 +70,8 @@
       }
     }
     </script>
+    <link rel="stylesheet" href="/asset/form-protection.css?v=20261023-spam1">
+    <script src="/asset/form-protection.js?v=20261023-spam1" defer></script>
 </head>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#06752e">
@@ -264,7 +266,7 @@
             </div>
         </div>
     </footer>
-    <script src="asset/script.js?v=20261019-forms1"></script> <!-- Intl Tel Input JS -->
+    <script src="asset/script.js?v=20261023-spam1"></script> <!-- Intl Tel Input JS -->
     <script src="asset/vendor/intl-tel-input/js/intlTelInput.min.js"></script>
     <script>        /* Initialize Intl Tel Input */        const input = document.querySelector("#contactNumber");        if (input) {            window.intlTelInput(input, {                utilsScript: "asset/vendor/intl-tel-input/js/utils.js",                initialCountry: "us",                preferredCountries: ["us", "ph"],                separateDialCode: true            });        }    </script>
     <script>
@@ -277,14 +279,18 @@
             document.getElementById('contact-subject').value = 'Placement / Visa Inquiry';
         }
         document.getElementById('contact-form').addEventListener('submit', async function (e) {
-            e.preventDefault(); const btn = this.querySelector('button[type="submit"]'); const originalText = btn.innerText; btn.innerText = 'Sending...'; btn.disabled = true; const formData = {
+            e.preventDefault();
+            let protection;
+            try { protection = await window.StbFormProtection.prepare(this); }
+            catch (error) { alert(error.message); return; }
+ const btn = this.querySelector('button[type="submit"]'); const originalText = btn.innerText; btn.innerText = 'Sending...'; btn.disabled = true; const formData = {
                 name: this.querySelector('input[type="text"]').value, email: this.querySelector('input[type="email"]').value, contact_number: window.intlTelInputGlobals?.getInstance(document.getElementById('contactNumber'))?.getNumber() || this.querySelector('input[name="contact_number"]').value, subject: this.querySelectorAll('input[type="text"]')[1].value, /* 2nd text input is subject */ message: this.querySelector('textarea').value
             }; try {
                 // Use relative path for Hostinger deployment
                 const response = await fetch(contactEndpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify({ ...formData, ...protection })
                 }); const result = await response.json(); if (response.ok) { alert(result.message); this.reset(); if (placementForm) document.getElementById('contact-subject').value = 'Placement / Visa Inquiry'; } else { alert(`Error (${response.status}): ${result.error || result.message || 'Failed to send message.'}`); }
             } catch (error) { console.error('Error:', error); alert(`Network/Server Error: ${error.message}\nPlease try again later or contact us directly.`); } finally { btn.innerText = originalText; btn.disabled = false; }
         });    </script>

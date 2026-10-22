@@ -34,6 +34,25 @@ process.env.EMAIL_PASS = 'test-only-placeholder';
 process.env.GEMINI_API_KEY = '';
 process.env.SITE_MAINTENANCE = 'off';
 process.env.NODE_ENV = 'test';
+process.env.TURNSTILE_SITE_KEY = 'local-test-site';
+process.env.TURNSTILE_SECRET_KEY = 'local-test-secret';
+const nativeFetch = global.fetch;
+let tokenSequence = 0;
+// Exercise the real guard and signed ticket; only Cloudflare and SMTP are mocked.
+global.fetch = async (url, options = {}) => {
+    if (String(url) === 'https://challenges.cloudflare.com/turnstile/v0/siteverify') {
+        return Response.json({ success: true, hostname: 'stbernadineusa.com', action: 'stb_public_form' });
+    }
+    if (options.method === 'POST' && /^http:\/\/127\.0\.0\.1:\d+\/(send-|request-care|apply-job|subscribe)/.test(String(url))) {
+        const origin = new URL(url).origin;
+        const config = await (await nativeFetch(origin + '/api/form-protection')).json();
+        const protection = { stb_website: '', stb_form_ticket: config.ticket, 'cf-turnstile-response': 'fixture-' + ++tokenSequence };
+        if (options.body instanceof FormData) {
+            for (const [key, value] of Object.entries(protection)) options.body.set(key, value);
+        } else options = { ...options, body: JSON.stringify({ ...JSON.parse(options.body), ...protection }) };
+    }
+    return nativeFetch(url, options);
+};
 const app = require('../server');
 const { createFormTransport } = require('../form_mail');
 Module._load = originalLoad;
@@ -47,7 +66,7 @@ test.before(async () => {
     });
     base = `http://127.0.0.1:${server.address().port}`;
 });
-test.after(() => new Promise(resolve => server.close(resolve)));
+test.after(() => new Promise(resolve => server.close(() => { global.fetch = nativeFetch; resolve(); })));
 
 async function submit(route, data, multipart = false) {
     const headers = { 'X-Forwarded-For': `203.0.113.${visitor++}` };
@@ -206,12 +225,28 @@ test('Job declarations must be confirmed before sending an application', async (
 });
 
 test('Source files, encoded source paths and applicant uploads cannot be downloaded', async () => {
-    for (const route of ['/server.js', '/server%2Ejs', '/form_mail.js', '/email_templates.js', '/maintenance.js', '/test/forms-email.test.js', '/uploads/test.pdf', '/.env', '/stbernadine_manual_deploy.zip']) {
+    for (const route of ['/server.js', '/server%2Ejs', '/form_mail.js', '/email_templates.js', '/maintenance.js', '/spam_protection.js', '/test/forms-email.test.js', '/uploads/test.pdf', '/.env', '/stbernadine_manual_deploy.zip']) {
         const response = await fetch(base + route);
         assert.equal(response.status, 403, route);
     }
     const response = await fetch(base + '/asset/script.js');
     assert.equal(response.status, 200);
+});
+
+test('Unverified submissions cannot send department messages or acknowledgements', async () => {
+    const before = messages.length;
+    const response = await nativeFetch(base + '/send-contact', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Forwarded-For': '203.0.113.230' }, body: JSON.stringify(routes[1][1]) });
+    assert.equal(response.status, 400);
+    assert.equal(messages.length, before);
+});
+
+test('Commercial website pitches are tagged for review without an automatic acknowledgement', async () => {
+    const result = await submit('/send-contact', { name: 'Pitch fixture', email: 'visitor@example.invalid', subject: 'SEO proposal', message: 'We offer SEO services and website redesign for your business.' });
+    assert.equal(result.response.status, 200);
+    assert.equal(result.messages.length, 1);
+    assert.equal(result.messages[0].to, 'info@stbernadineusa.com');
+    assert.match(result.messages[0].subject, /^\[WEBSITE SPAM REVIEW\]/);
+    assert.equal((await result.response.json()).confirmationSent, false);
 });
 
 test('Local reverse proxy clients are limited separately with readable JSON errors', async () => {
