@@ -5927,18 +5927,9 @@ input:not([type="checkbox"]):not([type="radio"]), select, textarea {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* Compact floating controls retain a 44px touch target. */
+.chat-toggle-btn, #back-to-top { width:44px; height:44px; min-width:44px; min-height:44px; padding:0; bottom:20px; box-shadow:0 3px 12px rgba(6,117,46,.2); }
+.chat-toggle-btn { right:20px; }
+#back-to-top { left:20px; }
+.chat-toggle-btn svg, #back-to-top svg { width:20px; height:20px; }
+.chat-toggle-btn:hover, #back-to-top:hover { transform:translateY(-2px); box-shadow:0 5px 14px rgba(6,117,46,.25); }
