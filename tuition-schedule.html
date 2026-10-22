@@ -209,6 +209,32 @@
             background: var(--primary-dark);
         }
 
+        @media screen and (max-width: 8.5in) {
+            .page {
+                width: 100%;
+                min-height: 0;
+                margin: 5rem auto 1rem;
+                padding: 1.25rem;
+            }
+            .doc-title {
+                font-size: clamp(1.5rem, 6vw, 2.5rem);
+            }
+            .fee-table {
+                table-layout: fixed;
+            }
+            .fee-table th, .fee-table td {
+                padding: 10px 6px;
+                overflow-wrap: anywhere;
+                font-size: 0.8rem;
+            }
+            .ui-controls {
+                top: 12px;
+                right: 12px;
+                padding: 8px;
+                max-width: calc(100% - 24px);
+            }
+        }
+
         @media print {
             body {
                 background: none;

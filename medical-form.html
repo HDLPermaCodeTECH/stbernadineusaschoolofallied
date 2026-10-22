@@ -7,6 +7,7 @@
     <title>Medical Physical Form | St. Bernadine School of Allied Health</title>
     <link rel="icon" type="image/png" href="favicon.png?v=21">
     <link rel="shortcut icon" href="favicon.ico?v=21">
+    <link rel="stylesheet" href="asset/vendor/fontawesome/css/all.min.css?v=20261022-print1">
     <meta name="description"
         content="Download and print the Medical Physical Form for St. Bernadine School of Allied Health. Required for clinical placement and enrollment.">
     <meta name="keywords"
@@ -247,6 +248,25 @@
                 width: 100%;
                 margin-top: 5rem;
                 padding: 1.5rem;
+            }
+            .row, .checkbox-group {
+                flex-wrap: wrap;
+            }
+            .col {
+                flex: 1 1 160px;
+                min-width: 0;
+            }
+            .field-label, .section-title {
+                overflow-wrap: anywhere;
+            }
+            .doc-title {
+                font-size: clamp(1.5rem, 6vw, 2.2rem);
+            }
+            .ui-controls {
+                top: 12px;
+                right: 12px;
+                padding: 8px;
+                max-width: calc(100% - 24px);
             }
         }
     </style>
