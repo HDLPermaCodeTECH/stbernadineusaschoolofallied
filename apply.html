@@ -564,7 +564,7 @@
                 <div class="form-group">
                     <label>How Did You Know About Us?</label>
                     <select id="referrer" name="referrer" class="form-control"
-                        onchange="this.value === 'Others' ? document.getElementById('referrerOther').style.display = 'block' : document.getElementById('referrerOther').style.display = 'none'">
+                        data-referrer-source>
                         <option value="">Select an option</option>
                         <option value="FB">Facebook</option>
                         <option value="IG">Instagram</option>
@@ -781,7 +781,7 @@
                     let previewContent = '';
                     if (file.type.startsWith('image/')) {
                         const imgUrl = URL.createObjectURL(file);
-                        previewContent = `<img src="${imgUrl}" class="file-preview" onload="URL.revokeObjectURL(this.src)" loading="lazy" decoding="async">`;
+                        previewContent = `<img src="${imgUrl}" class="file-preview"  loading="lazy" decoding="async">`;
                     } else if (file.type === 'application/pdf') {
                         previewContent = `<div class="file-preview"><i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i></div>`;
                     } else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
@@ -794,13 +794,16 @@
                     // Format size
                     const size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
                     fileItem.innerHTML = `
-                        <button type="button" class="remove-file" onclick="removeFile(${index})" title="Remove file">
+                        <button type="button" class="remove-file" data-remove-file="${index}" title="Remove file">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                         ${previewContent}
-                        <div class="file-info">${file.name}</div>
+                        <div class="file-info"></div>
                         <div class="file-size">${size}</div>
                     `;
+                    const previewImage = fileItem.querySelector('img');
+                    if (previewImage) previewImage.addEventListener('load', () => URL.revokeObjectURL(previewImage.src), { once: true });
+                    fileItem.querySelector('.file-info').textContent = file.name;
                     fileList.appendChild(fileItem);
                 });
             } else {
@@ -1170,6 +1173,7 @@
     </script>
 
     <script src="asset/back-to-top.js?v=20261014-ui2" defer></script>
+    <script src="asset/ui-controls.js?v=20261022-csp1" defer></script>
 </body>
 
 </html>

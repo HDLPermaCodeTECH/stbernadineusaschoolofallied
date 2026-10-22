@@ -200,7 +200,7 @@
                     </div>
                     <div style="text-align: right; min-width: 160px; padding-left: 20px;" class="job-btn-container">
                         <a href="#apply" class="btn btn-outline" style="padding: 12px 24px; border-width: 2px;"
-                            onclick="selectJob('Clinical Nursing Instructor')">Apply Now</a>
+                            data-job-position="Clinical Nursing Instructor">Apply Now</a>
                     </div>
                 </div>
 
@@ -233,7 +233,7 @@
                     </div>
                     <div style="text-align: right; min-width: 160px; padding-left: 20px;" class="job-btn-container">
                         <a href="#apply" class="btn btn-outline" style="padding: 12px 24px; border-width: 2px;"
-                            onclick="selectJob('Certified Home Health Aide')">Apply Now</a>
+                            data-job-position="Certified Home Health Aide">Apply Now</a>
                     </div>
                 </div>
 
@@ -267,7 +267,7 @@
                     </div>
                     <div style="text-align: right; min-width: 160px; padding-left: 20px;" class="job-btn-container">
                         <a href="#apply" class="btn btn-outline" style="padding: 12px 24px; border-width: 2px;"
-                            onclick="selectJob('Healthcare Recruiter / Placement Specialist')">Apply Now</a>
+                            data-job-position="Healthcare Recruiter / Placement Specialist">Apply Now</a>
                     </div>
                 </div>
             </div>
@@ -508,11 +508,11 @@
                         <div style="display: flex; gap: 30px; flex-wrap: wrap;">
                             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                                 <input type="radio" name="AppMethod" value="upload" checked
-                                    onchange="toggleFormSections()" style="transform: scale(1.2);">
+                                     style="transform: scale(1.2);">
                                 <span style="font-weight: 500;">Upload Resume (Quick Apply)</span>
                             </label>
                             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                                <input type="radio" name="AppMethod" value="manual" onchange="toggleFormSections()"
+                                <input type="radio" name="AppMethod" value="manual" 
                                     style="transform: scale(1.2);">
                                 <span style="font-weight: 500;">Fill Form Manually</span>
                             </label>
@@ -1024,6 +1024,7 @@
         }
     </script>
     <script src="asset/back-to-top.js?v=20261014-ui2" defer></script>
+    <script src="asset/ui-controls.js?v=20261022-csp1" defer></script>
 </body>
 
 </html>
