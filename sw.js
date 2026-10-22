@@ -17,7 +17,6 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-self.addEventListener('fetch', (event) => {
-    // Network only - bypass cache
-    event.respondWith(fetch(event.request));
-});
+// Leave network requests to the browser. Intercepting third-party script
+// redirects with fetch(event.request) prevents Turnstile from loading on
+// subsequent visits. No offline response or request cache is needed here.
