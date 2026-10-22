@@ -1,4 +1,9 @@
-.stb-form-security { flex: 1 0 100%; width: 100%; min-width: 0; margin: 16px 0 8px; }
-.stb-form-notice, .stb-verification-status { margin: 8px 0; font: inherit; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.stb-form-security { box-sizing: border-box; flex: 1 0 100%; width: 100%; min-width: 0; margin: 18px auto 16px; text-align: center; }
+.stb-form-notice, .stb-verification-status { margin: 8px auto; max-width: 460px; font: inherit; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; text-align: center; }
 .stb-form-trap { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
-.stb-turnstile-widget { max-width: 100%; }
+.stb-turnstile-frame { width: 100%; max-width: 300px; height: 65px; margin: 10px auto; }
+.stb-turnstile-widget { width: 300px; height: 65px; transform-origin: top left; }
+@media (max-width: 480px) {
+    .enrollment-card-container { padding: 24px 12px !important; }
+    .enrollment-card { padding: 24px 16px !important; }
+}

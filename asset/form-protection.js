@@ -52,16 +52,30 @@
         state.honeypot = honeypot;
         const widget = document.createElement('div');
         widget.className = 'stb-turnstile-widget';
+        const frame = document.createElement('div');
+        frame.className = 'stb-turnstile-frame';
+        frame.appendChild(widget);
         const status = document.createElement('p');
         status.className = 'stb-verification-status';
         status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
         status.textContent = 'Loading verification…';
-        group.append(widget, status); form.appendChild(group);
+        group.append(frame, status);
+        const submit = form.querySelector('button[type="submit"], input[type="submit"]');
+        if (submit?.parentElement === form && !form.classList.contains('footer-subscribe-form')) form.insertBefore(group, submit);
+        else form.appendChild(group);
+        // Keep the 65px horizontal widget centered, including narrow mobile cards.
+        const resize = () => {
+            const scale = Math.min(1, frame.clientWidth / 300);
+            widget.style.transform = `scale(${scale})`;
+            frame.style.height = `${65 * scale}px`;
+        };
+        new ResizeObserver(resize).observe(frame);
+        resize();
         state.group = group; state.status = status;
         state.ready = Promise.all([getConfig(), loadWidget()]).then(([config]) => {
             state.config = config;
             state.id = window.turnstile.render(widget, {
-                sitekey: config.siteKey, action: config.action, theme: 'auto', size: 'compact',
+                sitekey: config.siteKey, action: config.action, theme: 'auto', size: 'normal',
                 callback: token => { state.token = token; status.textContent = 'Verification complete.'; },
                 'expired-callback': () => { state.token = ''; status.textContent = 'Please complete verification again.'; },
                 'error-callback': () => { state.token = ''; status.textContent = 'Verification could not complete. Please retry or contact the school directly.'; return true; }
