@@ -8,12 +8,22 @@
     function loadWidget() {
         if (window.turnstile) return Promise.resolve();
         if (!scriptPromise) scriptPromise = new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-            script.async = true;
-            script.onload = resolve;
-            script.onerror = () => reject(new Error('Verification could not load. Please reload or contact the school directly.'));
-            document.head.appendChild(script);
+            let attempts = 0;
+            const load = () => {
+                const script = document.createElement('script');
+                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+                script.async = true;
+                script.onload = resolve;
+                script.onerror = () => {
+                    script.remove();
+                    // Allow an older service worker to finish updating without
+                    // reloading the form or losing information already entered.
+                    if (++attempts < 3) setTimeout(load, 1000);
+                    else reject(new Error('Verification could not load. Please reload or contact the school directly.'));
+                };
+                document.head.appendChild(script);
+            };
+            load();
         });
         return scriptPromise;
     }
