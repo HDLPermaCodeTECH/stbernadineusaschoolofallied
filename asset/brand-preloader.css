@@ -1,0 +1,38 @@
+/* Original brand artwork, presented against a light surface for legibility. */
+.footer-brand img[src*="st-bernadine-logo"] { box-sizing: border-box; width: 148px; height: 126px; object-fit: contain; padding: 10px; background: #fffdf8; border-radius: 14px; }
+.stb-loading #stb-preloader { display: grid; opacity: 1; visibility: visible; }
+#stb-preloader {
+    display: grid; position: fixed; inset: 0; z-index: 20000; place-items: center;
+    overflow: hidden; pointer-events: none; background: #faf9f5; color: #214d2a;
+    opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s;
+    font-family: Arial, Helvetica, sans-serif;
+    /* CSS escape hatch if execution stops before JavaScript can dismiss it. */
+    animation: stb-loader-fallback 0s 3s forwards;
+}
+#stb-preloader::before, #stb-preloader::after {
+    content: ""; position: absolute; width: 65vmax; height: 65vmax; border-radius: 50%;
+    pointer-events: none;
+}
+#stb-preloader::before { top: -44vmax; left: -28vmax; background: radial-gradient(circle, #e4eade, transparent 68%); }
+#stb-preloader::after { right: -35vmax; bottom: -45vmax; background: radial-gradient(circle, #efe0db, transparent 68%); }
+.stb-loader-content { position: relative; z-index: 1; width: min(400px, calc(100% - 48px)); text-align: center; animation: stb-loader-arrive .5s ease both; }
+.stb-loader-seal { position: relative; display: grid; place-items: center; width: 192px; height: 192px; margin: 0 auto 34px; }
+.stb-loader-seal::before { content: ""; position: absolute; inset: 0; border: 1px solid #d9e0d3; border-radius: 50%; }
+.stb-loader-seal::after { content: ""; position: absolute; inset: -1px; border: 2px solid transparent; border-top-color: #275d37; border-right-color: #9c0a0a; border-radius: 50%; animation: stb-loader-orbit 1.8s linear infinite; }
+.stb-loader-seal img { display: block; width: 142px; height: 121px; object-fit: contain; }
+.stb-loader-eyebrow { margin: 0 0 14px; color: #667464; font-size: 10px; font-weight: 700; letter-spacing: .24em; line-height: 1.7; text-transform: uppercase; }
+.stb-loader-heading { margin: 0; font: 400 clamp(28px, 5vw, 36px)/1.2 Georgia, 'Times New Roman', serif; color: #23472d; }
+.stb-loader-rule { width: 116px; height: 2px; overflow: hidden; margin: 28px auto 15px; background: #e3e5dc; border-radius: 2px; }
+.stb-loader-rule::before { content: ""; display: block; width: 50%; height: 100%; background: linear-gradient(90deg, #2b613a, #9c0a0a); animation: stb-loader-sweep 1.2s ease-in-out infinite; }
+.stb-loader-status { margin: 0; color: #596658; font-size: 12px; letter-spacing: .02em; line-height: 1.6; }
+.stb-loader-footer { position: absolute; bottom: max(28px, env(safe-area-inset-bottom)); left: 24px; right: 24px; text-align: center; color: #64725f; font-size: 9px; font-weight: 600; letter-spacing: .17em; line-height: 1.9; }
+@keyframes stb-loader-orbit { to { transform: rotate(360deg); } }
+@keyframes stb-loader-sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
+@keyframes stb-loader-arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes stb-loader-fallback { to { opacity: 0; visibility: hidden; } }
+@media (max-height: 500px) { .stb-loader-seal { width: 124px; height: 124px; margin-bottom: 16px; } .stb-loader-seal img { width: 92px; height: 78px; } .stb-loader-rule { margin-top: 16px; } .stb-loader-footer { bottom: 10px; } }
+@media (prefers-reduced-motion: reduce) {
+    #stb-preloader { transition: none; }
+    .stb-loader-content, .stb-loader-seal::after, .stb-loader-rule::before { animation: none; }
+}
+@media print { #stb-preloader { display: none !important; } }

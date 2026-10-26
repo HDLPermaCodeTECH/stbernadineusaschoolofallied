@@ -7,14 +7,10 @@
   "theme_color": "#06752e",
   "icons": [
     {
-      "src": "asset/images/logo.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "asset/images/logo.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/asset/images/st-bernadine-logo-20261026.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
