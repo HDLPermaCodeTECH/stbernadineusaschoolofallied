@@ -14,20 +14,20 @@
         const overlay = document.getElementById('stb-preloader');
         if (overlay) {
             overlay.setAttribute('aria-hidden', 'true');
-            setTimeout(() => overlay.remove(), reducedMotion ? 0 : 350);
+            setTimeout(() => overlay.remove(), reducedMotion ? 0 : 650);
         }
     };
     const ready = () => {
         const logo = document.querySelector('#stb-preloader img');
         const reveal = () => {
-            dismissTimer = setTimeout(finish, Math.max(0, (reducedMotion ? 0 : 650) - (performance.now() - started)));
+            dismissTimer = setTimeout(finish, Math.max(0, (reducedMotion ? 0 : 3000) - (performance.now() - started)));
         };
         if (logo && typeof logo.decode === 'function') logo.decode().catch(() => {}).then(reveal);
         else reveal();
     };
     root.classList.add('stb-loading');
     // Never wait for CAPTCHA, maps, video, external services, or window.load.
-    setTimeout(finish, 2200);
+    setTimeout(finish, 5000);
     window.addEventListener('pageshow', event => { if (event.persisted) finish(); });
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, { once: true });
     else ready();
