@@ -69,8 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
         document.body.classList.toggle('nav-open', isOpen);
         navLinks.inert = mobileViewport.matches && !isOpen;
-        document.body.style.overflow = isOpen ? 'hidden' : '';
+        document.documentElement.style.overflow = isOpen ? 'hidden' : '';
+        document.body.style.overflow = '';
         if (isOpen) menuHeading.querySelector('button').focus();
+        if (isOpen) {
+            const pinnedHeader = document.querySelector('header');
+            pinnedHeader.classList.remove('stb-header-hidden');
+            pinnedHeader.inert = false;
+        }
     }
 
     function toggleMobileMenu() {
@@ -580,16 +586,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Header Scroll Effect ---
+    // --- Direction-aware header: read downward, navigate upward. ---
     const header = document.querySelector('header');
     if (header) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+        let previousY = Math.max(0, window.scrollY);
+        let travel = 0;
+        let direction = 0;
+        let scheduled = false;
+        const revealHeader = () => {
+            header.classList.remove('stb-header-hidden');
+            header.inert = false;
+        };
+        const updateHeader = () => {
+            scheduled = false;
+            const limit = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+            const y = Math.min(limit, Math.max(0, window.scrollY));
+            const delta = y - previousY;
+            previousY = y;
+            header.classList.toggle('scrolled', y > 50);
+            const keyboardFocus = header.contains(document.activeElement) && document.activeElement.matches(':focus-visible');
+            if (y < 50 || document.body.classList.contains('nav-open') || keyboardFocus) {
+                revealHeader(); travel = 0; direction = 0; return;
             }
+            if (!delta) return;
+            const nextDirection = Math.sign(delta);
+            travel = nextDirection === direction ? travel + Math.abs(delta) : Math.abs(delta);
+            direction = nextDirection;
+            if (travel < 12) return;
+            const hidden = direction > 0 && y > header.offsetHeight + 80;
+            header.classList.toggle('stb-header-hidden', hidden);
+            header.inert = hidden;
+            travel = 0;
+        };
+        window.addEventListener('scroll', () => {
+            if (!scheduled) { scheduled = true; requestAnimationFrame(updateHeader); }
         }, { passive: true });
+        document.addEventListener('keydown', event => { if (event.key === 'Tab') revealHeader(); });
+        header.addEventListener('focusin', revealHeader);
+        window.addEventListener('pageshow', () => { previousY = Math.max(0, window.scrollY); revealHeader(); });
     }
 
     // --- Scroll Reveal Animations ---

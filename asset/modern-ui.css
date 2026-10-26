@@ -9,13 +9,19 @@
     --shadow-raised: 0 6px 16px #17372a08, 0 30px 70px -36px #17372a55;
     background: #f7f8f3;
     color: #25392f;
+    /* Clip horizontal overflow without making body a separate scroll container. */
+    overflow-x: clip;
+    overflow-y: visible;
 }
 .stb-modern .top-bar { background: #153b28; font-size: 12px; }
 .stb-modern header {
     top: 12px; width: calc(100% - 40px); max-width: 1440px; margin: 12px auto 18px;
     border: 0; background: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none;
     z-index: 1100;
+    transition: transform .28s cubic-bezier(.2,.7,.2,1), opacity .18s ease;
 }
+.stb-modern header.stb-header-hidden { transform: translateY(calc(-100% - 32px)); opacity: 0; pointer-events: none; }
+.stb-modern.nav-open header, .stb-modern header:focus-within { transform: none; opacity: 1; pointer-events: auto; }
 .stb-modern header > .container { padding: 0; max-width: none; width: 100%; }
 .stb-modern .navbar {
     min-height: 94px; padding: 10px 24px; gap: 20px; border: 1px solid #ffffff;
