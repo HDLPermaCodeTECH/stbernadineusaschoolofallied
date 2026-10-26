@@ -315,3 +315,15 @@ test('The deployed default keeps pages and form endpoints in HTTP 503 maintenanc
     const output = execFileSync(process.execPath, ['-e', script], { cwd: process.cwd(), env: { ...process.env, SITE_MAINTENANCE: 'on' }, encoding: 'utf8', timeout: 20000 });
     assert.match(output, /MAINTENANCE_OK/);
 });
+
+
+test('chat rejects non-text and oversized messages before reaching the provider', async () => {
+    for (const message of ['', { text: 'bad type' }, 'x'.repeat(2001)]) {
+        const response = await nativeFetch(base + '/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message }) });
+        assert.equal(response.status, 400);
+    }
+    const disabled = await nativeFetch(base + '/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'A general question' }) });
+    assert.equal(disabled.status, 503);
+    assert.equal((await disabled.json()).code, 'AI_UNAVAILABLE');
+    assert.equal((await nativeFetch(base + '/chat_service.js')).status, 403);
+});

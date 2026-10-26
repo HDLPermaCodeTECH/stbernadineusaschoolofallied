@@ -1,5 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const express = require('express');
+const { createChatHandler } = require('./chat_service');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
@@ -157,7 +158,7 @@ app.use((req, res, next) => {
     try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
     catch { return res.status(400).json({ error: 'Invalid request path.' }); }
     const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/', 'email_brand.hbs'];
-    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates|spam_protection)\.js$/.test(requestPath);
+    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates|spam_protection|chat_service)\.js$/.test(requestPath);
     if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
         return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
     }
@@ -187,7 +188,7 @@ if (process.env.GEMINI_API_KEY) {
     if (apiKey) {
         const genAI = new GoogleGenerativeAI(apiKey);
         chatModel = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: process.env.GEMINI_MODEL?.trim() || "gemini-3.1-flash-lite",
             systemInstruction: {
                 parts: [{
                     text: `You are St. Bernadine AI, the official assistant for St. Bernadine School of Allied Health & Professional Services.
@@ -274,8 +275,8 @@ if (process.env.GEMINI_API_KEY) {
 *   If a question is about the school, be an expert.
 *   If a question is general (e.g., "Tell me about history" or "How to cook?"), answer it accurately and helpfully using your own vast intelligence.` }]
             }
-        });
-        console.log("Gemini API configured (Key trimmed).");
+        }, { timeout: 20000 });
+        console.log("Gemini API configuration loaded; connection verified on request.");
     } else {
         console.log("WARNING: GEMINI_API_KEY is empty.");
     }
@@ -284,38 +285,11 @@ if (process.env.GEMINI_API_KEY) {
 }
 
 app.post('/chat', [
-    body('message').trim().notEmpty().withMessage('Message is required'),
+    body('message').isString().withMessage('Message must be text').bail().trim()
+        .notEmpty().withMessage('Message is required')
+        .isLength({ max: 2000 }).withMessage('Message must be 2000 characters or fewer'),
     validate
-], async (req, res) => {
-    try {
-        if (!chatModel) {
-            return res.status(503).json({ error: "Gemini API not configured" });
-        }
-
-        const userMessage = req.body.message;
-        if (!userMessage) {
-            return res.status(400).json({ error: "Message required" });
-        }
-
-        const chat = chatModel.startChat({
-            history: [], // Start fresh or verify if history preservation is needed
-            generationConfig: {
-                maxOutputTokens: 1000,
-            },
-        });
-
-        const result = await chat.sendMessage(userMessage);
-        const response = await result.response;
-        const text = response.text();
-
-        res.json({ response: text });
-
-    } catch (error) {
-        console.error("Gemini API Error Full:", JSON.stringify(error, null, 2));
-        console.error("Gemini API Error Message:", error.message);
-        res.status(500).json({ error: "AI Error: " + error.message });
-    }
-});
+], createChatHandler(chatModel));
 
 // --- NODEMAILER EMAIL & PDF CONFIGURATION ---
 let transporter;

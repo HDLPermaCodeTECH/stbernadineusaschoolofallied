@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="chat-input local-theme-input">
-                <input type="text" id="user-input" placeholder="Type your question..." aria-label="Your question">
+                <input type="text" id="user-input" maxlength="2000" placeholder="Type your question..." aria-label="Your question">
                 <button id="send-btn" aria-label="Send question"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg></button>
             </div>
         </div>
@@ -310,13 +310,42 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter') sendMessage();
     });
 
+    // Treat both provider and visitor text as untrusted. Keep only simple formatting
+    // and safe links; strip active elements, inline handlers and unsafe URL schemes.
+    function safeChatContent(html) {
+        const template = document.createElement('template');
+        template.innerHTML = String(html);
+        const clean = document.createDocumentFragment();
+        const allowed = new Set(['B', 'STRONG', 'I', 'EM', 'BR', 'P', 'UL', 'OL', 'LI', 'A']);
+        function copy(node, parent) {
+            if (node.nodeType === Node.TEXT_NODE) { parent.appendChild(document.createTextNode(node.textContent)); return; }
+            if (node.nodeType !== Node.ELEMENT_NODE || ['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'SVG', 'MATH'].includes(node.tagName)) return;
+            const target = allowed.has(node.tagName) ? document.createElement(node.tagName.toLowerCase()) : parent;
+            if (target !== parent && node.tagName === 'A') {
+                try {
+                    const url = new URL(node.getAttribute('href') || '', location.origin + '/');
+                    if (['https:', 'http:', 'mailto:', 'tel:'].includes(url.protocol)) {
+                        target.setAttribute('href', url.href);
+                        target.setAttribute('target', '_blank');
+                        target.setAttribute('rel', 'noopener noreferrer');
+                    }
+                } catch (_) { /* Malformed links remain readable text. */ }
+            }
+            if (target !== parent) parent.appendChild(target);
+            for (const child of node.childNodes) copy(child, target);
+        }
+        for (const node of template.content.childNodes) copy(node, clean);
+        return clean;
+    }
+
     function addMessage(text, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', sender);
         if (sender === 'bot') {
-            messageDiv.innerHTML = `<strong>St. Bernadine assistant</strong><br>${text}`;
+            messageDiv.innerHTML = '<strong>St. Bernadine assistant</strong><br>';
+            messageDiv.appendChild(safeChatContent(text));
         } else {
-            messageDiv.innerHTML = text;
+            messageDiv.textContent = text;
         }
         chatMessages.appendChild(messageDiv);
         scrollToBottom();
@@ -486,36 +515,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 3. Fallback: Secure Backend AI (For general/unknown queries)
-        // Uses the server-side Gemini configuration to protect API keys and handle general knowledge
+        // School information stays available even when the external AI is unavailable.
+        const fallback = "Advanced AI answers are temporarily unavailable. I can still help with <strong>programs, tuition, location, placement and care services</strong> using our website information.<br><br>For other questions, <a href='/contact'>contact our team</a>.";
+        if (input.length > 2000) return 'Please keep your question to 2,000 characters or fewer.';
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 25000);
         try {
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: input })
+                body: JSON.stringify({ message: input }),
+                signal: controller.signal
             });
-
             if (response.ok) {
                 const data = await response.json();
-                return data.response;
-            } else {
-                console.warn("AI Server Error:", response.status);
-                if (response.status === 429) {
-                    return "I'm thinking too fast! 🧠💨<br>Please wait <strong>5-10 seconds</strong> and try again. (Rate Limited)";
-                } else if (response.status === 503) {
-                    return "My AI brain is still warming up. Please wait a moment and try again.";
-                }
-                return `System Error: ${response.status} - Please contact support if this persists.`;
+                return typeof data.response === 'string' && data.response.trim() ? data.response : fallback;
             }
-        } catch (e) {
-            console.error("AI Server unreachable.", e);
-            // Final Fallback if the whole backend connection fails
-            return "I'm having trouble connecting to my brain right now (Server Offline).<br><br>But I can still help with:<br>- <strong>Programs</strong><br>- <strong>Tuition</strong><br>- <strong>Location</strong><br><br>Please try again in a few minutes!";
+            if (response.status === 429) {
+                return 'Advanced AI answers are busy right now. Please try again later. You can still use the quick topics below or <a href="/contact">contact our team</a>.';
+            }
+            return fallback;
+        } catch (_) {
+            return fallback;
+        } finally {
+            clearTimeout(timeout);
         }
-
-        return "I'm not sure about that. Please try asking about our **Programs**, **Tuition**, or **Location**.";
     }
-
 
 
     // --- Hero Slider ---
