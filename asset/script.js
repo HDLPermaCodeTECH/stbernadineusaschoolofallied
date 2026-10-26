@@ -214,64 +214,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     let chatInitialized = false;
+    let chatBusy = false;
 
     function showInitialMessage() {
         chatInitialized = true;
-        // Clear any hardcoded messages from HTML template if they exist
         chatMessages.innerHTML = '';
-
-        setTimeout(() => {
-            showTypingIndicator();
-            setTimeout(() => {
-                removeTypingIndicator();
-                addMessage("Welcome to St. Bernadine! I can help you find a program, explore care services, or reach the right team. Where would you like to start?", 'bot');
-                showSuggestions(); // Restored per user request
-            }, 800);
-        }, 300);
+        addMessage("Welcome to St. Bernadine! I can help you find a program, explore care services, or reach the right team. Where would you like to start?", 'bot');
+        showSuggestions();
     }
 
-    // Send Message Logic
     async function sendMessage() {
         const message = userInput.value.trim();
-        if (message) {
-            // Add user message
-            addMessage(message, 'user');
-            userInput.value = '';
-
-            // Simulate AI thinking
-            showTypingIndicator();
-
-            try {
-                // Get Response (Async)
-                const response = await getBotResponse(message);
-
-                removeTypingIndicator();
-                addMessage(response, 'bot');
-
-                // Re-show suggestions after bot response
-                setTimeout(showSuggestions, 500);
-            } catch (error) {
-                console.error("Chat Error:", error);
-                removeTypingIndicator();
-                addMessage("I'm having trouble connecting right now. Please try again.", 'bot');
-            }
+        if (!message || chatBusy) return;
+        userInput.value = '';
+        chatBusy = true;
+        sendBtn.disabled = true;
+        chatbotContainer.setAttribute('aria-busy', 'true');
+        const existing = document.querySelector('.chat-suggestions');
+        if (existing) existing.remove();
+        addMessage(message, 'user');
+        showTypingIndicator();
+        try {
+            const response = await getBotResponse(message);
+            removeTypingIndicator();
+            addMessage(response, 'bot');
+        } catch (_) {
+            removeTypingIndicator();
+            addMessage("I'm having trouble connecting right now. Please try again, choose a quick topic, or contact our team.", 'bot');
+        } finally {
+            chatBusy = false;
+            sendBtn.disabled = false;
+            chatbotContainer.setAttribute('aria-busy', 'false');
+            showSuggestions();
         }
     }
 
     function handleSuggestion(text) {
-        // Remove suggestions immediately to prevent double-clicks
-        const existing = document.querySelector('.chat-suggestions');
-        if (existing) existing.remove();
-
-        addMessage(text, 'user');
-        showTypingIndicator();
-
-        // Use the same async logic
-        getBotResponse(text).then(response => {
-            removeTypingIndicator();
-            addMessage(response, 'bot');
-            setTimeout(showSuggestions, 500);
-        });
+        if (chatBusy) return;
+        userInput.value = text;
+        return sendMessage();
     }
 
     function showSuggestions() {
