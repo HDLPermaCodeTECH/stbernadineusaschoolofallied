@@ -121,9 +121,9 @@ for (const [route, data, multipart] of routes) {
         assert.ok(confirmation.text.includes(expectedRecipients[route]));
         assert.match(confirmation.html, /What happens next\?/);
         assert.doesNotMatch(confirmation.html, /<script|<form/i);
-        assert.match(confirmation.html, /src="https:\/\/stbernadineusa.com\/asset\/images\/4d-logo.png"/);
-        assert.match(confirmation.html, /#06752e/);
-        assert.match(confirmation.html, /#902017/);
+        assert.match(confirmation.html, /src="https:\/\/stbernadineusa.com\/asset\/images\/st-bernadine-email-logo-20261026.png"/);
+        assert.match(confirmation.html, /#1F4D1F/);
+        assert.match(confirmation.html, /#9C0A0A/);
     });
 }
 test('SMTP authentication rejection never produces a success response', async () => {
@@ -225,7 +225,7 @@ test('Job declarations must be confirmed before sending an application', async (
 });
 
 test('Source files, encoded source paths and applicant uploads cannot be downloaded', async () => {
-    for (const route of ['/server.js', '/server%2Ejs', '/form_mail.js', '/email_templates.js', '/maintenance.js', '/spam_protection.js', '/test/forms-email.test.js', '/uploads/test.pdf', '/.env', '/stbernadine_manual_deploy.zip']) {
+    for (const route of ['/server.js', '/server%2Ejs', '/form_mail.js', '/email_templates.js', '/email_brand.hbs', '/maintenance.js', '/spam_protection.js', '/test/forms-email.test.js', '/uploads/test.pdf', '/.env', '/stbernadine_manual_deploy.zip']) {
         const response = await fetch(base + route);
         assert.equal(response.status, 403, route);
     }
@@ -301,12 +301,12 @@ test('The deployed default keeps pages and form endpoints in HTTP 503 maintenanc
                     assert.equal(response.headers.get('retry-after'), '3600');
                     assert.match(response.headers.get('cache-control'), /no-store/);
                 }
-                const logo = await fetch('http://127.0.0.1:' + server.address().port + '/asset/images/4d-logo.png');
+                const logo = await fetch('http://127.0.0.1:' + server.address().port + '/asset/images/st-bernadine-email-logo-20261026.png');
                 assert.equal(logo.status, 200);
                 assert.ok(logo.headers.get('content-type').startsWith('image/png'));
-                const original = require('node:fs').readFileSync('asset/images/4d-logo.png');
+                const original = require('node:fs').readFileSync('asset/images/st-bernadine-email-logo-20261026.png');
                 assert.ok(Buffer.from(await logo.arrayBuffer()).equals(original));
-                const postLogo = await fetch('http://127.0.0.1:' + server.address().port + '/asset/images/4d-logo.png', { method: 'POST' });
+                const postLogo = await fetch('http://127.0.0.1:' + server.address().port + '/asset/images/st-bernadine-email-logo-20261026.png', { method: 'POST' });
                 assert.equal(postLogo.status, 503);
                 console.log('MAINTENANCE_OK');
             } catch(error) { console.error(error.message); process.exitCode=1; }

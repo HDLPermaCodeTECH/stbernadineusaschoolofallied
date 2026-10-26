@@ -22,9 +22,9 @@ const app = express();
 app.set('trust proxy', 'loopback');
 
 // The official logo remains available to email clients during maintenance.
-app.get('/asset/images/4d-logo.png', (req, res) => {
+app.get(['/asset/images/4d-logo.png', '/asset/images/st-bernadine-email-logo-20261026.png'], (req, res) => {
     res.set('X-Content-Type-Options', 'nosniff');
-    res.sendFile(path.join(__dirname, 'asset/images/4d-logo.png'), { headers: { 'Cache-Control': 'public, max-age=86400' } });
+    res.sendFile(path.join(__dirname, 'asset/images', path.basename(req.path)), { headers: { 'Cache-Control': 'public, max-age=86400' } });
 });
 
 // Temporary site-wide maintenance is enabled by default.
@@ -156,7 +156,7 @@ app.use((req, res, next) => {
     let requestPath;
     try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
     catch { return res.status(400).json({ error: 'Invalid request path.' }); }
-    const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/'];
+    const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/', 'email_brand.hbs'];
     const serverSource = /^\/(?:server|form_mail|maintenance|email_templates|spam_protection)\.js$/.test(requestPath);
     if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
         return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });

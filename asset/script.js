@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Flag body as JS-loaded for safe animations
     document.body.classList.add('js-loaded');
+    document.querySelectorAll('#contact-form, #homeCareInquiryForm, #request-care-form, #jobApplicationForm, #application-form, #referral-form').forEach(form => {
+        if (form.parentElement?.tagName === 'DIV') form.parentElement.classList.add('stb-form-card');
+    });
 
     // --- Mobile Navigation ---
     const mobileMenuBtn = document.createElement('button');
@@ -46,6 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelector('.nav-links');
     navLinks.id = 'primary-navigation';
     const mobileViewport = window.matchMedia('(max-width: 1200px)');
+    const navigationSlot = document.createComment('Desktop navigation position');
+    navLinks.before(navigationSlot);
+    const menuHeading = document.createElement('div');
+    menuHeading.className = 'nav-menu-heading';
+    menuHeading.innerHTML = '<div><strong>St. Bernadine</strong><small>Healthcare. Education. Opportunity.</small></div><button type="button" class="nav-menu-close" aria-label="Close navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>';
+    navLinks.prepend(menuHeading);
+    function mountNavigation() {
+        // A drawer outside the blurred header stays fixed to the viewport.
+        if (mobileViewport.matches) document.body.appendChild(navLinks);
+        else navigationSlot.after(navLinks);
+    }
+    mountNavigation();
 
     function setMobileMenu(isOpen) {
         navLinks.classList.toggle('active', isOpen);
@@ -55,20 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('nav-open', isOpen);
         navLinks.inert = mobileViewport.matches && !isOpen;
         document.body.style.overflow = isOpen ? 'hidden' : '';
+        if (isOpen) menuHeading.querySelector('button').focus();
     }
 
     function toggleMobileMenu() {
         setMobileMenu(!navLinks.classList.contains('active'));
     }
     setMobileMenu(false);
-    mobileViewport.addEventListener('change', () => setMobileMenu(false));
+    mobileViewport.addEventListener('change', () => { mountNavigation(); setMobileMenu(false); });
+    menuHeading.querySelector('button').addEventListener('click', () => { setMobileMenu(false); mobileMenuBtn.focus(); });
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && navLinks.classList.contains('active')) {
             setMobileMenu(false);
             mobileMenuBtn.focus();
         }
         if (event.key === 'Tab' && navLinks.classList.contains('active')) {
-            const links = [...navLinks.querySelectorAll('a[href]')];
+            const links = [...navLinks.querySelectorAll('a[href], button:not([disabled])')];
             const first = links[0];
             const last = links[links.length - 1];
             if (event.shiftKey && document.activeElement === first) {
@@ -128,14 +145,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatbotHTML = `
         <div class="chatbot-container" id="chatbot-panel" role="dialog" aria-label="St. Bernadine AI assistant" inert>
             <div class="chat-header">
-                <div class="chat-title">
-                    <i class="fa-solid fa-robot"></i> St. Bernadine School of Allied Health AI
+                <div class="chat-identity">
+                    <img class="chat-avatar" src="/asset/images/st-bernadine-email-logo-20261026.png" alt="" width="46" height="46">
+                    <div><span class="chat-title">St. Bernadine</span><span class="chat-subtitle">AI website assistant · Here to help you explore</span></div>
                 </div>
                 <button id="close-chat" aria-label="Close chat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
             </div>
             <div class="chat-messages" id="chat-messages">
                 <div class="message bot">
-                    Welcome to St. Bernadine! I am the AI Assistant. How can I help you today?
+                    Welcome to St. Bernadine! I can help you find a program, explore care services, or reach the right team. Where would you like to start?
                 </div>
             </div>
             <div class="chat-input local-theme-input">
@@ -200,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showTypingIndicator();
             setTimeout(() => {
                 removeTypingIndicator();
-                addMessage("Welcome to St. Bernadine! I am the AI Assistant. How can I help you today?", 'bot');
+                addMessage("Welcome to St. Bernadine! I can help you find a program, explore care services, or reach the right team. Where would you like to start?", 'bot');
                 showSuggestions(); // Restored per user request
             }, 800);
         }, 300);
@@ -259,15 +277,15 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestionsDiv.classList.add('chat-suggestions');
 
         const topics = [
-            { label: '📝 Apply Now', query: 'application' },
-            { label: '🏥 Request Care', query: 'request care' },
-            { label: '📚 Programs', query: 'programs' },
-            { label: '💰 Tuition', query: 'tuition' },
-            { label: '🎓 Student Life', query: 'student_life' },
-            { label: '🌐 Visa Sponsorship', query: 'visa' },
-            { label: '👩‍⚕️ Founder', query: 'founder' },
-            { label: '📍 Location', query: 'location' },
-            { label: '🤝 Referral', query: 'referral' }
+            { label: 'Apply Now', query: 'application' },
+            { label: 'Request Care', query: 'request care' },
+            { label: 'Programs', query: 'programs' },
+            { label: 'Tuition', query: 'tuition' },
+            { label: 'Student Life', query: 'student_life' },
+            { label: 'Visa Sponsorship', query: 'visa' },
+            { label: 'Our Founder', query: 'founder' },
+            { label: 'Location', query: 'location' },
+            { label: 'Referral', query: 'referral' }
         ];
 
         topics.forEach(topic => {
@@ -290,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', sender);
         if (sender === 'bot') {
-            messageDiv.innerHTML = `<strong>St. Bernadine School AI:</strong><br>${text}`;
+            messageDiv.innerHTML = `<strong>St. Bernadine assistant</strong><br>${text}`;
         } else {
             messageDiv.innerHTML = text;
         }

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>{{subject}}</title>
+
+  <style>
+    :root{color-scheme:only light} html,body{margin:0!important;padding:0!important;width:100%!important;-webkit-text-size-adjust:100%} table{border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt} td{overflow-wrap:anywhere;word-break:break-word} .email-container{table-layout:fixed} img{border:0;outline:none} a[x-apple-data-detectors]{color:inherit!important}
+    @media only screen and (max-width: 620px) {
+      .email-container {
+        width: 100% !important;
+      }
+      .mobile-padding {
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+      }
+      .email-heading {
+        font-size: 28px !important;
+        line-height: 36px !important;
+      }
+    }
+  </style>
+</head>
+
+<body style="margin:0;padding:0;background:#F7F5F0;">
+
+  <!-- Preview text -->
+  <div style="display:none;max-height:0;overflow:hidden;
+              opacity:0;color:transparent;">
+    {{preheader}}
+  </div>
+
+  <table role="presentation" width="100%"
+         cellspacing="0" cellpadding="0" border="0"
+         style="background:#F7F5F0;">
+    <tr>
+      <td align="center" style="padding:30px 12px;">
+
+        <!--[if mso]>
+        <table role="presentation" width="600"
+               align="center" cellpadding="0"
+               cellspacing="0" border="0">
+        <tr><td>
+        <![endif]-->
+
+        <table role="presentation"
+               class="email-container"
+               width="100%"
+               cellspacing="0" cellpadding="0"
+               border="0"
+               style="max-width:600px;background:#FFFFFF;">
+
+          <!-- Brand accent -->
+          <tr>
+            <td height="5"
+                style="background:#9C0A0A;
+                       font-size:0;line-height:0;">
+              &nbsp;
+            </td>
+          </tr>
+
+          <!-- Permanent header -->
+          <tr>
+            <td align="center"
+                class="mobile-padding"
+                style="padding:30px 40px 24px;">
+
+              <a href="https://stbernadineusa.com"
+                 style="text-decoration:none;">
+                <img src="{{logo_url}}"
+                     width="115"
+                     alt="St. Bernadine"
+                     style="display:block;width:115px;
+                            max-width:100%;height:auto;
+                            border:0;">
+              </a>
+
+              <p style="margin:14px 0 0;
+                        font-family:Arial,sans-serif;
+                        font-size:11px;
+                        letter-spacing:2px;
+                        line-height:18px;
+                        color:#1F4D1F;">
+                COMPASSION • COMPETENCE • COMMITMENT
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Dynamic hero -->
+          <tr>
+            <td class="mobile-padding"
+                style="padding:38px 40px;
+                       background:#1F4D1F;">
+
+              <p style="margin:0 0 14px;
+                        font-family:Arial,sans-serif;
+                        font-size:11px;
+                        font-weight:bold;
+                        letter-spacing:2px;
+                        line-height:18px;
+                        color:#F2D9AB;">
+                {{category}}
+              </p>
+
+              <h1 class="email-heading"
+                  style="margin:0;
+                         color:#FFFFFF;
+                         font-family:Georgia,serif;
+                         font-size:34px;
+                         font-weight:normal;
+                         line-height:42px;">
+                {{title}}
+              </h1>
+
+              {{#if subtitle}}
+              <p style="margin:16px 0 0;
+                        color:#E7EEE7;
+                        font-family:Arial,sans-serif;
+                        font-size:15px;
+                        line-height:24px;">
+                {{subtitle}}
+              </p>
+              {{/if}}
+
+            </td>
+          </tr>
+
+          <!-- Dynamic content -->
+          <tr>
+            <td class="mobile-padding"
+                style="padding:38px 40px 30px;">
+
+              {{#if greeting}}
+              <p style="margin:0 0 20px;
+                        font-family:Arial,sans-serif;
+                        font-size:16px;
+                        font-weight:bold;
+                        color:#1F4D1F;">
+                {{greeting}}
+              </p>
+              {{/if}}
+
+              <div style="font-family:Arial,sans-serif;
+                          font-size:15px;
+                          line-height:26px;
+                          color:#374151;">
+                {{{body_html}}}
+              </div>
+
+            </td>
+          </tr>
+
+          <!-- Optional featured image -->
+          {{#if featured_image_url}}
+          <tr>
+            <td align="center"
+                style="padding:0 24px 25px;">
+              <img src="{{featured_image_url}}"
+                   alt="{{featured_image_alt}}"
+                   width="552"
+                   style="display:block;width:100%;
+                          max-width:552px;height:auto;
+                          border:0;">
+            </td>
+          </tr>
+          {{/if}}
+
+          <!-- Optional primary CTA -->
+          {{#if cta_url}}
+          <tr>
+            <td align="center"
+                class="mobile-padding"
+                style="padding:10px 40px 40px;">
+
+              <table role="presentation"
+                     cellspacing="0" cellpadding="0"
+                     border="0">
+                <tr>
+                  <td align="center"
+                      bgcolor="#9C0A0A"
+                      style="border-radius:5px;">
+                    <a href="{{cta_url}}"
+                       style="display:inline-block;
+                              padding:16px 30px;
+                              border:1px solid #9C0A0A;
+                              border-radius:5px;
+                              color:#FFFFFF;
+                              font-family:Arial,sans-serif;
+                              font-size:14px;
+                              font-weight:bold;
+                              text-decoration:none;">
+                      {{cta_label}}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+          {{/if}}
+
+          <!-- Permanent message -->
+          <tr>
+            <td class="mobile-padding"
+                style="padding:25px 40px;
+                       background:#F7F5F0;
+                       border-top:1px solid #E9E5DC;">
+
+              <p style="margin:0;
+                        color:#1F4D1F;
+                        font-family:Georgia,serif;
+                        font-size:20px;
+                        line-height:28px;
+                        text-align:center;">
+                People Helping People
+              </p>
+
+              <p style="margin:10px 0 0;
+                        color:#5D665E;
+                        font-family:Arial,sans-serif;
+                        font-size:12px;
+                        line-height:20px;
+                        text-align:center;">
+                Building a stronger community through
+                healthcare, education and service.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Permanent footer -->
+          <tr>
+            <td class="mobile-padding"
+                align="center"
+                style="padding:32px 40px;
+                       background:#153B23;">
+
+              <p style="margin:0 0 12px;
+                        color:#FFFFFF;
+                        font-family:Arial,sans-serif;
+                        font-size:16px;
+                        font-weight:bold;
+                        letter-spacing:1px;">
+                ST. BERNADINE
+              </p>
+
+              <p style="margin:0 0 12px;
+                        font-family:Arial,sans-serif;
+                        font-size:12px;
+                        line-height:22px;
+                        color:#E3E9E3;">
+                {{mailing_address}}
+              </p>
+
+              <p style="margin:0 0 18px;
+                        font-family:Arial,sans-serif;
+                        font-size:12px;
+                        line-height:22px;">
+
+                <a href="{{website_url}}"
+                   style="color:#FFFFFF;">
+                  Visit Our Website
+                </a>
+
+                &nbsp; | &nbsp;
+
+                <a href="mailto:{{contact_email}}"
+                   style="color:#FFFFFF;">
+                  Contact Us
+                </a>
+              </p>
+
+              <p style="margin:0 0 12px;
+                        color:#D2DED4;
+                        font-family:Arial,sans-serif;
+                        font-size:11px;
+                        line-height:19px;">
+                {{recipient_context}}
+              </p>
+
+              {{#if unsubscribe_url}}
+              <p style="margin:0 0 18px;
+                        font-family:Arial,sans-serif;
+                        font-size:11px;
+                        line-height:19px;">
+                <a href="{{unsubscribe_url}}"
+                   style="color:#FFFFFF;
+                          text-decoration:underline;">
+                  Unsubscribe
+                </a>
+              </p>
+              {{/if}}
+
+              <p style="margin:0;
+                        color:#B4C7B8;
+                        font-family:Arial,sans-serif;
+                        font-size:11px;
+                        line-height:18px;">
+                © {{current_year}} St. Bernadine.
+                All rights reserved.
+              </p>
+
+            </td>
+          </tr>
+
+        </table>
+
+        <!--[if mso]>
+        </td></tr></table>
+        <![endif]-->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
