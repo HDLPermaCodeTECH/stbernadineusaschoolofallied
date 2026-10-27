@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { KEY, LIFETIME, createPreferences, parsePreferences, readPreferences, savePreferences } = require('../asset/cookie-preferences');
+const { KEY, LIFETIME, createPreferences, parsePreferences, readPreferences, savePreferences, hasStoredMapOptOut } = require('../asset/cookie-preferences');
 const now = Date.UTC(2026, 9, 27);
 
 test('only the optional map can be enabled; essential services remain active', () => {
@@ -17,13 +17,13 @@ test('only the optional map can be enabled; essential services remain active', (
     }
 });
 
-test('invalid, unknown-version and legacy choices do not grant map permission', () => {
+test('invalid, unknown-version and legacy records are not accepted as saved preferences', () => {
     for (const raw of [null, '', '{', 'accepted', 'declined', 'true', '{}', JSON.stringify({ ...createPreferences(true, now), version: 2 })]) {
         assert.equal(parsePreferences(raw, now), null);
     }
 });
 
-test('expired consent asks again and cannot silently enable optional maps', () => {
+test('expired preference records require a new choice', () => {
     const raw = JSON.stringify(createPreferences(true, now));
     assert.ok(parsePreferences(raw, now + LIFETIME - 1));
     assert.equal(parsePreferences(raw, now + LIFETIME), null);
@@ -54,7 +54,7 @@ test('a new explicit choice replaces the old banner marker without treating it a
     assert.equal(JSON.parse(values.get(KEY)).essential, true);
 });
 
-test('the contact map has no live source before consent, including when scripts fail', () => {
+test('the contact map starts inert in HTML so saved opt-outs can be applied before loading', () => {
     const html = fs.readFileSync(path.join(__dirname, '../contact.html'), 'utf8');
     const frame = html.match(/<iframe[\s\S]*?<\/iframe>/)[0];
     assert.match(frame, /\bhidden\b/);
@@ -73,9 +73,18 @@ test('all shared public pages load privacy controls and provide a footer prefere
         const html = fs.readFileSync(path.join(root, file), 'utf8');
         if (!html.includes('/asset/modern-ui.css?')) continue;
         pages++;
-        assert.match(html, /cookie-preferences\.js\?v=20261027-privacy1" defer/, file);
+        assert.match(html, /cookie-preferences\.js\?v=20261027-privacy2" defer/, file);
         assert.match(html, /cookie-preferences\.css\?v=20261027-privacy1/, file);
         assert.match(html, /<a href="\/privacy#cookies" data-cookie-settings>Cookie Settings<\/a>/, file);
     }
     assert.equal(pages, 31);
+});
+
+
+test('an existing map opt-out is retained, including when a fresh privacy choice is requested', () => {
+    const storage = { getItem: () => JSON.stringify(createPreferences(false, now - LIFETIME - 1)) };
+    assert.equal(readPreferences(storage, now), null);
+    assert.equal(hasStoredMapOptOut(storage), true);
+    assert.equal(hasStoredMapOptOut({ getItem: () => null }), false);
+    assert.equal(hasStoredMapOptOut({ getItem: () => JSON.stringify(createPreferences(true, now)) }), false);
 });

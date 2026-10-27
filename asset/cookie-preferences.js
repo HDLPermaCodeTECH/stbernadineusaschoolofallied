@@ -32,6 +32,12 @@
             return true;
         } catch (_) { return false; }
     }
+    function hasStoredMapOptOut(storage) {
+        try {
+            const value = JSON.parse(storage.getItem(KEY));
+            return value?.version === 1 && value.externalMedia === false;
+        } catch (_) { return false; }
+    }
     function mount(win) {
         const doc = win.document;
         function init() {
@@ -39,6 +45,7 @@
             let storage;
             try { storage = win.localStorage; } catch (_) { storage = null; }
             let preferences = readPreferences(storage);
+            const mapsAllowed = () => preferences ? preferences.externalMedia === true : !hasStoredMapOptOut(storage);
             let returnFocus;
             const icon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v5c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg>';
             const host = doc.createElement('div');
@@ -47,14 +54,14 @@
                 <section id="stb-privacy-banner" class="stb-privacy-banner" aria-labelledby="stb-privacy-banner-title" hidden>
                     <div class="stb-privacy-symbol">${icon}</div>
                     <div class="stb-privacy-banner-copy"><h2 id="stb-privacy-banner-title">A little choice. More privacy.</h2>
-                    <p>Essential storage keeps this site working securely and remembers your choice. Optional Google Maps stays off until you allow it. <a href="/privacy#cookies">Privacy details</a></p></div>
+                    <p>Essential storage keeps this site working securely. Google Maps on our Contact page loads by default and connects to Google. Choose Essential only to turn the embedded map off. <a href="/privacy#cookies">Privacy details</a></p></div>
                     <div class="stb-privacy-actions"><button type="button" data-privacy-choice="essential">Essential only</button><button type="button" data-privacy-choice="optional">Allow optional</button><button type="button" class="stb-privacy-settings" data-cookie-settings>Cookie Settings</button></div>
                 </section>
                 <dialog id="stb-privacy-dialog" class="stb-privacy-dialog" aria-labelledby="stb-privacy-title" aria-describedby="stb-privacy-intro">
                     <div class="stb-privacy-heading"><div><span class="stb-privacy-eyebrow">ST. BERNADINE · PRIVACY</span><h2 id="stb-privacy-title" tabindex="-1">Your privacy, your choice.</h2></div><button type="button" class="stb-privacy-close" aria-label="Close cookie settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
                     <div class="stb-privacy-body"><p id="stb-privacy-intro">Keep the essentials, choose the extras. You can change these preferences at any time using Cookie Settings in the footer.</p>
                         <section class="stb-privacy-category"><div class="stb-privacy-category-title"><h3>Essential services</h3><span class="stb-privacy-badge">Always active</span></div><p>Site delivery, security verification for forms and saving your privacy choice. These services keep the website and its forms working.</p></section>
-                        <section class="stb-privacy-category"><label class="stb-privacy-map-label" for="stb-privacy-maps"><span><strong>Google Maps</strong><small>Optional external content</small></span><input type="checkbox" id="stb-privacy-maps" aria-describedby="stb-privacy-map-description"></label><p id="stb-privacy-map-description">Show the interactive map on our Contact page. Loading it connects to Google, which may receive your IP address and use its own cookies or storage. It stays off unless you allow it.</p></section>
+                        <section class="stb-privacy-category"><label class="stb-privacy-map-label" for="stb-privacy-maps"><span><strong>Google Maps</strong><small>Optional external content</small></span><input type="checkbox" id="stb-privacy-maps" aria-describedby="stb-privacy-map-description"></label><p id="stb-privacy-map-description">Google Maps loads by default on our Contact page and connects to Google, which may receive your IP address and use its own cookies or storage. Turn this off or choose Essential only to stop embedded map loads.</p></section>
                         <section class="stb-privacy-category stb-privacy-inactive"><div class="stb-privacy-category-title"><h3>Analytics &amp; advertising</h3><span class="stb-privacy-badge">Not in use</span></div><p>No analytics or advertising trackers are installed in this website's current setup.</p></section>
                         <p class="stb-privacy-small">Your choice is saved in this browser for up to 180 days. Turning maps off stops future embedded map loads on this site; it cannot erase information Google has already received. <a href="/privacy#cookies">Read the privacy details</a>.</p>
                     </div>
@@ -67,7 +74,7 @@
             const status = doc.getElementById('stb-privacy-status');
             let statusTimer;
             function apply() {
-                const allowed = preferences?.externalMedia === true;
+                const allowed = mapsAllowed();
                 doc.querySelectorAll('iframe[data-consent-src]').forEach(frame => {
                     const placeholder = frame.parentElement.querySelector('.stb-map-placeholder');
                     if (allowed) {
@@ -90,7 +97,7 @@
                 returnFocus = trigger || doc.activeElement;
                 const menu = doc.querySelector('.mobile-menu-btn[aria-expanded="true"]');
                 if (menu) menu.click();
-                checkbox.checked = preferences?.externalMedia === true;
+                checkbox.checked = mapsAllowed();
                 if (!dialog.open) dialog.showModal();
                 doc.documentElement.classList.add('stb-privacy-modal-open');
                 doc.getElementById('stb-privacy-title').focus();
@@ -128,7 +135,7 @@
             win.addEventListener('storage', event => {
                 if (event.key === KEY || event.key === null) {
                     preferences = readPreferences(storage);
-                    checkbox.checked = preferences?.externalMedia === true;
+                    checkbox.checked = mapsAllowed();
                     apply();
                 }
             });
@@ -137,11 +144,11 @@
                 if (storage) preferences = readPreferences(storage);
                 apply();
             });
-            win.StBPrivacy = Object.freeze({ openSettings: () => open(), getPreferences: () => preferences ? { ...preferences } : null });
+            win.StBPrivacy = Object.freeze({ openSettings: () => open(), getPreferences: () => preferences ? { ...preferences } : null, mapsAllowed });
             apply();
         }
         if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init, { once: true });
         else init();
     }
-    return { KEY, LIFETIME, createPreferences, parsePreferences, readPreferences, savePreferences, mount };
+    return { KEY, LIFETIME, createPreferences, parsePreferences, readPreferences, savePreferences, hasStoredMapOptOut, mount };
 });
