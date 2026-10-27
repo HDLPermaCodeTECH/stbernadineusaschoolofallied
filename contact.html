@@ -77,8 +77,8 @@
     <link rel="stylesheet" href="/asset/modern-ui.css?v=20261026-ui2">
     <link rel="stylesheet" href="/asset/cookie-preferences.css?v=20261027-privacy1">
     <script src="/asset/cookie-preferences.js?v=20261027-privacy2" defer></script>
-    <link rel="stylesheet" href="/asset/location-card.css?v=20261027-map1">
-    <script src="/asset/location-card.js?v=20261027-map1" defer></script>
+    <link rel="stylesheet" href="/asset/location-card.css?v=20261027-map2">
+    <script src="/asset/location-card.js?v=20261027-map2" defer></script>
 </head>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#06752e">
@@ -224,7 +224,7 @@
             <section class="stb-location-card" id="visit-us" aria-labelledby="stb-location-title" data-map-allowed="false">
                 <div class="stb-location-heading">
                     <div><span class="stb-location-eyebrow">ST. BERNADINE · JERSEY CITY</span><h2 id="stb-location-title">A place to begin your next chapter.</h2></div>
-                    <span class="stb-location-state" data-map-permission-state>Google Maps off</span>
+                    <div class="stb-location-controls"><div class="stb-map-view-switch" role="group" aria-label="Map view"><button type="button" data-map-view="satellite" aria-pressed="true">Satellite</button><button type="button" data-map-view="street" aria-pressed="false">Street View</button></div><span class="stb-location-state" data-map-permission-state>Google Maps off</span></div>
                 </div>
                 <div class="stb-location-grid">
                     <div class="map-embed stb-consent-map stb-map-stage">
@@ -236,7 +236,7 @@
                             <span class="stb-location-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v5c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-3Z"/></svg>Your map preference is respected</span>
                         </div>
                         <iframe
-                            hidden title="St. Bernadine location on Google Maps" data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.738080068307!2d-74.0620888!3d40.7275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c250ca533f810b%3A0xc3f8e5c54e0aeb29!2s591%20Summit%20Ave%20Suite%20410%2C%20Jersey%20City%2C%20NJ%2007306!5e0!3m2!1sen!2sus!4v1707577800000!5m2!1sen!2sus"
+                            hidden title="Satellite view of the St. Bernadine office on Google Maps" data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2873.653897804722!2d-74.05961669999999!3d40.7347143!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25730cc6fffff%3A0x6cd93daa558c8d9f!2s591%20Summit%20Ave%20Ste%20410%2C%20Jersey%20City%2C%20NJ%2007306%2C%20USA!5e1!3m2!1sen!2sph!4v1793081546117!5m2!1sen!2sph" data-satellite-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2873.653897804722!2d-74.05961669999999!3d40.7347143!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25730cc6fffff%3A0x6cd93daa558c8d9f!2s591%20Summit%20Ave%20Ste%20410%2C%20Jersey%20City%2C%20NJ%2007306%2C%20USA!5e1!3m2!1sen!2sph!4v1793081546117!5m2!1sen!2sph" data-street-src="https://www.google.com/maps/embed?pb=!4v1793081609791!6m8!1m7!1sXGSkY5t9_cZnzAq_shc3XQ!2m2!1d40.73483690394325!2d-74.05928612019306!3f247.204!4f0!5f0.7820865974627469"
                             width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
                         <div class="stb-map-loader" hidden><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="14"/></svg><span>Loading the interactive map…</span></div>
@@ -256,6 +256,7 @@
                         <a class="stb-location-settings-link" href="/privacy#cookies" data-cookie-settings>Change map privacy settings</a>
                     </div>
                 </div>
+                <p class="stb-location-imagery-note" data-street-imagery-note hidden>Google Street View imagery shows the surrounding street; it is not a live camera. The imagery date is shown by Google.</p>
             </section>
         </div>
     </section> <!-- Footer -->

@@ -32,6 +32,18 @@
         });
         new MutationObserver(update).observe(frame, { attributes: true, attributeFilter: ['src', 'hidden'] });
         update();
+        const viewButtons = [...card.querySelectorAll('[data-map-view]')];
+        const imageryNote = card.querySelector('[data-street-imagery-note]');
+        viewButtons.forEach(button => button.addEventListener('click', () => {
+            const street = button.dataset.mapView === 'street';
+            const url = street ? frame.dataset.streetSrc : frame.dataset.satelliteSrc;
+            frame.dataset.consentSrc = url;
+            frame.title = street ? 'Google Street View near the St. Bernadine office' : 'Satellite view of the St. Bernadine office on Google Maps';
+            viewButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+            imageryNote.hidden = !street;
+            // Changing the view never overrides an existing map opt-out.
+            if (frame.hasAttribute('src') && frame.getAttribute('src') !== url) frame.setAttribute('src', url);
+        }));
         const copy = card.querySelector('[data-copy-address]');
         const feedback = card.querySelector('.stb-location-feedback');
         const fallback = card.querySelector('.stb-location-copy-fallback');
