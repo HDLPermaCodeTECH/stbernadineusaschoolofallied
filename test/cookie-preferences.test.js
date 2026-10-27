@@ -61,7 +61,7 @@ test('the contact map has no live source before consent, including when scripts 
     assert.match(frame, /data-consent-src="https:\/\/www\.google\.com\/maps\/embed/);
     assert.doesNotMatch(frame, /\s+src\s*=/);
     assert.match(html, /Choose map preferences/);
-    assert.match(html, /Open directions in Google Maps/);
+    assert.match(html, /Get Directions/);
 });
 
 test('all shared public pages load privacy controls and provide a footer preferences link', () => {

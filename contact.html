@@ -77,6 +77,8 @@
     <link rel="stylesheet" href="/asset/modern-ui.css?v=20261026-ui2">
     <link rel="stylesheet" href="/asset/cookie-preferences.css?v=20261027-privacy1">
     <script src="/asset/cookie-preferences.js?v=20261027-privacy1" defer></script>
+    <link rel="stylesheet" href="/asset/location-card.css?v=20261027-map1">
+    <script src="/asset/location-card.js?v=20261027-map1" defer></script>
 </head>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#06752e">
@@ -180,24 +182,10 @@
                                 class="fa-solid fa-clock"
                                 style="color: var(--secondary-color); font-size: 1.2rem; margin-top: 5px;"></i>
                             <div> <strong>Business Hours:</strong><br> <span style="display: block; margin-top: 5px;">
-                                    Monday - Friday: 9:00 AM - 5:00 PM EST<br> Saturday: By Appointment<br> Sunday:
+                                    Monday - Friday: 9:00 AM - 5:00 PM Eastern<br> Saturday: By Appointment<br> Sunday:
                                     Closed </span> </div>
                         </li>
-                    </ul> <!-- Map Placeholder -->
-                    <div class="map-embed stb-consent-map"
-                        style="width: 100%; height: 400px; border-radius: 12px; overflow: hidden; margin-top: 20px;">
-                        <div class="stb-map-placeholder">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-                            <h3>Find your way to St. Bernadine.</h3>
-                            <p>The interactive map is off. Allow Google Maps in Cookie Settings to display it here.</p>
-                            <button type="button" data-cookie-settings>Choose map preferences</button>
-                            <a href="https://www.google.com/maps/search/?api=1&amp;query=591+Summit+Ave+Suite+410+Jersey+City+NJ+07306" target="_blank" rel="noopener noreferrer">Open directions in Google Maps</a>
-                        </div>
-                        <iframe
-                            hidden title="St. Bernadine location on Google Maps" data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.738080068307!2d-74.0620888!3d40.7275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c250ca533f810b%3A0xc3f8e5c54e0aeb29!2s591%20Summit%20Ave%20Suite%20410%2C%20Jersey%20City%2C%20NJ%2007306!5e0!3m2!1sen!2sus!4v1707577800000!5m2!1sen!2sus"
-                            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
+                    </ul>
                 </div> <!-- Contact Form -->
                 <div class="p-40"
                     style="background: var(--white); border-radius: 12px; box-shadow: var(--shadow-lg); border: 1px solid #E2E8F0;">
@@ -233,6 +221,42 @@
                     </form>
                 </div>
             </div>
+            <section class="stb-location-card" id="visit-us" aria-labelledby="stb-location-title" data-map-allowed="false">
+                <div class="stb-location-heading">
+                    <div><span class="stb-location-eyebrow">ST. BERNADINE · JERSEY CITY</span><h2 id="stb-location-title">A place to begin your next chapter.</h2></div>
+                    <span class="stb-location-state" data-map-permission-state>Google Maps off</span>
+                </div>
+                <div class="stb-location-grid">
+                    <div class="map-embed stb-consent-map stb-map-stage">
+                        <div class="stb-map-placeholder">
+                            <div class="stb-map-pin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+                            <h3>Your visit starts here.</h3>
+                            <p>The interactive map is paused until you allow Google Maps. Our address and directions are always available.</p>
+                            <button type="button" data-cookie-settings>Choose map preferences</button>
+                            <span class="stb-location-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6v5c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-3Z"/></svg>Private until you choose</span>
+                        </div>
+                        <iframe
+                            hidden title="St. Bernadine location on Google Maps" data-consent-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.738080068307!2d-74.0620888!3d40.7275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c250ca533f810b%3A0xc3f8e5c54e0aeb29!2s591%20Summit%20Ave%20Suite%20410%2C%20Jersey%20City%2C%20NJ%2007306!5e0!3m2!1sen!2sus!4v1707577800000!5m2!1sen!2sus"
+                            width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <div class="stb-map-loader" hidden><svg viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="14"/></svg><span>Loading the interactive map…</span></div>
+                    </div>
+                    <div class="stb-location-panel">
+                        <span class="stb-location-eyebrow">COME SAY HELLO</span>
+                        <h3>Jersey City office</h3>
+                        <address class="stb-location-address">591 Summit Avenue, Suite 410<br>Jersey City, NJ 07306<br>United States</address>
+                        <div class="stb-location-hours"><strong>Plan your visit</strong>Monday–Friday · 9:00 AM–5:00 PM Eastern<br>Saturday · By appointment<br>Sunday · Closed</div>
+                        <div class="stb-location-actions">
+                            <a class="stb-location-directions" href="https://www.google.com/maps/dir/?api=1&amp;destination=591+Summit+Ave+Suite+410+Jersey+City+NJ+07306" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 9-9 9-9-9 9-9Z"/><path d="M8 15v-4h7m-3-3 3 3-3 3"/></svg>Get Directions</a>
+                            <button type="button" data-copy-address="591 Summit Avenue, Suite 410, Jersey City, NJ 07306, United States"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg>Copy Address</button>
+                            <a href="tel:+12012221116" aria-label="Call St. Bernadine at +1 (201) 222-1116"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3H3c0 10 8 18 18 18v-3l-5-3-2 2a15 15 0 0 1-7-7l2-2-3-5Z"/></svg>Call</a>
+                        </div>
+                        <p class="stb-location-feedback" role="status" aria-live="polite"></p>
+                        <label class="stb-location-copy-fallback" hidden>Copy this address<input type="text" readonly value="591 Summit Avenue, Suite 410, Jersey City, NJ 07306, United States"></label>
+                        <a class="stb-location-settings-link" href="/privacy#cookies" data-cookie-settings>Change map privacy settings</a>
+                    </div>
+                </div>
+            </section>
         </div>
     </section> <!-- Footer -->
     <footer id="contact">
