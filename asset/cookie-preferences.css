@@ -1,0 +1,68 @@
+/* St. Bernadine privacy controls. Optional embeds fail closed in the HTML. */
+#stb-privacy-controls { --privacy-green:#1f4d1f; --privacy-text:#253d2c; --privacy-border:#d9e1d4; color:var(--privacy-text); font:inherit; }
+#stb-privacy-controls [hidden], .map-embed [hidden] { display:none !important; }
+#stb-privacy-controls button, .stb-map-placeholder button { min-height:44px; border:1px solid #1f4d1f; border-radius:12px; padding:11px 16px; background:#fffefa; color:#1f4d1f; font:inherit; font-size:13px; font-weight:600; line-height:1.35; cursor:pointer; transition:background .18s,color .18s; }
+#stb-privacy-controls button:hover, .stb-map-placeholder button:hover { background:#edf2e7; }
+#stb-privacy-controls :is(button,a,input):focus-visible, .stb-map-placeholder :is(button,a):focus-visible { outline:3px solid #9c0a0a; outline-offset:4px; }
+#stb-privacy-controls a, .stb-map-placeholder a { color:#1f4d1f; text-decoration:underline; text-underline-offset:3px; }
+.stb-privacy-banner { position:fixed; z-index:12000; bottom:max(18px,env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); width:min(1000px,calc(100% - 32px)); padding:22px; display:flex; align-items:center; gap:18px; background:#fffefa; border:1px solid #d9e1d4; border-radius:24px; box-shadow:0 16px 70px #183e252b; max-height:calc(100dvh - 32px); overflow:auto; }
+.stb-privacy-symbol { width:44px; height:44px; background:#edf2e7; border-radius:14px; display:grid; place-items:center; flex-shrink:0; }
+.stb-privacy-symbol svg { width:25px; height:25px; fill:none; stroke:#1f4d1f; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.stb-privacy-banner-copy { flex:1; min-width:0; }
+.stb-privacy-banner h2 { font-size:18px; margin:0 0 7px; line-height:1.3; color:#1f4d1f; }
+.stb-privacy-banner p { font-size:13px; margin:0; line-height:1.65; color:#4a5c4c; }
+.stb-privacy-actions { flex:0 0 276px; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+#stb-privacy-controls .stb-privacy-settings { grid-column:1/-1; border-color:transparent; background:transparent; text-decoration:underline; text-underline-offset:3px; padding:7px 12px; }
+.stb-privacy-dialog { position:fixed; inset:0; width:min(620px,calc(100% - 28px)); max-height:calc(100dvh - 40px); margin:auto; padding:0; border:1px solid #d9e1d4; border-radius:28px; background:#fffefa; color:#253d2c; box-shadow:0 24px 100px #102d3066; overflow:hidden; }
+.stb-privacy-dialog[open] { display:flex; flex-direction:column; }
+.stb-privacy-dialog::backdrop { background:#122b256e; backdrop-filter:blur(4px); }
+.stb-privacy-heading { padding:26px 28px 20px; display:flex; align-items:flex-start; gap:12px; justify-content:space-between; border-bottom:1px solid #e5e9df; }
+.stb-privacy-eyebrow { display:block; font-size:10px; letter-spacing:.14em; color:#66745e; margin-bottom:10px; font-weight:600; }
+#stb-privacy-controls .stb-privacy-heading h2 { font-family:Georgia,serif; color:#1f4d1f; font-size:29px; font-weight:400; letter-spacing:-.025em; line-height:1.2; margin:0; }
+#stb-privacy-controls .stb-privacy-close { flex-shrink:0; width:44px; height:44px; border:1px solid #d9e1d4; padding:10px; background:#edf2e7; }
+.stb-privacy-close svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.8; }
+.stb-privacy-body { overflow:auto; overscroll-behavior:contain; padding:22px 28px 12px; min-height:0; }
+.stb-privacy-body > p { font-size:14px; line-height:1.7; color:#4a5c4c; margin:0 0 18px; }
+.stb-privacy-category { padding:17px 18px; border:1px solid #d9e1d4; border-radius:16px; margin:0 0 12px; }
+.stb-privacy-category-title { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+#stb-privacy-controls .stb-privacy-category h3 { font-size:15px; color:#1f4d1f; margin:0; }
+.stb-privacy-badge { background:#edf2e7; color:#355437; font-size:10px; padding:5px 8px; border-radius:6px; white-space:nowrap; }
+.stb-privacy-category p { font-size:13px; line-height:1.7; color:#526153; margin:10px 0 0; }
+.stb-privacy-map-label { display:flex; align-items:center; justify-content:space-between; gap:18px; cursor:pointer; min-height:44px; }
+.stb-privacy-map-label strong { display:block; font-size:15px; color:#1f4d1f; }
+.stb-privacy-map-label small { display:block; font-size:11px; color:#66745e; margin-top:5px; }
+#stb-privacy-maps { appearance:auto; -webkit-appearance:checkbox; accent-color:#1f4d1f; width:24px; height:24px; flex-shrink:0; cursor:pointer; }
+.stb-privacy-inactive { background:#f7f8f3; }
+.stb-privacy-body .stb-privacy-small { font-size:12px; line-height:1.7; }
+.stb-privacy-dialog-actions { display:flex; flex-wrap:wrap; gap:8px; padding:18px 28px 24px; border-top:1px solid #e5e9df; background:#fffefa; }
+.stb-privacy-dialog-actions button { flex:1; }
+#stb-privacy-controls .stb-privacy-save { background:#1f4d1f; color:#fff; }
+#stb-privacy-controls .stb-privacy-save:hover { background:#153c1b; }
+html.stb-privacy-modal-open { overflow:hidden !important; }
+.stb-privacy-status { position:fixed; bottom:max(20px,env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); z-index:12001; width:max-content; max-width:calc(100% - 32px); margin:0; padding:14px 20px; background:#1f4d1f; color:#fff; border-radius:14px; box-shadow:0 10px 35px #183e252b; font-size:13px; line-height:1.6; opacity:0; pointer-events:none; }
+.stb-privacy-status-visible { opacity:1; }
+.stb-map-placeholder { width:100%; height:100%; min-height:300px; display:flex; align-items:center; justify-content:center; flex-direction:column; padding:28px; text-align:center; background:#edf2e7; color:#253d2c; }
+.stb-map-placeholder svg { width:30px; height:30px; fill:none; stroke:#1f4d1f; stroke-width:1.6; margin-bottom:12px; }
+.stb-map-placeholder h3 { font-size:19px; color:#1f4d1f; margin:0 0 10px; }
+.stb-map-placeholder p { font-size:13px; line-height:1.7; max-width:330px; margin:0 0 16px; }
+.stb-map-placeholder a { font-size:12px; margin-top:14px; min-height:36px; display:inline-flex; align-items:center; }
+.stb-modern .stb-consent-map { height:auto !important; min-height:320px; min-width:0; max-width:100%; }
+.stb-modern .stb-consent-map iframe { width:100%; height:400px !important; display:block; }
+.stb-consent-map .stb-map-placeholder { height:auto; min-height:320px; padding:24px; }
+.stb-contact-layout > *, .stb-contact-layout li > div { min-width:0; }
+.stb-contact-layout a { overflow-wrap:anywhere; }
+.stb-modern .footer-bottom [data-cookie-settings] { color:inherit; text-decoration:underline; text-underline-offset:3px; min-height:44px; display:inline-flex; align-items:center; }
+@media(max-width:680px) {
+    .stb-privacy-banner { width:calc(100% - 24px); bottom:max(12px,env(safe-area-inset-bottom)); padding:20px; border-radius:22px; display:block; }
+    .stb-privacy-symbol { display:none; }
+    .stb-privacy-actions { margin-top:16px; }
+    .stb-privacy-dialog { width:calc(100% - 24px); max-height:calc(100dvh - 24px); border-radius:24px; }
+    .stb-privacy-heading { padding:22px 20px 18px; }
+    #stb-privacy-controls .stb-privacy-heading h2 { font-size:25px; }
+    .stb-privacy-body { padding:18px 20px 8px; }
+    .stb-privacy-dialog-actions { padding:14px 20px 18px; display:grid; grid-template-columns:1fr 1fr; }
+    #stb-privacy-controls .stb-privacy-save { grid-column:1/-1; }
+    .stb-privacy-category { padding:14px; }
+}
+@media(prefers-reduced-motion:reduce) { #stb-privacy-controls * { transition:none !important; } }
+@media print { #stb-privacy-controls { display:none !important; } }

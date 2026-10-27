@@ -646,51 +646,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fadeElements.forEach(el => revealObserver.observe(el));
     }
-    // --- Cookie Consent Banner ---
-    const cookieBannerHTML = `
-        <div id="cookie-banner" class="cookie-banner">
-            <div class="container">
-                <div class="cookie-content">
-                    <p>🍪 We use cookies to improve your experience and analyze site traffic. By continuing, you agree to our use of cookies.</p>
-                    <div class="cookie-actions">
-                        <button id="accept-cookies" class="btn btn-primary btn-sm">Accept</button>
-                        <button id="decline-cookies" class="btn btn-outline btn-sm">Decline</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Check if user has already made a choice
-    if (!localStorage.getItem('cookieConsent')) {
-        document.body.classList.add('cookie-pending');
-        // Inject banner
-        document.body.insertAdjacentHTML('beforeend', cookieBannerHTML);
-
-        const cookieBanner = document.getElementById('cookie-banner');
-        const acceptBtn = document.getElementById('accept-cookies');
-        const declineBtn = document.getElementById('decline-cookies');
-
-        // Show banner with a slight delay for animation
-        setTimeout(() => {
-            cookieBanner.classList.add('visible');
-        }, 1000);
-
-        acceptBtn.addEventListener('click', () => {
-            document.body.classList.remove('cookie-pending');
-            localStorage.setItem('cookieConsent', 'accepted');
-            cookieBanner.classList.remove('visible');
-            setTimeout(() => cookieBanner.remove(), 500);
-        });
-
-        declineBtn.addEventListener('click', () => {
-            document.body.classList.remove('cookie-pending');
-            localStorage.setItem('cookieConsent', 'declined');
-            cookieBanner.classList.remove('visible');
-            setTimeout(() => cookieBanner.remove(), 500);
-        });
-    }
-
     // Submit newsletter requests to the school office instead of reloading the page.
     document.querySelectorAll('.footer-subscribe-form').forEach(form => {
         const input = form.querySelector('input[type="email"]');
