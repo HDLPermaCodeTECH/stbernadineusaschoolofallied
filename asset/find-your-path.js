@@ -23,8 +23,9 @@
             section.querySelector('[data-path-eyebrow]').textContent = path.eyebrow;
             section.querySelector('[data-path-badge]').textContent = path.badge;
             section.querySelector('[data-path-description]').textContent = path.description;
+            section.querySelector('.stb-path-photo').removeAttribute('data-default-view');
             const image = section.querySelector('.stb-path-photo img'); image.src = path.image; image.alt = path.alt;
-            const primary = section.querySelector('[data-path-primary]'); primary.textContent = path.primary + ' →'; primary.href = path.href;
+            const primary = section.querySelector('[data-path-primary]'); primary.querySelector('[data-path-primary-label]').textContent = path.primary; primary.href = path.href;
             const secondary = section.querySelector('[data-path-secondary]'); secondary.textContent = path.secondary; secondary.href = path.contact;
             section.querySelector('.stb-path-actions').hidden = false;
             section.querySelector('[data-path-back]').hidden = false;
