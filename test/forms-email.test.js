@@ -126,6 +126,32 @@ for (const [route, data, multipart] of routes) {
         assert.match(confirmation.html, /#9C0A0A/);
     });
 }
+test('All inquiry categories appear in notification subjects and both body formats with existing routing', async () => {
+    for (const [inquiry_type, label] of Object.entries({ enrollment: 'Enrollment / Training', placement: 'Job Placement', care: 'Home Care Services', partnership: 'Business Partnership', other: 'Other Concern' })) {
+        const result = await submit('/send-contact', { ...routes[1][1], inquiry_type });
+        assert.equal(result.response.status, 200, await result.response.text());
+        assert.equal(result.messages.length, 2);
+        assert.equal(result.messages[0].to, 'info@stbernadineusa.com');
+        assert.ok(result.messages[0].subject.includes(`[${label}]`));
+        assert.ok(result.messages[0].html.includes(label));
+        assert.ok(result.messages[0].text.includes(`Type of Inquiry: ${label}`));
+        assert.equal(result.messages[0].replyTo, 'visitor@example.invalid');
+    }
+    const placement = await submit('/send-placement', { ...routes[1][1], inquiry_type: 'placement' });
+    assert.equal(placement.response.status, 200);
+    assert.equal(placement.messages[0].to, 'placement@stbernadineusa.com');
+    assert.ok(placement.messages[0].subject.includes('[Job Placement]'));
+    assert.equal(placement.messages[1].replyTo, 'placement@stbernadineusa.com');
+});
+
+test('Invalid inquiry categories cannot send notification or acknowledgement emails', async () => {
+    for (const inquiry_type of ['', 'unknown', '<script>alert(1)</script>', 'care\r\nBcc: attacker@example.invalid', ['care'], { type: 'care' }, null]) {
+        const result = await submit('/send-contact', { ...routes[1][1], inquiry_type });
+        assert.equal(result.response.status, 400);
+        assert.equal(result.messages.length, 0);
+    }
+});
+
 test('SMTP authentication rejection never produces a success response', async () => {
     failNext = true;
     const result = await submit('/send-referral', routes.find(row => row[0] === '/send-referral')[1]);

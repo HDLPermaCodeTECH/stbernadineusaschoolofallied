@@ -795,16 +795,27 @@ const generateCareRequestPDF = (data) => {
     });
 };
 
+const CONTACT_INQUIRY_TYPES = Object.freeze({
+    enrollment: 'Enrollment / Training',
+    placement: 'Job Placement',
+    care: 'Home Care Services',
+    partnership: 'Business Partnership',
+    other: 'Other Concern'
+});
+
 app.post(['/send-contact', '/send-placement'], formProtection.guard, [
     body('name').trim().notEmpty().escape(),
     body('email').trim().isEmail(),
     body('contact_number').optional().trim().isLength({ max: 64 }).escape(),
+    // Optional for compatibility with already-open forms from the earlier release.
+    body('inquiry_type').optional().isString().bail().isIn(Object.keys(CONTACT_INQUIRY_TYPES)).withMessage('Please select a valid inquiry type.'),
     body('subject').trim().notEmpty().escape(),
     body('message').trim().notEmpty().escape(),
     validate
 ], async (req, res) => {
     try {
-        const { name, email, contact_number, subject, message } = req.body;
+        const { name, email, contact_number, inquiry_type, subject, message } = req.body;
+        const inquiryType = CONTACT_INQUIRY_TYPES[inquiry_type] || (req.path === '/send-placement' ? CONTACT_INQUIRY_TYPES.placement : CONTACT_INQUIRY_TYPES.other);
 
         // Professional HTML Email Template
         const htmlContent = `
@@ -863,6 +874,8 @@ app.post(['/send-contact', '/send-placement'], formProtection.guard, [
                                 <p class="text">A new message has been submitted via the website contact form.</p>
                                 
                                 <div class="info-box">
+                                    <p class="info-label">Type of Inquiry</p>
+                                    <p class="info-value">${inquiryType}</p>
                                     <p class="info-label">Subject</p>
                                     <p class="info-value">"${subject}"</p>
                                     
@@ -896,7 +909,9 @@ app.post(['/send-contact', '/send-placement'], formProtection.guard, [
         const bccEmail = null;
 
         // Correct parameter order: to, subject, htmlContent, attachments, replyTo, cc, bcc
-        await sendEmail(req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY, `[Inquiry] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail);
+        await sendEmail(req.path === '/send-placement' ? FORM_INBOXES.PLACEMENT : FORM_INBOXES.INQUIRY, `[Inquiry] [${inquiryType}] ${subject} - ${name}`, htmlContent, null, email, ccEmail, bccEmail, {
+            text: `Type of Inquiry: ${inquiryType}\nSubject: ${subject}\nFrom: ${name}\nEmail: ${email}\nContact Number: ${contact_number || 'Not provided'}\n\nMessage:\n${message}`
+        });
 
         // Auto-Reply to Inquirer
 

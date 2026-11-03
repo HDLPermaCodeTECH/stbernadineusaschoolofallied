@@ -207,6 +207,19 @@
                                 style="width: 100%; padding-top: 12px; padding-bottom: 12px; padding-right: 12px; border: 1px solid #CBD5E1; border-radius: 6px;"
                                 required>
                         </div>
+                        <div style="margin-bottom: 20px;">
+                            <label for="contact-inquiry-type" style="display: block; margin-bottom: 8px; font-weight: 600;">Type of Inquiry</label>
+                            <select id="contact-inquiry-type" name="inquiry_type" required aria-describedby="contact-inquiry-help"
+                                style="width: 100%; min-height: 48px; padding: 12px; border: 1px solid #CBD5E1; border-radius: 6px; background-color: #fff; color: #173d2b; font: inherit;">
+                                <option value="" disabled selected>Select an inquiry type</option>
+                                <option value="enrollment">Enrollment / Training</option>
+                                <option value="placement">Job Placement</option>
+                                <option value="care">Home Care Services</option>
+                                <option value="partnership">Business Partnership</option>
+                                <option value="other">Other Concern</option>
+                            </select>
+                            <small id="contact-inquiry-help" style="display: block; margin-top: 8px; color: #526455; line-height: 1.5;">Choose the topic that best matches your message so our team can review it more easily.</small>
+                        </div>
                         <div style="margin-bottom: 20px;"> <label for="contact-subject"
                                 style="display: block; margin-bottom: 8px; font-weight: 600;">Subject</label> <input
                                 type="text" id="contact-subject"
@@ -325,6 +338,7 @@
             document.querySelector('.services-hero-content h1').textContent = 'Placement Inquiry';
             document.getElementById('contact-form').parentElement.querySelector('h2').textContent = 'Placement Inquiry Form';
             document.getElementById('contact-subject').value = 'Placement / Visa Inquiry';
+            document.getElementById('contact-inquiry-type').value = 'placement';
         }
         document.getElementById('contact-form').addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -332,14 +346,19 @@
             try { protection = await window.StbFormProtection.prepare(this); }
             catch (error) { alert(error.message); return; }
  const btn = this.querySelector('button[type="submit"]'); const originalText = btn.innerText; btn.innerText = 'Sending...'; btn.disabled = true; const formData = {
-                name: this.querySelector('input[type="text"]').value, email: this.querySelector('input[type="email"]').value, contact_number: window.intlTelInputGlobals?.getInstance(document.getElementById('contactNumber'))?.getNumber() || this.querySelector('input[name="contact_number"]').value, subject: this.querySelectorAll('input[type="text"]')[1].value, /* 2nd text input is subject */ message: this.querySelector('textarea').value
+                name: this.querySelector('#contact-name').value,
+                email: this.querySelector('#contact-email').value,
+                contact_number: window.intlTelInputGlobals?.getInstance(document.getElementById('contactNumber'))?.getNumber() || this.querySelector('input[name="contact_number"]').value,
+                inquiry_type: this.querySelector('#contact-inquiry-type').value,
+                subject: this.querySelector('#contact-subject').value,
+                message: this.querySelector('#contact-message').value
             }; try {
                 // Use relative path for Hostinger deployment
                 const response = await fetch(contactEndpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ...formData, ...protection })
-                }); const result = await response.json(); if (response.ok) { alert(result.message); this.reset(); if (placementForm) document.getElementById('contact-subject').value = 'Placement / Visa Inquiry'; } else { alert(`Error (${response.status}): ${result.error || result.message || 'Failed to send message.'}`); }
+                }); const result = await response.json(); if (response.ok) { alert(result.message); this.reset(); if (placementForm) { document.getElementById('contact-subject').value = 'Placement / Visa Inquiry'; document.getElementById('contact-inquiry-type').value = 'placement'; } } else { alert(`Error (${response.status}): ${result.error || result.message || 'Failed to send message.'}`); }
             } catch (error) { console.error('Error:', error); alert(`Network/Server Error: ${error.message}\nPlease try again later or contact us directly.`); } finally { btn.innerText = originalText; btn.disabled = false; }
         });    </script>
     <script src="asset/back-to-top.js?v=20261014-ui2" defer></script>
