@@ -1,0 +1,6 @@
+/* Horizontal framing only. Preserve size, vertical framing, text and zoom. */
+@media(max-width:768px) {
+    .stb-modern #home.hero .slide[data-hero-scene="walk"] { background-position-x:80% !important; }
+    .stb-modern #home.hero .slide[data-hero-scene="companion"] { background-position-x:72% !important; }
+    .stb-modern #home.hero .slide[data-hero-scene="nurse"] { background-position-x:87% !important; }
+}
