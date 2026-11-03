@@ -1,6 +1,18 @@
-/* Horizontal framing only. Preserve size, vertical framing, text and zoom. */
+/* Preserve hero size, cover, vertical photo framing and desktop presentation. */
+.stb-modern #home.hero .hero-mobile-kicker { display:none; }
 @media(max-width:768px) {
     .stb-modern #home.hero .slide[data-hero-scene="walk"] { background-position-x:80% !important; }
     .stb-modern #home.hero .slide[data-hero-scene="companion"] { background-position-x:72% !important; }
     .stb-modern #home.hero .slide[data-hero-scene="nurse"] { background-position-x:87% !important; }
+    .stb-modern #home.hero { align-items:flex-end; padding:24px 0; }
+    .stb-modern #home.hero::before { background:none; }
+    .stb-modern #home.hero .hero-content { isolation:isolate; }
+    .stb-modern #home.hero .hero-content > .hero-kicker { display:none; }
+    .stb-modern #home.hero .hero-mobile-kicker { display:inline-flex; position:absolute; top:24px; left:22px; max-width:calc(100% - 44px); margin:0; z-index:3; }
+    .stb-modern #home.hero .hero-content::before {
+        content:""; position:absolute; inset:-32px -22px -24px; z-index:-1; pointer-events:none;
+        background:linear-gradient(180deg,#0b3024c7,#0b3024f5);
+        backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+        mask-image:linear-gradient(transparent,#000 32px); -webkit-mask-image:linear-gradient(transparent,#000 32px);
+    }
 }
