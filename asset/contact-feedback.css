@@ -1,0 +1,12 @@
+#contact-form .stb-field-error { color: #921c1c; display: block; font-size: 14px; line-height: 1.5; margin: 8px 0 0; }
+#contact-form .stb-field-error[hidden], #contact-form .stb-contact-feedback[hidden], #contact-form [data-feedback-help][hidden] { display: none; }
+#contact-form [aria-invalid="true"] { border-color: #a52c28 !important; box-shadow: 0 0 0 2px #a52c2812; }
+#contact-form .stb-message-count { display: block; text-align: right; margin-top: 8px; color: #526455; font-size: 13px; font-variant-numeric: tabular-nums; }
+#contact-form .stb-message-count[data-at-limit="true"] { color: #921c1c; font-weight: 600; }
+#contact-form .stb-contact-feedback { margin-top: 18px; padding: 20px; border: 1px solid #bdd1bb; border-left: 4px solid #1f4d1f; border-radius: 14px; background: #f0f6ec; color: #173d2b; scroll-margin-top: 130px; }
+#contact-form .stb-contact-feedback[data-state="error"] { background: #fff6f3; color: #732721; border-color: #e5beb6; border-left-color: #9c0a0a; }
+#contact-form .stb-contact-feedback strong { display: block; font-size: 18px; line-height: 1.4; }
+#contact-form .stb-contact-feedback p { margin: 8px 0 0; line-height: 1.65; overflow-wrap: anywhere; }
+#contact-form .stb-contact-feedback a { color: inherit; display: inline-block; margin-top: 8px; padding: 10px 0; min-height: 44px; font-weight: 600; text-decoration: underline; }
+#contact-form :is(input,select,textarea) { scroll-margin-top: 140px; }
+#contact-form button[disabled] { opacity: .7; cursor: wait; }

@@ -804,13 +804,13 @@ const CONTACT_INQUIRY_TYPES = Object.freeze({
 });
 
 app.post(['/send-contact', '/send-placement'], formProtection.guard, [
-    body('name').trim().notEmpty().escape(),
-    body('email').trim().isEmail(),
-    body('contact_number').optional().trim().isLength({ max: 64 }).escape(),
+    body('name').isString().bail().trim().isLength({ min: 1, max: 180 }).withMessage('Enter your name using 180 characters or fewer.').escape(),
+    body('email').isString().bail().trim().isLength({ max: 254 }).isEmail().withMessage('Enter a valid email address.'),
+    body('contact_number').optional().isString().bail().trim().isLength({ max: 64 }).bail().custom(value => /^[+\d][\d\s().-]*$/.test(value) && value.replace(/\D/g, '').length >= 7 && value.replace(/\D/g, '').length <= 15).withMessage('Enter a valid phone number with its country code.').escape(),
     // Optional for compatibility with already-open forms from the earlier release.
     body('inquiry_type').optional().isString().bail().isIn(Object.keys(CONTACT_INQUIRY_TYPES)).withMessage('Please select a valid inquiry type.'),
-    body('subject').trim().notEmpty().escape(),
-    body('message').trim().notEmpty().escape(),
+    body('subject').isString().bail().trim().isLength({ min: 1, max: 180 }).withMessage('Enter a subject using 180 characters or fewer.').escape(),
+    body('message').isString().bail().custom(value => value.length <= 3000).withMessage('Use 3,000 characters or fewer.').bail().trim().notEmpty().withMessage('Enter your message.').escape(),
     validate
 ], async (req, res) => {
     try {

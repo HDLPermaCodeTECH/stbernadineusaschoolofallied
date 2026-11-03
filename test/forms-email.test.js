@@ -152,6 +152,33 @@ test('Invalid inquiry categories cannot send notification or acknowledgement ema
     }
 });
 
+test('Contact validation reports the affected fields without sending invalid submissions', async () => {
+    for (const route of ['/send-contact', '/send-placement']) {
+        const result = await submit(route, { ...routes[1][1], name: ' ', email: 'bad-address', contact_number: 'not-a-phone', subject: ' ', message: ' ' });
+        assert.equal(result.response.status, 400);
+        assert.equal(result.messages.length, 0);
+        const body = await result.response.json();
+        for (const path of ['name','email','contact_number','subject','message']) assert.ok(body.details.some(detail => detail.path === path), path);
+    }
+});
+
+test('Inquiry message limits accept the boundary and reject oversized or non-text payloads before email', async () => {
+    const accepted = await submit('/send-contact', { ...routes[1][1], message: 'x'.repeat(3000) });
+    assert.equal(accepted.response.status, 200);
+    assert.equal(accepted.messages.length, 2);
+    for (const message of ['x'.repeat(3001), '😀'.repeat(1501), ['array'], { text: 'object' }]) {
+        const rejected = await submit('/send-contact', { ...routes[1][1], message });
+        assert.equal(rejected.response.status, 400);
+        assert.equal(rejected.messages.length, 0);
+        assert.ok((await rejected.response.json()).details.some(detail => detail.path === 'message'));
+    }
+    for (const field of ['name', 'subject']) {
+        const rejected = await submit('/send-contact', { ...routes[1][1], [field]: 'x'.repeat(181) });
+        assert.equal(rejected.response.status, 400);
+        assert.equal(rejected.messages.length, 0);
+    }
+});
+
 test('SMTP authentication rejection never produces a success response', async () => {
     failNext = true;
     const result = await submit('/send-referral', routes.find(row => row[0] === '/send-referral')[1]);
