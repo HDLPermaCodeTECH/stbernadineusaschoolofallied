@@ -57,7 +57,11 @@
         anchor.insertAdjacentElement('afterend', error);
         field.setAttribute('aria-describedby', [field.getAttribute('aria-describedby'), error.id].filter(Boolean).join(' '));
         errors[key] = error;
-        field.addEventListener('blur', () => validateField(key));
+        field.addEventListener('blur', event => {
+            // The submit handler validates every field. Avoid shifting the button
+            // between pointer-down and click when focus is moving onto it.
+            if (event.relatedTarget !== button) validateField(key);
+        });
         field.addEventListener(key === 'inquiry_type' ? 'change' : 'input', () => {
             if (field.getAttribute('aria-invalid') === 'true') validateField(key);
             if (key === 'message') updateCount();
