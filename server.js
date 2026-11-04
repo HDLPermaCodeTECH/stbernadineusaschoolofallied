@@ -33,6 +33,13 @@ app.get(['/asset/images/4d-logo.png', '/asset/images/st-bernadine-email-logo-202
 // Temporary site-wide maintenance is enabled by default.
 if (process.env.SITE_MAINTENANCE !== 'off') app.use(require('./maintenance'));
 
+// This fixed deadline survives process restarts and expires without a redeploy.
+app.use(require('./forms_maintenance').createFormsMaintenance({
+    startsAt: require('./forms_maintenance_window.json').startsAt,
+    until: process.env.FORMS_MAINTENANCE_UNTIL || require('./forms_maintenance_window.json').until,
+    enabled: process.env.NODE_ENV !== 'test' && process.env.FORMS_MAINTENANCE !== 'off'
+}));
+
 // Redirect .html to extensionless URLs for SEO
 app.use((req, res, next) => {
     if (req.path === '/index.html') {
