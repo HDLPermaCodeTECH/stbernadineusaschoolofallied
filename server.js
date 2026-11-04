@@ -10,6 +10,7 @@ const fs = require('fs');
 const { FORM_INBOXES, createFormTransport, safeMailError } = require('./form_mail');
 const { buildAcknowledgement } = require('./email_templates');
 const { createFormProtection, submissionContext, REVIEW_PREFIX } = require('./spam_protection');
+const hardening = require('./security_hardening');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
@@ -19,6 +20,7 @@ require('dotenv').config();
 const formProtection = createFormProtection();
 
 const app = express();
+app.disable('x-powered-by');
 // Only trust the local reverse proxy, never arbitrary forwarded client headers.
 app.set('trust proxy', 'loopback');
 
@@ -49,7 +51,7 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://hdlpermacodetech.github.io", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com", "https://challenges.cloudflare.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://hdlpermacodetech.github.io", "https://cdn.jsdelivr.net", "https://kit.fontawesome.com", "https://challenges.cloudflare.com"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://kit.fontawesome.com"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ka-f.fontawesome.com"],
             imgSrc: ["'self'", "data:", "https:", "https://img.icons8.com"],
@@ -64,19 +66,16 @@ app.use(hpp()); // Prevent HTTP Parameter Pollution
 app.use(compression()); // Compress all responses
 
 const corsOptions = {
-    origin: [
-        'https://www.stbernadineusa.com',
-        'https://stbernadineusa.com',
-        'https://hdlpermacodetech.github.io',
-        'http://localhost:5500',
-        'http://127.0.0.1:5500',
-        'http://localhost:3000'
-    ],
+    origin: (origin, callback) => callback(null, !origin || hardening.trustedOrigin(origin)),
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 };
+app.use(hardening.requestGuard);
+app.use(['/send-email','/apply-job'],hardening.limitConcurrency(4));
+app.use('/chat',hardening.limitConcurrency(4));
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit:hardening.JSON_LIMIT, inflate:false, strict:true }));
+app.use(hardening.flatJsonGuard);
 app.get('/api/form-protection', rateLimit({ windowMs: 60000, max: 90 }), formProtection.config);
 
 // Global Rate Limiting
@@ -97,49 +96,38 @@ app.use(['/send-email', '/send-contact', '/send-placement', '/request-care', '/a
 
 // Delete only files uploaded by this request, including validation and mail failures.
 app.use(['/send-email', '/apply-job'], (req, res, next) => {
-    res.once('finish', () => {
-        const files = Array.isArray(req.files) ? req.files : Object.values(req.files || {}).flat();
-        for (const file of files) {
-            fs.unlink(file.path, error => {
-                if (error && error.code !== 'ENOENT') console.error('[UPLOAD_CLEANUP_FAILED]', JSON.stringify({ code: error.code }));
-            });
-        }
-    });
+    res.once('finish', () => hardening.cleanupUploads(req));
+    res.once('close', () => hardening.cleanupUploads(req));
     next();
 });
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        if (!fs.existsSync('uploads')) {
-            fs.mkdirSync('uploads');
-        }
-        cb(null, 'uploads/')
+        cb(null, hardening.ensureUploadDirectory());
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
+        hardening.privateUploadName(req, file, cb);
     }
 });
 
 const upload = multer({ 
     storage: storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB limit
-        files: 10,
-    },
+    limits: hardening.MULTIPART_LIMITS,
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
         if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error('Invalid file type. Only PDF, JPG, and PNG are allowed.'), false);
+            const message='Invalid file type. Only PDF, JPG, and PNG are allowed.';
+            cb(Object.assign(new Error(message), { status:400, publicMessage:message }), false);
         }
     }
 });
 
 const jobUpload = multer({
     storage,
-    limits: { fileSize: 5 * 1024 * 1024, files: 2 },
+    limits: { ...hardening.MULTIPART_LIMITS, files: 2, parts:102 },
     fileFilter: (req, file, cb) => {
         const allowed = file.fieldname === 'resume'
             ? ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
@@ -152,18 +140,8 @@ const jobUpload = multer({
     }
 });
 
-// Block access to sensitive files in the root directory (Security Layer)
-app.use((req, res, next) => {
-    let requestPath;
-    try { requestPath = decodeURIComponent(req.path).toLowerCase(); }
-    catch { return res.status(400).json({ error: 'Invalid request path.' }); }
-    const sensitiveFiles = ['.env', '.git', '.htaccess', '.mail-checks', 'package.json', 'package-lock.json', 'node_modules', 'tools/', 'uploads/', 'test/', 'scratch/', 'email_brand.hbs'];
-    const serverSource = /^\/(?:server|form_mail|maintenance|email_templates|spam_protection|chat_service)\.js$/.test(requestPath);
-    if (serverSource || /\.(?:zip|md|ps1|py)$/.test(requestPath) || sensitiveFiles.some(file => requestPath.includes(file))) {
-        return res.status(403).json({ error: "Access Denied: You do not have permission to access this file." });
-    }
-    next();
-});
+// Serve only known public pages and asset types; new backend files stay private.
+app.use(hardening.publicFileGate(__dirname));
 
 // Serve static files seamlessly matching extensionless URLs to .html files
 app.use(express.static(__dirname, {
@@ -517,6 +495,7 @@ const formFailure = (res, error) => {
 
 app.post('/send-email', 
     upload.array('attachment'),
+    hardening.validateUploads,
     formProtection.guard,
     [
         body('firstName').trim().notEmpty().escape(),
@@ -1265,6 +1244,7 @@ const generateJobApplicationPDF = (data) => {
 // --- POST ENDPOINT: APPLY FOR A JOB ---
 app.post('/apply-job', 
     jobUpload.fields([{ name: 'resume', maxCount: 1 }, { name: 'applicantPhoto', maxCount: 1 }]),
+    hardening.validateUploads,
     formProtection.guard,
     [
         body('firstName').trim().notEmpty().escape(),
@@ -1423,10 +1403,7 @@ app.post('/subscribe', formProtection.guard, [
     }
 });
 
-// Ensure uploads directory exists
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-}
+hardening.ensureUploadDirectory();
 
 // Health Check
 app.get('/health', (req, res) => {
@@ -1435,12 +1412,15 @@ app.get('/health', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error("ERROR:", err.message);
     const uploadError = err instanceof multer.MulterError;
     const status = uploadError ? (err.code === 'LIMIT_FILE_SIZE' ? 413 : 400) : (err.status || 500);
+    console.error('[REQUEST_REJECTED]', JSON.stringify({ status, code:String(err.code || err.type || 'INTERNAL_ERROR').replace(/[^a-z0-9_.-]/gi,'').slice(0,80) }));
+    const requestMessage = err.type==='entity.too.large' ? 'This request exceeds the permitted size. Please reduce its contents.'
+        : err.type==='entity.parse.failed' ? 'The request contains invalid JSON. Please refresh the page and try again.'
+        : err.type==='encoding.unsupported' ? 'Compressed request bodies are not supported.' : null;
     // Hide stack traces and internal details in production
     const response = {
-        error: err.publicMessage || (uploadError ? (err.code === 'LIMIT_FILE_SIZE' ? 'The uploaded file exceeds the 5 MB limit.' : 'The uploaded files do not match this form. Please check your attachments.') : process.env.NODE_ENV === 'production'
+        error: requestMessage || err.publicMessage || (uploadError ? (err.code === 'LIMIT_FILE_SIZE' ? 'The uploaded file exceeds the 5 MB limit.' : 'The uploaded files do not match this form. Please check your attachments.') : process.env.NODE_ENV === 'production'
             ? 'An internal server error occurred. Please try again later.' 
             : err.message)
     };

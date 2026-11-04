@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const Module = require('node:module');
+const uploadFixtures = require('./upload-fixtures');
 
 const messages = [];
 let failNext = false;
@@ -75,6 +76,7 @@ async function submit(route, data, multipart = false) {
         body = new FormData();
         for (const [key, value] of Object.entries(data)) body.append(key, value);
         if (route === '/apply-job') body.append('resume', new Blob(['%PDF-1.4 test fixture'], { type: 'application/pdf' }), 'test-resume.pdf');
+        if (route === '/apply-job' && data.AppMethod === 'manual') body.append('applicantPhoto',new Blob([uploadFixtures.png],{type:'image/png'}),'test-photo.png');
     } else {
         headers['Content-Type'] = 'application/json';
         body = JSON.stringify(data);
@@ -260,7 +262,7 @@ test('Job resume uploads accept the advertised formats and reject unsupported fi
     ]) {
         const form = new FormData();
         for (const [key, value] of Object.entries(data)) form.append(key, value);
-        form.append('resume', new Blob(['Local file type fixture'], { type: mimeType }), `format-fixture.${extension}`);
+        form.append('resume', new Blob([uploadFixtures[extension] || 'Unsupported fixture'], { type: mimeType }), `format-fixture.${extension}`);
         const before = messages.length;
         const response = await fetch(base + '/apply-job', { method: 'POST', headers: { 'X-Forwarded-For': `203.0.113.${visitor++}` }, body: form });
         assert.equal(response.status, expected, extension);
@@ -321,6 +323,8 @@ test('Local reverse proxy clients are limited separately with readable JSON erro
 
 test('Temporary applicant files are cleaned up after rejected and invalid submissions', async () => {
     const fs = require('node:fs/promises');
+    const { UPLOAD_DIRECTORY } = require('../security_hardening');
+    const beforeFiles = new Set(await fs.readdir(UPLOAD_DIRECTORY));
     for (const scenario of ['invalid', 'rejected']) {
         const suffix = `cleanup-fixture-${scenario}-${Date.now()}.pdf`;
         const upload = new FormData();
@@ -333,12 +337,123 @@ test('Temporary applicant files are cleaned up after rejected and invalid submis
         assert.equal(response.status, scenario === 'invalid' ? 400 : 503);
         let leftovers;
         for (let i = 0; i < 20; i++) {
-            leftovers = (await fs.readdir('uploads')).filter(name => name.endsWith(suffix));
+            leftovers = (await fs.readdir(UPLOAD_DIRECTORY)).filter(name => !beforeFiles.has(name));
             if (!leftovers.length) break;
             await new Promise(resolve => setTimeout(resolve, 25));
         }
         assert.equal(leftovers.length, 0, 'Temporary application upload was not deleted');
     }
+});
+
+test('Cross-site and unsupported requests are rejected before CAPTCHA or email processing', async () => {
+    const before = messages.length;
+    for (const headers of [
+        { Origin:'https://attacker.example', 'Content-Type':'application/json' },
+        { Origin:'null', 'Content-Type':'application/json' },
+        { 'Sec-Fetch-Site':'cross-site', 'Content-Type':'application/json' }
+    ]) {
+        const response=await nativeFetch(base+'/send-contact',{method:'POST',headers,body:JSON.stringify(routes[1][1])});
+        assert.equal(response.status,403);
+    }
+    const unsupported=await nativeFetch(base+'/send-contact',{method:'POST',headers:{'Content-Type':'text/plain'},body:'test'});
+    assert.equal(unsupported.status,415);
+    for(const route of ['/SEND-CONTACT','/send-contact/']) {
+        const response=await nativeFetch(base+route,{method:'POST',headers:{Origin:'https://attacker.example','Content-Type':'application/json'},body:'{}'});
+        assert.equal(response.status,403,route);
+        const nested=await nativeFetch(base+route,{method:'POST',headers:{'Content-Type':'application/json'},body:'{"email":{"nested":true}}'});
+        assert.equal(nested.status,400,route);
+    }
+    assert.equal(messages.length,before);
+});
+
+test('Oversized, nested, malformed and compressed JSON fail safely without mail delivery', async () => {
+    const before=messages.length;
+    const cases=[
+        [JSON.stringify({message:'x'.repeat(70*1024)}),{},413],
+        ['{"email":{"unexpected":"nested"}}',{},400],
+        ['["unexpected array"]',{},400],
+        ['{"__proto__":{"polluted":true}}',{},400],
+        ['{"message":',{},400],
+        [require('node:zlib').gzipSync('{"message":"fixture"}'),{'Content-Encoding':'gzip'},415]
+    ];
+    for(const [body,extra,status] of cases) {
+        const response=await nativeFetch(base+'/send-contact',{method:'POST',headers:{'Content-Type':'application/json',...extra},body});
+        assert.equal(response.status,status,await response.text());
+    }
+    assert.equal(messages.length,before);
+    assert.equal({}.polluted,undefined);
+});
+
+test('Public-file allowlisting hides backend modules and diagnostic data while preserving website files', async () => {
+    for(const route of ['/security_hardening.js','/models.json','/models_utf8.json','/package-lock.json','/asset/backup.env','/asset/debug.json','/asset/source.js.map']) {
+        const response=await nativeFetch(base+route);
+        assert.equal(response.status,403,route);
+    }
+    for(const route of ['/','/contact','/about-us/','/school-of-allied-health-services/','/manifest.json','/sw.js','/asset/form-protection.js','/asset/images/st-bernadine-email-logo-20261026.png','/health']) {
+        const response=await nativeFetch(base+route);
+        assert.equal(response.status,200,route);
+    }
+    const response=await nativeFetch(base+'/contact');
+    assert.equal(response.headers.get('x-powered-by'),null);
+    assert.doesNotMatch(response.headers.get('content-security-policy'),/unsafe-eval/);
+});
+
+test('MIME-spoofed files and incorrect filename extensions cannot reach department emails', async () => {
+    const data=routes.find(row=>row[0]==='/apply-job')[1];
+    for(const [filename,bytes,mime] of [
+        ['resume.pdf',Buffer.from('<html><script>alert(1)</script></html>'),'application/pdf'],
+        ['resume.exe',uploadFixtures.pdf,'application/pdf'],
+        ['resume.docx',Buffer.from('PK\x03\x04not a Word document package'),'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    ]) {
+        const form=new FormData();
+        for(const [key,value] of Object.entries(data)) form.append(key,value);
+        form.append('resume',new Blob([bytes],{type:mime}),filename);
+        const before=messages.length;
+        const response=await fetch(base+'/apply-job',{method:'POST',headers:{'X-Forwarded-For':`203.0.113.${visitor++}`},body:form});
+        assert.equal(response.status,400,filename);
+        assert.equal(messages.length,before);
+    }
+});
+
+test('Applicant uploads use random filenames outside the served website root', async () => {
+    const path=require('node:path');
+    const {UPLOAD_DIRECTORY}=require('../security_hardening');
+    const result=await submit('/apply-job',routes.find(row=>row[0]==='/apply-job')[1],true);
+    assert.equal(result.response.status,200);
+    const file=result.messages[0].attachments.find(item=>item.path);
+    assert.ok(file);
+    assert.equal(path.dirname(file.path),UPLOAD_DIRECTORY);
+    assert.match(path.basename(file.path),/^[a-f0-9-]{36}\.pdf$/);
+    assert.ok(!path.resolve(file.path).startsWith(path.resolve(__dirname,'..')+path.sep));
+});
+
+test('Enrollment upload types, field sizes and file sizes are bounded before email',async()=>{
+    const cases=[
+        ['unsupported',400],['large-field',400],['large-file',413]
+    ];
+    for(const [kind,status] of cases) {
+        const form=new FormData();
+        form.append('firstName','Test');form.append('lastName','Student');form.append('email','visitor@example.invalid');form.append('Program','CNA');
+        if(kind==='large-field') form.append('extra','x'.repeat(129*1024));
+        else form.append('attachment',new Blob([kind==='large-file'?Buffer.alloc(5*1024*1024+1):'unsupported'],{type:kind==='large-file'?'application/pdf':'application/x-msdownload'}),kind==='large-file'?'large.pdf':'file.exe');
+        const before=messages.length;
+        const response=await fetch(base+'/send-email',{method:'POST',headers:{'X-Forwarded-For':`203.0.113.${visitor++}`},body:form});
+        assert.equal(response.status,status,kind);
+        assert.equal(messages.length,before);
+    }
+});
+
+test('Manual application signatures are checked before PDF image processing',async()=>{
+    const data={...routes.find(row=>row[0]==='/apply-job')[1],AppMethod:'manual'};
+    const oversized=Buffer.from(uploadFixtures.png);oversized.writeUInt32BE(100000,16);
+    for(const signature of ['data:image/png;base64,'+oversized.toString('base64'),'https://attacker.example/signature.png']) {
+        const result=await submit('/apply-job',{...data,SignatureData:signature},true);
+        assert.equal(result.response.status,400);
+        assert.equal(result.messages.length,0);
+    }
+    const result=await submit('/apply-job',{...data,SignatureData:'data:image/png;base64,'+uploadFixtures.png.toString('base64')},true);
+    assert.equal(result.response.status,200,await result.response.text());
+    assert.ok(result.messages[0].attachments.some(file=>file.contentType==='application/pdf'));
 });
 
 test('The deployed default keeps pages and form endpoints in HTTP 503 maintenance', () => {

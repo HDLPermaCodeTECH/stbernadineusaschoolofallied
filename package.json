@@ -11,7 +11,7 @@
     "dependencies": {
         "@google/generative-ai": "^0.24.1",
         "axios": "^1.20.0",
-        "body-parser": "^1.20.8",
+        "body-parser": "^1.20.9",
         "compression": "^1.8.2",
         "cors": "^2.8.5",
         "dotenv": "^17.3.1",
@@ -21,11 +21,8 @@
         "form-data": "^4.0.6",
         "helmet": "^8.1.0",
         "hpp": "^0.2.3",
-        "multer": "^2.4.0",
+        "multer": "^2.5.0",
         "nodemailer": "^10.2.0",
         "pdfkit": "^0.17.2"
-    },
-    "devDependencies": {
-        "javascript-obfuscator": "^5.4.1"
     }
 }
