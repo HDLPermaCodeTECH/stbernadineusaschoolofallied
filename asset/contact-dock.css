@@ -1,6 +1,8 @@
 /* Full-width contact actions, with utilities lifted clear of the bottom edge. */
 :root {
     --stb-contact-dock-height: 68px;
+    --stb-contact-action-height: 66px;
+    --stb-contact-safe-area: env(safe-area-inset-bottom, 0px);
     --stb-contact-green: #214d31;
     --stb-contact-surface: #fffefa;
     --stb-contact-edge: max(16px, env(safe-area-inset-right));
@@ -9,17 +11,21 @@ html.stb-contact-dock-ready { scroll-padding-bottom: calc(var(--stb-contact-dock
 body.stb-contact-dock-ready { padding-bottom: calc(var(--stb-page-bottom-padding, 0px) + var(--stb-contact-dock-height)); }
 .stb-contact-dock {
     position: fixed; inset: auto 0 0; z-index: 9000;
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%; max-width: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr);
+    width: 100%; max-width: none; margin: 0; padding: 0 0 var(--stb-contact-safe-area);
+    height: calc(var(--stb-contact-action-height) + var(--stb-contact-safe-area));
+    min-height: calc(var(--stb-contact-action-height) + var(--stb-contact-safe-area));
+    max-height: calc(var(--stb-contact-action-height) + var(--stb-contact-safe-area));
+    box-sizing: border-box; flex: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
     border: 0; border-radius: 22px 22px 0 0; overflow: hidden;
-    background: var(--stb-contact-surface);
+    background: linear-gradient(90deg, var(--stb-contact-green) 50%, var(--stb-contact-surface) 50%);
     box-shadow: 0 -12px 36px #17372a1c, 0 -3px 10px #17372a14;
     font-family: var(--font-body, Arial, sans-serif); isolation: isolate;
 }
 .stb-contact-dock .stb-contact-action {
     display: flex; align-items: center; justify-content: center; gap: 10px;
-    min-width: 0; min-height: 66px; margin: 0;
-    padding: 16px 12px calc(16px + env(safe-area-inset-bottom));
+    min-width: 0; min-height: 0; height: 100%; margin: 0;
+    padding: 0 12px; box-sizing: border-box;
     border: 0; border-radius: 0; text-decoration: none;
     font: 600 15px/1.3 var(--font-body, Arial, sans-serif);
     letter-spacing: 0; text-transform: none; text-align: center;
@@ -68,7 +74,8 @@ body.stb-contact-dock-ready.chat-open #back-to-top { visibility: hidden; pointer
     body.stb-contact-dock-ready .stb-privacy-status { bottom: max(20px, env(safe-area-inset-bottom)); }
 }
 @media (max-width: 768px) {
-    .stb-contact-dock .stb-contact-action { min-height: 62px; gap: 8px; font-size: 14px; padding-top: 14px; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+    :root { --stb-contact-action-height: 62px; }
+    .stb-contact-dock .stb-contact-action { gap: 8px; font-size: 14px; }
     body.stb-contact-dock-ready .chatbot-container {
         left: 12px; right: 12px; width: auto;
         bottom: calc(var(--stb-contact-dock-height) + 12px);

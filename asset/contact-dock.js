@@ -15,10 +15,31 @@
         root.classList.add('stb-contact-dock-ready');
         doc.body.classList.add('stb-contact-dock-ready');
 
-        const updateHeight = () => root.style.setProperty('--stb-contact-dock-height', Math.ceil(dock.getBoundingClientRect().height) + 'px');
-        updateHeight();
+        let previousHeight;
+        const updateHeight = () => {
+            const height = Math.ceil(dock.getBoundingClientRect().height);
+            if (height !== previousHeight) {
+                previousHeight = height;
+                root.style.setProperty('--stb-contact-dock-height', height + 'px');
+            }
+        };
+        let layoutKey;
+        const updateLayout = () => {
+            const key = window.innerWidth + ':' + (window.screen.orientation?.angle ?? window.orientation ?? 0);
+            if (key !== layoutKey) {
+                layoutKey = key;
+                // Browser toolbars can change the safe-area value during a scroll.
+                // Keep its initial spacing stable until width/orientation changes.
+                root.style.removeProperty('--stb-contact-safe-area');
+                const inset = parseFloat(getComputedStyle(dock).paddingBottom) || 0;
+                root.style.setProperty('--stb-contact-safe-area', inset + 'px');
+            }
+            updateHeight();
+        };
+        updateLayout();
         if ('ResizeObserver' in window) new ResizeObserver(updateHeight).observe(dock);
-        window.addEventListener('resize', updateHeight, { passive: true });
+        window.addEventListener('resize', updateLayout, { passive: true });
+        window.addEventListener('orientationchange', updateLayout, { passive: true });
         const updateViewport = () => root.style.setProperty('--stb-visible-height', (window.visualViewport?.height || window.innerHeight) + 'px');
         updateViewport();
         window.visualViewport?.addEventListener('resize', updateViewport, { passive: true });
