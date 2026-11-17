@@ -40,17 +40,8 @@ app.use(require('./forms_maintenance').createFormsMaintenance({
     enabled: process.env.NODE_ENV !== 'test' && process.env.FORMS_MAINTENANCE !== 'off'
 }));
 
-// Redirect .html to extensionless URLs for SEO
-app.use((req, res, next) => {
-    if (req.path === '/index.html') {
-        return res.redirect(301, '/' + req.url.substring(req.path.length));
-    }
-    if (req.path.endsWith('.html')) {
-        const cleanPath = req.path.slice(0, -5);
-        return res.redirect(301, cleanPath + req.url.substring(req.path.length));
-    }
-    next();
-});
+// Match the sitemap and page canonicals while preserving form submissions.
+app.use(require('./seo_routes').canonicalPageRedirect(__dirname));
 
 // Middleware
 // Security Middleware
