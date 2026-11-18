@@ -28,7 +28,7 @@ test.before(async () => {
 test.after(() => new Promise(resolve => server.close(resolve)));
 
 test('Every public page has one unique title, description and direct canonical URL', () => {
-    assert.equal(files.length, 35);
+    assert.equal(files.length, 36);
     const titles = new Set(), descriptions = new Set();
     for (const file of files) {
         const html = content(file), head = html.split('</head>')[0];
